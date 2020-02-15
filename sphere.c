@@ -30,7 +30,7 @@ int main(){
 	int H = 1080;
 	int W = 1080;
 
-	double fov = 80 * PI / 100;
+	double fov = 80 * PI / 100; // field of view 
 	int i,j;
 	void	*mlx_ptr = mlx_init();
 	void	*win_ptr = mlx_new_window(mlx_ptr,W,H,"test");
