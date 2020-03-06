@@ -6,3 +6,4 @@ https://www.youtube.com/watch?v=1HYhrx9bzP8
 https://github.com/ggambetta/computer-graphics-from-scratch/blob/master/Computer-Graphics-from-scratch.md
 https://computergraphicsguide.blogspot.com/2015/08/raycasting-and-phong-shading.html
 https://steveharveynz.wordpress.com/category/programming/c-raytracer/
+https://course.ccs.neu.edu/cs4300old/s11/lectures.html
