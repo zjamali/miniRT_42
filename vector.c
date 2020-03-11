@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vector.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/02/20 01:05:46 by zjamali           #+#    #+#             */
+/*   Updated: 2020/03/10 20:36:12 by zjamali          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 /* additin of two vectors and return the resulting vector */
@@ -40,7 +52,7 @@ double lenght(t_vector *v)
 t_vector normalize(t_vector *v)
 {
 	double norme = sqrt(lenght(v));
-	t_vector result = {v->x /= norme,v->y /= norme,v->z /= norme} ;
+	t_vector result = {v->x / norme,v->y / norme,v->z / norme} ;
 	return result;
 }
 t_vector vectorsproduit(t_vector *v1,t_vector *v2)
@@ -48,3 +60,11 @@ t_vector vectorsproduit(t_vector *v1,t_vector *v2)
 	t_vector result = {v1->x * v2->x, v1->y * v2->y, v1->z * v2->z};
 	return result;
 };
+t_vector vecttorscross(t_vector *v1,t_vector *v2)
+{
+	t_vector result;
+	result.x = (v1->y*v2->z) - (v1->z * v2->y);
+	result.y = (v1->z*v2->x) - (v1->x * v2->z);
+	result.z = (v1->x*v2->y) - (v1->y * v2->x);
+	return result;
+}
