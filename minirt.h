@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/03/09 19:35:43 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/03/13 18:58:13 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ double hit_sphere(t_ray ray,t_sphere *s);
 t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object);
 t_vector ft_diffuse(t_light *light,t_ray ray,double t,t_object *object,t_vector *colors);
 t_vector ft_ambient(t_ambient *ambient,t_vector *color);
-
+t_vector ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,double t);
 
 /***********************  PIXEL_COLOR.C  ***********************/
 int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *light);
