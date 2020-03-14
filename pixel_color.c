@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:09:11 by zjamali           #+#    #+#             */
-/*   Updated: 2020/03/13 19:10:33 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/03/14 00:53:26 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,10 @@ int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *lig
 					i_ambient = ft_ambient(ambient,&color);
 					i_specular = ft_specular(light,ray,closet_object,temp);
 					shadow = ft_shadow(temp,object,light,ray,closet_object);
-					colors.y =  i_ambient.y * 255 +  	 i_diffuse.y * 255 +       i_specular.y * 255;
-					colors.x =  i_ambient.x * 255 +    	 i_diffuse.x * 255 +       i_specular.x * 255;
-					colors.z =  i_ambient.z * 255 + 	 i_diffuse.z * 255 +       i_specular.z * 255;
+					printf("    %f   ",shadow.x);
+					colors.y =  i_ambient.y * 255 +  shadow.x *	( i_diffuse.y * 255 +       i_specular.y * 255);
+					colors.x =  i_ambient.x * 255 +  shadow.y *	( i_diffuse.x * 255 +       i_specular.x * 255);
+					colors.z =  i_ambient.z * 255 +  shadow.z *	( i_diffuse.z * 255 +       i_specular.z * 255);
 				}
 		}
 		temp = temp->next;
@@ -58,8 +59,5 @@ int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *lig
 		colors.z = min(255,colors.z);
 		amcolor = rgbconvert(colors.x,colors.y,colors.z);
 	}
-	else
-		amcolor = rgbconvert(255,255,255);
-	
 	return amcolor;
 }

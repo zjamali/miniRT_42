@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/03/13 18:32:55 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/03/14 00:56:48 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,16 @@ int main(){
 	t_sphere sphere;
 	sphere.origin.x = 0;
 	sphere.origin.y = 0;
-	sphere.origin.z = -10;
+	sphere.origin.z = -14;
 	sphere.radius = 1.5;
 	t_vector color ={255,0,0};
 	sphere.color = color;
 
 	t_sphere s1;
-	s1.origin.x = 3.2;
+	s1.origin.x = 4;
 	s1.origin.y = 0;
-	s1.origin.z = -10;
-	s1.radius = 1.5;
+	s1.origin.z = -20;
+	s1.radius = 3.5;
 	t_vector color2 ={0,0,255};
 	s1.color = color2;
 
@@ -40,13 +40,13 @@ int main(){
 	s2.origin.x = -3.2;
 	s2.origin.y = 0;
 	s2.origin.z = -10;
-	s2.radius = 1.5;
+	s2.radius = 1.6;
 	t_vector color1 ={255,255,0};
 	s2.color = color1;
 
 	t_sphere s3;
 	s3.origin.x = 0;
-	s3.origin.y = 3.2;
+	s3.origin.y = 3.5;
 	s3.origin.z = -10;
 	s3.radius = 1.5;
 	t_vector color3 ={0,255,255};
@@ -102,16 +102,16 @@ int main(){
 	t_ambient ambient;
 	//t_vector ambcolor = {255,255,255};
 	//ambient.color = ambcolor;
-	ambient.intensity =0.1;
+	ambient.intensity =0.2;
 
 	t_light light;
 	t_vector lightcolor = {255,255,255};
 	t_vector coord ;
 	light.color = lightcolor;
 	light.intensity = 0.5;
-	light.origin.x = 0;
+	light.origin.x = -10;
 	light.origin.y = 0;
-	light.origin.z = 0;
+	light.origin.z = -10;
 
 /***********************************************/
 	while(i < W)

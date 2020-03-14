@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/03/13 19:59:48 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/03/13 22:28:14 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,36 @@ t_vector ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doub
 	t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
 	t_vector p = vectorsadd(&ray.origin,&scale_direction_to_p);
 	t_vector l_p = vectorsSub(&light->origin,&p);
-	double obj_btwn_l_and_p = hit_sphere(l_p,object);
-
-	
-
-
-	
+	l_p = normalize(&l_p);
+	t_ray rays;
+	int check = 0;
+	double closet_object1;
+	double closet_object = MAXFLOAT;
+	rays.direction = l_p;
+	rays.origin = p;
+	t_object *temps ;
+	temps = object;
+	while (temps != NULL)
+	{
+		closet_object1 = hit_sphere(rays,temps->object);
+		if (closet_object1 > 0)
+		{
+			if (closet_object1 < closet_object)
+				{
+					check = 1;
+					closet_object = closet_object1;
+				}
+		}
+		temps = temps->next;
+	}
+	t_vector vs = {1,1,1};
+	if (check == 1)
+	{
+		//printf("0");
+		t_vector vc = {0,0,0};
+		vs = vc;
+	}
+	 return vs;
 }
 t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 {
