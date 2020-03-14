@@ -6,12 +6,12 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/03/13 22:28:14 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/03/14 17:23:59 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-t_vector ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,double t)
+double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,double t)
 {
 	t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
 	t_vector p = vectorsadd(&ray.origin,&scale_direction_to_p);
@@ -19,7 +19,7 @@ t_vector ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doub
 	l_p = normalize(&l_p);
 	t_ray rays;
 	int check = 0;
-	double closet_object1;
+	double closet_object1 = 0;
 	double closet_object = MAXFLOAT;
 	rays.direction = l_p;
 	rays.origin = p;
@@ -27,7 +27,10 @@ t_vector ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doub
 	temps = object;
 	while (temps != NULL)
 	{
-		closet_object1 = hit_sphere(rays,temps->object);
+		if (temps->object_type == 's')
+			closet_object1 = hit_sphere(rays,temps->object);
+		else if (temps->object_type == 'p')
+			closet_object1 = hit_plane(rays,temps->object);
 		if (closet_object1 > 0)
 		{
 			if (closet_object1 < closet_object)
@@ -38,14 +41,11 @@ t_vector ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doub
 		}
 		temps = temps->next;
 	}
-	t_vector vs = {1,1,1};
 	if (check == 1)
 	{
-		//printf("0");
-		t_vector vc = {0,0,0};
-		vs = vc;
+		return 0;
 	}
-	 return vs;
+	 return 1;
 }
 t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 {
@@ -72,9 +72,11 @@ t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 t_vector ft_diffuse(t_light *light,t_ray ray,double t,t_object *object,t_vector *colors)
 {
 	t_vector scale_direction_to_P = vectorscal(&ray.direction,t);
-	t_vector p = vectorsadd(&ray.origin,&scale_direction_to_P); 
+	t_vector p = vectorsadd(&ray.origin,&scale_direction_to_P);
 	t_vector n = vectorsSub(&p,&object->origin);
 	n = normalize(&n);
+	if (object->object_type == 'p')
+		n = object->orientation;
 	t_vector l_p;
 	l_p = vectorsSub(&light->origin,&p);
 	l_p = normalize(&l_p);

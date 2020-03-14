@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 18:59:10 by zjamali           #+#    #+#             */
-/*   Updated: 2020/03/13 17:26:40 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/03/14 17:54:41 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 
 t_vector ft_camera(t_camera camera,double H,double W,double x,double y)
 {
-	t_vector lookAtPoint = {0,0,-1};
-	t_vector lookFrom = {0,0,0};
+	// t_vector lookAtPoint = {0,0,-1};
+	// t_vector lookFrom = {0,0,0};
 	t_vector up = {0,1,0};
-	t_vector n = vectorsSub(&lookFrom,&lookAtPoint);
-	n = normalize(&n);
+	// t_vector n = vectorsSub(&lookFrom,&lookAtPoint);   //// camera.orientation
+	t_vector n = camera.orientaion;
+	n = vectorscal(&n,-1);
+	//n = normalize(&n);
 	t_vector u = vecttorscross(&up,&n);
 	u = normalize(&u);
 	t_vector v = vecttorscross(&n,&u);
@@ -26,7 +28,7 @@ t_vector ft_camera(t_camera camera,double H,double W,double x,double y)
 	double aspectRatio = W/H;
 	double viewPlaneHalfWidth = aspectRatio * tan(theta/2);
 	double viewPlaneHalfHeight= -1 * tan(theta/2);
-	camera.lookfrom = lookFrom;
+	//camera.lookfrom = lookFrom;
 	t_vector c = vectorsSub(&camera.lookfrom,&n);
 	t_vector l;
 	l.x = c.x - u.x * viewPlaneHalfWidth/2 - v.x * viewPlaneHalfHeight /2;
