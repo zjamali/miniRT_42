@@ -12,7 +12,7 @@
 
 NAME  = minirt
 
-MLX = -lmlx -framework OpenGL -framework AppKit
+MLX = -lmlx -framework OpenGL -framework AppKit #-lX11
 
 CFLAGE =  -Wall -Wextra -Werror
 
@@ -25,7 +25,7 @@ OBJ = $(SRCS:.c=.o)
 
 $(NAME): $(OBJ)
 		@rm -rf minirt
-		@gcc $(CFLAGE) -I /usr/local/include $(OBJ) -L /usr/local/lib $(MLX)
+		@gcc $(CFLAGE) -I /usr/local/include $(OBJ) -L /usr/local/lib -L/usr/X11/lib/  $(MLX)
 	    @echo "         Made by : \033[1;91mzjamali\033[m"
 		@echo "          _       _______ _____    "
 		@echo "         (_)     (_) ___ \_   _|    "
@@ -34,6 +34,7 @@ $(NAME): $(OBJ)
 		@echo " | | | | | | | | | | | |\ \  | |   "
 		@echo " |_| |_| |_|_|_| |_|_\_| \_| \_/   "
 		@echo "Compilation of miniRT:  \033[1;32mOK\033[m"
+		#@./a.out
 all: $(NAME)
 
 clean:

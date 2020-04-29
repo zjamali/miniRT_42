@@ -37,10 +37,10 @@ int main(){
 	s1.color = color2;
 
 	t_sphere s2;
-	s2.origin.x = -3.2;
-	s2.origin.y = 0;
-	s2.origin.z = -10;
-	s2.radius = 1.6;
+	s2.origin.x = -3.2;//-3.2;
+	s2.origin.y = 0; // 0
+	s2.origin.z = -10;//-10;
+	s2.radius = 1.6;// 1.6
 	t_vector color1 ={255,255,0};
 	s2.color = color1;
 
@@ -54,7 +54,7 @@ int main(){
 	/***********************************************/
 
 	t_plane plane;
-	t_vector cord = {0,0,0};
+	t_vector cord = {1,1,1};
 	
 	plane.coord = cord;
 	t_vector v = {0,1,0};
@@ -95,7 +95,7 @@ int main(){
 	object3.color = &s3.color;
 	object3.object_type = 's';
 	object3.origin = s3.origin;
-	object3.next = &object4;
+	object3.next = &object4; // 
 
 	t_object object2;
 	object2.object = &sphere;
@@ -132,13 +132,13 @@ int main(){
 	t_vector coord ;
 	light.color = lightcolor;
 	light.intensity = 0.9;
-	light.origin.x = 0; // -10
-	light.origin.y = 5;
-	light.origin.z = 0; // -10
+	light.origin.x = -10; // -10
+	light.origin.y = 10;
+	light.origin.z = -10; // -10
 	while(i < W)
 	{
 		j = 0;
-		while( j < H)
+		while(j < H)
 		{
 			t_ray ray;
 			ray.origin.x = 0;
