@@ -53,6 +53,7 @@ int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *lig
 				}
 				i_ambient = ft_ambient(ambient,&color);
 				shadow = ft_shadow(temp,object,light,ray,closet_object);
+				//shadow = 1;
 				colors.y =  i_ambient.y * 255 +  shadow *	( i_diffuse.y * 255 +       i_specular.y * 255);
 				colors.x =  i_ambient.x * 255 +  shadow *	( i_diffuse.x * 255 +       i_specular.x * 255);
 				colors.z =  i_ambient.z * 255 +  shadow *	( i_diffuse.z * 255 +       i_specular.z * 255);

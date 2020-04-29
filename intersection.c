@@ -30,8 +30,12 @@ double hit_sphere(t_ray ray,t_sphere *sphere)
 	}
 }
 
+
+
+
 double hit_plane(t_ray ray,t_plane *plane)
 {
+	///////////////////// this the correct
 	// P - C | V = 0
 	// t = DOT1 (-X,V) / DOT1(D,V) 
 	double t;
@@ -42,7 +46,7 @@ double hit_plane(t_ray ray,t_plane *plane)
 	if (DOT2 != 0)
 	{
 		t_vector x = vectorscal(&V,-1);
-		double DOT1 = vectorsDot(&x,&V);
+		double DOT1 = vectorsDot(&X,&V);
 		t = DOT1 / DOT2;
 		if (t < 0)
 		 	return 0;
@@ -50,3 +54,69 @@ double hit_plane(t_ray ray,t_plane *plane)
 	}
 	return 0;
 }
+
+
+
+/*
+double hit_plane(t_ray ray,t_plane *plane)
+{
+	// P - C | V = 0
+	// t = DOT1 (-X,V) / DOT1(D,V) 
+	double t;
+
+	t_vector V = normalize(&plane->orientation);
+	double DOT2 = vectorsDot(&ray.direction,&V);
+	if (DOT2 != 0.0)
+	{
+		t_vector X = vectorsSub(&ray.origin,&plane->coord);
+		t_vector x = vectorscal(&V,-1);
+		double DOT1 = vectorsDot(&X,&x);
+		t = DOT1 / DOT2;
+		if (t >= 0)
+		 	return t;
+		return 0;
+	}
+	return 0;
+}
+
+double hit_plane(t_ray ray,t_plane *plane)
+{
+	// P - C | V = 0
+	// t = DOT1 (-X,V) / DOT1(D,V) 
+	double t;
+	double DOT2 = vectorsDot(&ray.direction,&plane->orientation);
+	if (DOT2 != 0)
+	{
+		t_vector x = vectorsSub(&plane->coord,&ray.origin);
+		double DOT1 = vectorsDot(&x,&ray.origin);
+		t = DOT1 / DOT2;
+		if (t > 0)
+		 	return 0;
+		return t;
+	}
+	return 0;
+}
+
+
+
+double hit_plane(t_ray ray,t_plane *plane)
+{
+	double a;
+	double b;
+	double t;
+	t_vector oc;
+
+	a = vectorsDot(&plane->orientation,&ray.direction);
+	//printf("%f\n",a);
+	if (a != 0.0)
+	{
+		oc =  vectorsSub(&plane->coord,&ray.origin);
+		b = vectorsDot(&oc, &plane->orientation);
+		t = b/ a;
+		//printf("%f\n",b);
+		if (t > 0.0)
+			return (t);
+	}
+	return 0;
+}
+*/

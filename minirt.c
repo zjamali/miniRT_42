@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+//#include "/usr/X11/include/mlx.h"
 #include <mlx.h>
 #include <stdio.h>
 #include "minirt.h"
