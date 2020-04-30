@@ -157,9 +157,6 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 					//printf("%f\n",k);
 					if (d < c)
 					{
-						//printf("%f\n",closet_object1);
-						//printf("%f,%f,%f  %f,%f,%f  %f,%f,%f\n",i.x,i.y,i.z,
-						//p.x,p.y,p.z,l_p.x,l_p.y,l_p.z);
 						check = 1;
 						closet_object = closet_object1;
 					}

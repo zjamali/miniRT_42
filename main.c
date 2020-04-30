@@ -37,18 +37,18 @@ int main(){
 	s1.color = color2;
 
 	t_sphere s2;
-	s2.origin.x = -3.2;//-3.2;
-	s2.origin.y = 0; // 0
+	s2.origin.x = 0;//-3.2;
+	s2.origin.y = 20; // 0
 	s2.origin.z = -10;//-10;
-	s2.radius = 1.6;// 1.6
+	s2.radius = 3;// 1.6
 	t_vector color1 ={255,255,0};
 	s2.color = color1;
 
 	t_sphere s3;
 	s3.origin.x = 0;
-	s3.origin.y = 0;//3.5;
+	s3.origin.y = 5;//3.5;
 	s3.origin.z = 10;//-10;
-	s3.radius = 2;//1.5; 
+	s3.radius = 1.5; 
 	t_vector color3 ={0,255,255};
 	s3.color = color3;
 	/***********************************************/
@@ -73,11 +73,11 @@ int main(){
 	t_camera camera;
 	camera.lookfrom.x = 0;
 	camera.lookfrom.y = 0;
-	camera.lookfrom.z = 0;
+	camera.lookfrom.z = 5;
 	camera.fov = 90;
 	camera.orientaion.x = 0;
-	camera.orientaion.y = 0; //0
-	camera.orientaion.z = -1; // -1
+	camera.orientaion.y = 1; //0
+	camera.orientaion.z = 1; // -1
 	/***********************/
     i = 0;
 
@@ -141,12 +141,13 @@ int main(){
 		while(j < H)
 		{
 			t_ray ray;
-			ray.origin.x = 0;//0;
-			ray.origin.y = 0;//0;
-			ray.origin.z = 5;//0;
+			//ray.origin.x = 0;//0;
+			//ray.origin.y = 0;//0;
+			//ray.origin.z = 5;//0;
 
-			t_vector v = {0,0,0};
-			ray.direction = v;
+			//t_vector v = {0,0,0};
+			//ray.direction = v;
+			ray.origin = camera.lookfrom;
 			ray.direction = ft_camera(camera,H,W,i,j);
 			ray.direction = normalize(&ray.direction);
 			int colors = ft_color_of_pixel(ray,&object,&ambient,&light);

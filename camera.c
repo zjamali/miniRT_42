@@ -18,7 +18,7 @@ t_vector ft_camera(t_camera camera,double H,double W,double x,double y)
 	//t_vector lookFrom = {0,5,0};
 	t_vector up = {0,1,0};
 	//t_vector n = vectorsSub(&lookFrom,&lookAtPoint);   //// camera.orientation
-	t_vector n = camera.orientaion;
+	t_vector n = normalize(&camera.orientaion);
 	n = vectorscal(&n,-1);
 	//n = normalize(&n);
 	t_vector u = vecttorscross(&up,&n);
@@ -29,7 +29,10 @@ t_vector ft_camera(t_camera camera,double H,double W,double x,double y)
 	double viewPlaneHalfWidth = aspectRatio * tan(theta/2);
 	double viewPlaneHalfHeight= -1 * tan(theta/2);
 	//camera.lookfrom = lookFrom;
-	t_vector c = vectorsSub(&camera.lookfrom,&n);
+	t_vector none = {0,0,0};
+	// *t_vector c = vectorsSub(&camera.lookfrom,&n);
+	//t_vector c = vectorsSub(&none,&n);
+	t_vector c = vectorscal(&n,-1);
 	t_vector l;
 	l.x = c.x - u.x * viewPlaneHalfWidth/2 - v.x * viewPlaneHalfHeight /2;
 	l.y = c.y - u.y * viewPlaneHalfWidth/2 - v.y * viewPlaneHalfHeight /2;
