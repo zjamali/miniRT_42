@@ -128,7 +128,7 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 
 	int check = 0;
 	double closet_object1 = 0;
-	double closet_object = MAXFLOAT;
+	double closet_object = 1000000000000;
 	t_object *temps ;
 	temps = object;
 	while (temps != NULL)
@@ -142,29 +142,27 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 			if (closet_object1 < closet_object)
 				{
 					//printf("%f\n",closet_object1);
-					closet_object1 = closet_object1 + 0.001; // for points
+					closet_object1 = closet_object1 + 0.0001; // for points
 					t_vector scale_direction_to_i = vectorscal(&light_ray.direction,closet_object1);
 					//t_vector newray = {light_ray.origin.x - 0.001,light_ray.origin.y - 0.001,light_ray.origin.z - 0.001,};
 					t_vector i = vectorsadd(&light_ray.origin,&scale_direction_to_i);
 					//printf("%f,%f,%f  %f,%f,%f  %f,%f,%f\n",i.x,i.y,i.z,
-					//	p.x,p.y,p.z,l_p.x,l_p.y,l_p.z);
-					t_vector i_l = vectorsSub(&i,&light_ray.origin);
-					t_vector l_pa = vectorsSub(&light->origin,&light_ray.origin);
+						//p.x,p.y,p.z,l_p.x,l_p.y,l_p.z);
+					t_vector i_l = vectorsSub(&light_ray.origin,&i);
+					t_vector l_pa = vectorsSub(&light_ray.origin,&p);
 					double d,c;
 					d = lenght(&i_l);
-					c = lenght(&l_p);
+					c = lenght(&l_pa);
+					double k = vectorsDot(&i_l,&l_pa);
+					printf("%f\n",k);
 					if (d < c)
 					{
-						//printf("%.0f,%.0f,%.0f  %.0f,%.0f,%.0f\n",object->color->x,object->color->y,object->color->z,
-						//temps->color->x,temps->color->y,temps->color->z);
+						//printf("%f\n",closet_object1);
+						//printf("%f,%f,%f  %f,%f,%f  %f,%f,%f\n",i.x,i.y,i.z,
+						//p.x,p.y,p.z,l_p.x,l_p.y,l_p.z);
 						check = 1;
 						closet_object = closet_object1;
 					}
-					else
-					{
-						check = 0;
-					}
-					
 				}
 		}
 		temps = temps->next;
@@ -174,12 +172,6 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 		return 0;
 	}
 	 return 1;
-
-
-
-
-
-
 }
 t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 {

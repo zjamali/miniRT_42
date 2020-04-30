@@ -24,10 +24,23 @@ double hit_sphere(t_ray ray,t_sphere *sphere)
 	
 	if (delta < 0)
 		return 0;
+	/*
 	else
 	{
 		return ( (-1*B - sqrt(delta)) / (2.0*A));
-	}
+	}*/
+	double t;
+	double t1 = (-B + sqrt(delta)) / (2 * A);
+	double t2 = (-B - sqrt(delta)) / (2 * A);
+	if (t1 < 0)
+		return (0);
+
+	if (t1 > t2)
+		t = t2;
+	else
+		t = t1;
+
+	return t;
 }
 
 
@@ -46,7 +59,7 @@ double hit_plane(t_ray ray,t_plane *plane)
 	if (DOT2 != 0)
 	{
 		t_vector x = vectorscal(&V,-1);
-		double DOT1 = vectorsDot(&X,&V);
+		double DOT1 = vectorsDot(&X,&x);
 		t = DOT1 / DOT2;
 		if (t < 0)
 		 	return 0;

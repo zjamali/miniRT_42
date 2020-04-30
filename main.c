@@ -17,7 +17,7 @@ int main(){
 	int W = 1080;
 	int i,j;
 	void	*mlx_ptr = mlx_init();
-	void	*win_ptr = mlx_new_window(mlx_ptr,W,H,"test");
+	void	*win_ptr = mlx_new_window(mlx_ptr,W,H,"window");
 
 	/***********************/
 	t_sphere sphere;
@@ -46,15 +46,15 @@ int main(){
 
 	t_sphere s3;
 	s3.origin.x = 0;
-	s3.origin.y = 3.5;
-	s3.origin.z = -10;
-	s3.radius = 1.5;
+	s3.origin.y = 0;//3.5;
+	s3.origin.z = 30;//-10;
+	s3.radius = 2;//1.5; 
 	t_vector color3 ={0,255,255};
 	s3.color = color3;
 	/***********************************************/
 
 	t_plane plane;
-	t_vector cord = {1,1,1};
+	t_vector cord = {-1,-1,-1};
 	
 	plane.coord = cord;
 	t_vector v = {0,1,0};
@@ -125,16 +125,16 @@ int main(){
 	t_ambient ambient;
 	//t_vector ambcolor = {255,255,255};
 	//ambient.color = ambcolor;
-	ambient.intensity =0.1;
+	ambient.intensity =0.15;
 
 	t_light light;
 	t_vector lightcolor = {255,255,255};
 	t_vector coord ;
 	light.color = lightcolor;
 	light.intensity = 0.9;
-	light.origin.x = -10; // -10
-	light.origin.y = 10;
-	light.origin.z = -10; // -10
+	light.origin.x = 0; // -10
+	light.origin.y = 5;
+	light.origin.z = 0; // -10
 	while(i < W)
 	{
 		j = 0;
