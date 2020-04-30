@@ -47,14 +47,14 @@ int main(){
 	t_sphere s3;
 	s3.origin.x = 0;
 	s3.origin.y = 0;//3.5;
-	s3.origin.z = 30;//-10;
+	s3.origin.z = 10;//-10;
 	s3.radius = 2;//1.5; 
 	t_vector color3 ={0,255,255};
 	s3.color = color3;
 	/***********************************************/
 
 	t_plane plane;
-	t_vector cord = {-1,-1,-1};
+	t_vector cord = {-1,-5,-1};
 	
 	plane.coord = cord;
 	t_vector v = {0,1,0};
@@ -76,8 +76,8 @@ int main(){
 	camera.lookfrom.z = 0;
 	camera.fov = 90;
 	camera.orientaion.x = 0;
-	camera.orientaion.y = 0;
-	camera.orientaion.z = -1;
+	camera.orientaion.y = 0; //0
+	camera.orientaion.z = -1; // -1
 	/***********************/
     i = 0;
 
@@ -132,8 +132,8 @@ int main(){
 	t_vector coord ;
 	light.color = lightcolor;
 	light.intensity = 0.9;
-	light.origin.x = 0; // -10
-	light.origin.y = 5;
+	light.origin.x = 10; // -10
+	light.origin.y = 10;
 	light.origin.z = 0; // -10
 	while(i < W)
 	{
@@ -141,9 +141,9 @@ int main(){
 		while(j < H)
 		{
 			t_ray ray;
-			ray.origin.x = 0;
-			ray.origin.y = 0;
-			ray.origin.z = 0;
+			ray.origin.x = 0;//0;
+			ray.origin.y = 0;//0;
+			ray.origin.z = 5;//0;
 
 			t_vector v = {0,0,0};
 			ray.direction = v;

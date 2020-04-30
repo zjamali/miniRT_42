@@ -142,7 +142,7 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 			if (closet_object1 < closet_object)
 				{
 					//printf("%f\n",closet_object1);
-					closet_object1 = closet_object1 + 0.0001; // for points
+					closet_object1 = closet_object1 + 0.001; // for points
 					t_vector scale_direction_to_i = vectorscal(&light_ray.direction,closet_object1);
 					//t_vector newray = {light_ray.origin.x - 0.001,light_ray.origin.y - 0.001,light_ray.origin.z - 0.001,};
 					t_vector i = vectorsadd(&light_ray.origin,&scale_direction_to_i);
@@ -154,7 +154,7 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 					d = lenght(&i_l);
 					c = lenght(&l_pa);
 					double k = vectorsDot(&i_l,&l_pa);
-					printf("%f\n",k);
+					//printf("%f\n",k);
 					if (d < c)
 					{
 						//printf("%f\n",closet_object1);
