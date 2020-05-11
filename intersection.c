@@ -67,7 +67,40 @@ double hit_plane(t_ray ray,t_plane *plane)
 	}
 	return 0;
 }
+double hit_triangle(t_ray ray,t_triangle *triangle)
+{
+	double epsilon = 0.0000001;
+	t_vector edge1, edge2, h, s, q;
+	double a, f, u, v, t;
 
+	edge1 = vectorsSub(&triangle->vectors[1],&triangle->vectors[0]);
+	edge2 = vectorsSub(&triangle->vectors[2],&triangle->vectors[0]);
+	h = vecttorscross(&ray.direction,&edge2);
+	a = vectorsDot(&edge1,&h);
+	//printf("a");
+	if (a > -epsilon && a < epsilon)
+        return 0;    // This ray is parallel to this triangle.
+    f = 1.0/a;
+	s = vectorsSub(&ray.origin,&triangle->vectors[0]);
+	u = vectorsDot(&s,&h);
+	u = f * u;
+	//printf("u");
+	if (u < 0.0 || u > 1.0)
+        return 0;
+	q = vecttorscross(&s,&edge1);
+	v = vectorsDot(&ray.direction,&q);
+	v = f * v;
+	//printf("v");
+	if (v < 0.0 || u + v > 1.0)
+        return 0;
+    // At this stage we can compute t to find out where the intersection point is on the line.
+	t = vectorsDot(&q,&edge2);
+	t = f * t;
+	if (t > epsilon) // ray intersection
+        return t;
+    else // This means that there is a line intersection but not a ray intersection.
+        return 0;
+}
 
 
 /*

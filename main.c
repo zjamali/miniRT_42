@@ -13,7 +13,7 @@
 #include "minirt.h"
 
 int main(){
-	int H = 1080;
+	int H = 720;
 	int W = 1080;
 	int i,j;
 	void	*mlx_ptr = mlx_init();
@@ -24,8 +24,8 @@ int main(){
 	sphere.origin.x = 0;
 	sphere.origin.y = 0;
 	sphere.origin.z = -14;
-	sphere.radius = 2;
-	t_vector color ={255,0,0};
+	sphere.radius = 2; //2
+	t_vector color ={230,57,70};
 	sphere.color = color;
 
 	t_sphere s1;
@@ -33,7 +33,7 @@ int main(){
 	s1.origin.y = 0;
 	s1.origin.z = -20;
 	s1.radius = 3.5;
-	t_vector color2 ={0,0,255};
+	t_vector color2 ={87,205,196};
 	s1.color = color2;
 
 	t_sphere s2;
@@ -41,20 +41,20 @@ int main(){
 	s2.origin.y = 20; // 0
 	s2.origin.z = -10;//-10;
 	s2.radius = 3;// 1.6
-	t_vector color1 ={255,255,0};
+	t_vector color1 ={255,166,43};
 	s2.color = color1;
 
 	t_sphere s3;
 	s3.origin.x = 0;
-	s3.origin.y = 5;//3.5;
+	s3.origin.y = 0;//3.5;
 	s3.origin.z = 10;//-10;
 	s3.radius = 1.5; 
 	t_vector color3 ={0,255,255};
 	s3.color = color3;
-	/***********************************************/
+/***********************************************/
 
 	t_plane plane;
-	t_vector cord = {-1,-5,-1};
+	t_vector cord = {0,0,0};
 	
 	plane.coord = cord;
 	t_vector v = {0,1,0};
@@ -64,31 +64,50 @@ int main(){
 	plane.color.z = 255;
 /***********************************************/
 
-
-
 	/***********************/
-
+	t_triangle tr;
+	tr.vectors[0].x = -1;
+	tr.vectors[0].y = -1;
+	tr.vectors[0].z = 0;
+	tr.vectors[1].x = 1;
+	tr.vectors[1].y = -1;
+	tr.vectors[1].z = 0;
+	tr.vectors[2].x = 0;
+	tr.vectors[2].y = 1;
+	tr.vectors[2].z = 0;
+	t_vector trcolore = {255,0,0};
+	tr.color = trcolore;
 
 	/***********************/
 	t_camera camera;
 	camera.lookfrom.x = 0;
 	camera.lookfrom.y = 0;
-	camera.lookfrom.z = 5;
+	camera.lookfrom.z = 0;
 	camera.fov = 90;
 	camera.orientaion.x = 0;
-	camera.orientaion.y = 1; //0
-	camera.orientaion.z = 1; // -1
+	camera.orientaion.y = 0; //0
+	camera.orientaion.z = -1; // -1
 	/***********************/
     i = 0;
 
 /**********************************************/
+	t_object object5;
+	object5.object = &tr;
+	object5.color = &tr.color;
+	object5.object_type = 't';
+	object5.v3[0] = tr.vectors[0];
+	object5.v3[1] = tr.vectors[1];
+	object5.v3[2] = tr.vectors[2];
+	object5.color = &tr.color;
+	object5.next = NULL;
+
 	t_object object4;
 	object4.object = &plane;
 	object4.color = &plane.color;
 	object4.object_type = 'p';
 	object4.orientation = plane.orientation;
-	object4.origin = plane.color;
-	object4.next = NULL;
+	object4.origin = plane.coord;
+	object4.next = &object5;
 
 	t_object object3;
 	object3.object = &s3;
@@ -132,9 +151,9 @@ int main(){
 	t_vector coord ;
 	light.color = lightcolor;
 	light.intensity = 0.9;
-	light.origin.x = 10; // -10
-	light.origin.y = 10;
-	light.origin.z = 0; // -10
+	light.origin.x = 0; // -10
+	light.origin.y = 0;
+	light.origin.z = 10; // -10
 	while(i < W)
 	{
 		j = 0;

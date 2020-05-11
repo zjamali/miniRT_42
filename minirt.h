@@ -36,6 +36,12 @@ typedef struct s_plane
 	t_vector color;
 }t_plane;
 
+typedef struct s_triangle
+{
+	t_vector vectors[3];
+	t_vector color;
+}t_triangle;
+
 
 typedef struct s_ray
 {
@@ -56,6 +62,7 @@ typedef struct  s_object
 	t_vector origin;
 	t_vector orientation;
 	char object_type;
+	t_vector v3[3];
 	struct s_object *next;
 }t_object;
 
@@ -97,6 +104,7 @@ t_vector ft_camera(t_camera camera,double H,double W,double x,double y);
 /***********************  INTERSECTION.C  ***********************/
 double hit_sphere(t_ray ray,t_sphere *s);
 double hit_plane(t_ray ray,t_plane *plane);
+double hit_triangle(t_ray ray,t_triangle *triangle);
 
 
 /***********************  LIGHT.C  ***********************/

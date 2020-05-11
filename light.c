@@ -137,6 +137,9 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 			closet_object1 = hit_sphere(light_ray,temps->object);
 		else if (temps->object_type == 'p')
 			closet_object1 = hit_plane(light_ray,temps->object);
+		else if(temps->object_type == 't')
+			closet_object1 = hit_triangle(light_ray,temps->object);	
+		
 		if (closet_object1 > 0)
 		{
 			if (closet_object1 < closet_object)
@@ -175,6 +178,13 @@ t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 	t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
 	t_vector p = vectorsadd(&ray.origin,&scale_direction_to_p);
 	t_vector n = vectorsSub(&p,&object->origin);
+	if (object->object_type == 't')
+	{
+		t_vector edge1 = vectorsSub(&object->v3[1],&object->v3[0]); // 1 0 
+		t_vector edge2 = vectorsSub(&object->v3[2],&object->v3[0]); // 2 0
+		t_vector h = vecttorscross(&edge1,&edge2);
+		n = normalize(&h);
+	}
 	n = normalize(&n);
 	t_vector from_camera_to_p = vectorscal(&p,-1);
 	from_camera_to_p = normalize(&from_camera_to_p);
@@ -200,6 +210,13 @@ t_vector ft_diffuse(t_light *light,t_ray ray,double t,t_object *object,t_vector 
 	n = normalize(&n);
 	if (object->object_type == 'p')
 		n = object->orientation;
+	if (object->object_type == 't')
+	{
+		t_vector edge1 = vectorsSub(&object->v3[1],&object->v3[0]); // 1 0 
+		t_vector edge2 = vectorsSub(&object->v3[2],&object->v3[0]); // 2 0
+		t_vector h = vecttorscross(&edge1,&edge2);
+		n = normalize(&h);
+	}
 	t_vector l_p;
 	l_p = vectorsSub(&light->origin,&p);
 	l_p = normalize(&l_p);
