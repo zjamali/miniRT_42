@@ -37,6 +37,8 @@ int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *lig
 			closet_object1 = hit_plane(ray,temp->object);
 		else if (temp->object_type == 't')
 			closet_object1 = hit_triangle(ray,temp->object);
+		else if (temp->object_type == 'q')
+			closet_object1 = hit_square(ray,temp->object);
 		if (closet_object1 != 0)
 		{
 			if (closet_object1 < closet_object)
@@ -57,6 +59,13 @@ int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *lig
 				{
 					t_vector d = ft_diffuse(light,ray,closet_object,temp,&color);
 					i_diffuse = d;
+				}
+				if(temp->object_type == 'q')
+				{
+					t_vector d = ft_diffuse(light,ray,closet_object,temp,&color);
+					i_diffuse = d;
+					t_vector s = {0,0,0};
+					i_specular = s;
 				}
 				i_ambient = ft_ambient(ambient,&color);
 				shadow = ft_shadow(temp,object,light,ray,closet_object);

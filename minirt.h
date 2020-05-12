@@ -42,6 +42,14 @@ typedef struct s_triangle
 	t_vector color;
 }t_triangle;
 
+typedef struct s_square
+{
+	t_vector center;
+	t_vector normal;
+	double edge_size;
+	t_vector color;
+}t_square;
+
 
 typedef struct s_ray
 {
@@ -63,6 +71,7 @@ typedef struct  s_object
 	t_vector orientation;
 	char object_type;
 	t_vector v3[3];
+	double size;
 	struct s_object *next;
 }t_object;
 
@@ -105,6 +114,7 @@ t_vector ft_camera(t_camera camera,double H,double W,double x,double y);
 double hit_sphere(t_ray ray,t_sphere *s);
 double hit_plane(t_ray ray,t_plane *plane);
 double hit_triangle(t_ray ray,t_triangle *triangle);
+double hit_square(t_ray ray,t_square *s_square);
 
 
 /***********************  LIGHT.C  ***********************/

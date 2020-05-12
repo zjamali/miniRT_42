@@ -47,14 +47,14 @@ int main(){
 	t_sphere s3;
 	s3.origin.x = 0;
 	s3.origin.y = 0;//3.5;
-	s3.origin.z = 10;//-10;
-	s3.radius = 1.5; 
+	s3.origin.z = 25;//-10;
+	s3.radius = 3; // 1.5
 	t_vector color3 ={0,255,255};
 	s3.color = color3;
 /***********************************************/
 
 	t_plane plane;
-	t_vector cord = {0,0,0};
+	t_vector cord = {0,-10,0};
 	
 	plane.coord = cord;
 	t_vector v = {0,1,0};
@@ -80,17 +80,38 @@ int main(){
 
 	/***********************/
 	t_camera camera;
-	camera.lookfrom.x = 0;
-	camera.lookfrom.y = 0;
-	camera.lookfrom.z = 0;
+	camera.lookfrom.x = 0;//0;
+	camera.lookfrom.y = 0;//0;
+	camera.lookfrom.z = 0;//0;
 	camera.fov = 90;
 	camera.orientaion.x = 0;
 	camera.orientaion.y = 0; //0
-	camera.orientaion.z = -1; // -1
+	camera.orientaion.z = 1; // -1
 	/***********************/
-    i = 0;
+
+	/***********************/
+	t_square sq;
+	sq.center.x = 0;
+	sq.center.y = 3;
+	sq.center.z = 20;
+	sq.edge_size = 5;
+	t_vector normal = {0,0,-1}; // 1
+	sq.normal = normal;
+	t_vector sqcolor = {0,255,0};
+	sq.color = sqcolor;
+	/***********************/
 
 /**********************************************/
+	t_object object6;
+	object6.object_type = 'q';
+	object6.object = &sq;
+	object6.origin = sq.center;
+	object6.orientation = sq.normal;
+	object6.size = sq.edge_size;
+	object6.color = &sq.color;
+	object6.next = NULL;
+
+
 	t_object object5;
 	object5.object = &tr;
 	object5.color = &tr.color;
@@ -99,7 +120,7 @@ int main(){
 	object5.v3[1] = tr.vectors[1];
 	object5.v3[2] = tr.vectors[2];
 	object5.color = &tr.color;
-	object5.next = NULL;
+	object5.next = &object6;
 
 	t_object object4;
 	object4.object = &plane;
@@ -152,8 +173,11 @@ int main(){
 	light.color = lightcolor;
 	light.intensity = 0.9;
 	light.origin.x = 0; // -10
-	light.origin.y = 0;
-	light.origin.z = 10; // -10
+	light.origin.y = 5;
+	light.origin.z = 0; // -10
+/***********************************************/
+
+	i = 0;
 	while(i < W)
 	{
 		j = 0;

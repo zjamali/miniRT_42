@@ -55,6 +55,7 @@ double hit_plane(t_ray ray,t_plane *plane)
 
 	t_vector X = vectorsSub(&ray.origin,&plane->coord);
 	t_vector V = plane->orientation;
+	V = normalize(&V);
 	double DOT2 = vectorsDot(&ray.direction,&V);
 	if (DOT2 != 0)
 	{
@@ -100,6 +101,31 @@ double hit_triangle(t_ray ray,t_triangle *triangle)
         return t;
     else // This means that there is a line intersection but not a ray intersection.
         return 0;
+}
+
+double hit_square(t_ray ray,t_square *square)
+{
+	double t;
+	double size;
+	t_vector e1,e2;
+
+	t = hit_plane(ray,(t_plane*)square);
+
+	if (t >=0)
+	{
+		t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
+		t_vector p = vectorsadd(&ray.origin,&scale_direction_to_p);
+
+		t_vector u = vectorsSub(&p,&square->center);
+
+		double r = square->edge_size/2;
+
+		if (fabs(u.x) > r || fabs(u.y) > r || fabs(u.z) > r)
+			return 0;
+		return t;
+	}
+	return 0;
+	
 }
 
 
