@@ -15,3 +15,4 @@ https://web.cs.hacettepe.edu.tr/~erkut/bco511.s12/w03-raytracing.pdf
 https://www.youtube.com/watch?v=62-pRVZuS5c
 
 https://pdfs.semanticscholar.org/0e97/152b766ecbe29f0850a419ba3ba725d38463.pdf?_ga=2.17519292.427919042.1589188046-1548235695.1589188046
+https://mrl.nyu.edu/~dzorin/rend05/lecture2.pdf
