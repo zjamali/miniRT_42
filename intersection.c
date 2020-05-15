@@ -24,11 +24,6 @@ double hit_sphere(t_ray ray,t_sphere *sphere)
 	
 	if (delta < 0)
 		return 0;
-	/*
-	else
-	{
-		return ( (-1*B - sqrt(delta)) / (2.0*A));
-	}*/
 	double t;
 	double t1 = (-B + sqrt(delta)) / (2 * A);
 	double t2 = (-B - sqrt(delta)) / (2 * A);
@@ -128,6 +123,124 @@ double hit_square(t_ray ray,t_square *square)
 	
 }
 
+double hit_cylinder(t_ray ray,t_cylinder *cylinder)
+{
+	double t = 0;
+	// a*t^2 + b*t +c = 0;
+	cylinder->normal = normalize(&cylinder->normal);
+	t_vector oc =  vectorsSub(&ray.origin,&cylinder->coord);
+	double a = vectorsDot(&ray.direction,&ray.direction) - 
+				(vectorsDot(&ray.direction,&cylinder->normal) * vectorsDot(&ray.direction,&cylinder->normal));
+	double b = 2 * (vectorsDot(&ray.direction,&oc) - 
+				(vectorsDot(&ray.direction,&cylinder->normal) * vectorsDot(&oc,&cylinder->normal)));
+	double c = vectorsDot(&oc,&oc) -
+				vectorsDot(&oc,&cylinder->normal) * vectorsDot(&oc,&cylinder->normal) -
+				(cylinder->diameter/2) * (cylinder->diameter/2);
+	double delta =  b * b - 4 * a * c;
+	
+	if (delta < 0)
+		return 0;
+	double t1 = (-b + sqrt(delta)) / (2 * a);
+	double t2 = (-b - sqrt(delta)) / (2 * a);
+
+	if (t1 < 0)
+		return (0);
+	
+	if (t1 > t2)
+		t = t2;
+	else
+		t = t1;
+	//    m = D|V*t + X|V
+	double min = vectorsDot(&ray.direction,&cylinder->normal) * t2 + vectorsDot(&oc,&cylinder->normal);
+	double max = vectorsDot(&ray.direction,&cylinder->normal) * t1 + vectorsDot(&oc,&cylinder->normal);
+	if (min >= 0 && min <= cylinder->height)
+		return t2;
+	if (max >= 0 && max <= cylinder->height)
+		return t1;
+	return 0;
+}
+
+double hit_disk(t_ray ray,t_disk *disk)
+{
+	///////////////////// this the correct
+	// P - C | V = 0
+	// t = DOT1 (-X,V) / DOT1(D,V) 
+	double t;
+	t_vector X = vectorsSub(&ray.origin,&disk->coord);
+	t_vector V = disk->orientation;
+	V = normalize(&V);
+	double DOT2 = vectorsDot(&ray.direction,&V);
+	if (DOT2 != 0)
+	{
+		t_vector x = vectorscal(&V,-1);
+		double DOT1 = vectorsDot(&X,&x);
+		t = DOT1 / DOT2;
+		if (t < 0)
+		 	return 0;
+		t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
+		t_vector p = vectorsadd(&ray.origin,&scale_direction_to_p);
+		t_vector op = vectorsSub(&p,&disk->coord);
+		double h = vectorsDot(&op,&op);
+		if (sqrtf(h) <= disk->radius)
+			return t;
+	}
+	return 0;
+}
+
+/*
+t_plane cap_0;
+	cap_0.color = cylinder->color;
+	cap_0.coord = cylinder->coord;
+	cap_0.orientation = vectorscal(&cylinder->normal,-1);
+
+	t_plane cap_1;
+	cap_1.color = cylinder->color;
+	// cap_1.coord.x = cylinder->coord.x + cylinder->height;
+	// cap_1.coord.y = cylinder->coord.y + cylinder->height;
+	// cap_1.coord.z = cylinder->coord.z + cylinder->height;
+	cap_1.coord = vectorscal(&cylinder->normal,cylinder->height);
+	cap_1.coord = vectorsadd(&cap_1.coord,&cylinder->coord);
+	cap_1.orientation = cylinder->normal;
+	t = 0;
+	double tp1;
+	double tp0;
+	double tp;
+	tp0 = hit_plane(ray,&cap_0);
+	tp1 = hit_plane(ray,&cap_1);
+	//////if (t > 0)
+	//{
+		t_vector scale_direction_to_P0 = vectorscal(&ray.direction,tp0);
+		t_vector p0 = vectorsadd(&ray.origin,&scale_direction_to_P0);
+		t_vector op0 = vectorsSub(&p0,&cap_0.coord);
+
+		t_vector scale_direction_to_P1 = vectorscal(&ray.direction,tp1);
+		t_vector p1 = vectorsadd(&ray.origin,&scale_direction_to_P1);
+		t_vector op1 = vectorsSub(&p1,&cap_1.coord);
+
+		if(lenght(&op0) <= cylinder->diameter/2)
+		{
+			//printf("%f,%f,%f\n",p.x,p.y,p.z);
+			if (tp1 > tp0)
+				tp = tp0;
+		}
+		if(lenght(&op1) <= cylinder->diameter/2)
+		{
+			//printf("%f,%f,%f\n",p.x,p.y,p.z);
+			if (tp1 < tp0)
+				tp = tp1;
+		}
+		if (tp < t)
+		{
+			printf("f ");
+			return tp;
+		}
+		//else if (tp < t && tp > 0)
+			//return tp;
+		
+	//}
+	return 0;
+
+*/
 
 /*
 double hit_plane(t_ray ray,t_plane *plane)

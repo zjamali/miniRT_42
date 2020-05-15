@@ -101,7 +101,66 @@ int main(){
 	sq.color = sqcolor;
 	/***********************/
 
+	/***********************/
+	t_cylinder cy;
+	cy.coord.x = 0;
+	cy.coord.y = 0;
+	cy.coord.z = -2;
+
+	cy.diameter = 1;
+	cy.height = 1;
+	cy.normal.x = -1;
+	cy.normal.y = 0;
+	cy.normal.z = 1;
+	t_vector cycolor = {255,0,0};
+	cy.color = cycolor;
+
+	t_disk cap0;
+	cap0.orientation = vectorscal(&cy.normal,-1);
+	cap0.orientation = normalize(&cap0.orientation);
+	cap0.color = cy.color;
+	cap0.radius = cy.diameter / 2.0;
+	cap0.coord = cy.coord;
+
+	t_disk cap1;
+	cap1.orientation = normalize(&cy.normal);
+	cap1.color = cy.color;
+	cap1.radius = cy.diameter / 2.0;
+	cap1.coord = normalize(&cy.normal);
+	cap1.coord = vectorscal(&cap1.coord,cy.height);
+	cap1.coord = vectorsadd(&cy.coord,&cap1.coord);
+	/***********************/
+
+
 /**********************************************/
+	t_object object9;
+	object9.object = &cap1;
+	object9.color = &cap1.color;
+	object9.object_type = 'd';
+	object9.size = cap1.radius;
+	object9.orientation = normalize(&cap1.orientation);
+	object9.origin = cap1.coord;
+	object9.next = NULL;
+
+	t_object object8;
+	object8.object = &cap0;
+	object8.color = &cap0.color;
+	object8.object_type = 'd';
+	object8.size = cap0.radius;
+	object8.orientation = normalize(&cap0.orientation);
+	object8.origin = cap0.coord;
+	object8.next = &object9;
+
+	t_object object7;
+	object7.object_type = 'c';
+	object7.object = &cy;
+	object7.origin = cy.coord;
+	object7.orientation = cy.normal;
+	object7.size = cy.height;
+	object7.diameter = cy.diameter;
+	object7.color = &cy.color;
+	object7.next = &object8;
+
 	t_object object6;
 	object6.object_type = 'q';
 	object6.object = &sq;
@@ -109,7 +168,7 @@ int main(){
 	object6.orientation = sq.normal;
 	object6.size = sq.edge_size;
 	object6.color = &sq.color;
-	object6.next = NULL;
+	object6.next = &object7;
 
 
 	t_object object5;
@@ -128,7 +187,7 @@ int main(){
 	object4.object_type = 'p';
 	object4.orientation = plane.orientation;
 	object4.origin = plane.coord;
-	object4.next = &object5;
+	object4.next = &object6; /// object5;
 
 	t_object object3;
 	object3.object = &s3;
@@ -173,8 +232,8 @@ int main(){
 	light.color = lightcolor;
 	light.intensity = 0.9;
 	light.origin.x = 0; // -10
-	light.origin.y = 5;
-	light.origin.z = 0; // -10
+	light.origin.y = 0;
+	light.origin.z = -10; // -10
 /***********************************************/
 
 	i = 0;

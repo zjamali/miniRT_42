@@ -42,6 +42,14 @@ typedef struct s_triangle
 	t_vector color;
 }t_triangle;
 
+typedef struct s_disk
+{
+	t_vector coord;
+	t_vector orientation;
+	double radius;
+	t_vector color;
+}t_disk;
+
 typedef struct s_square
 {
 	t_vector center;
@@ -49,6 +57,16 @@ typedef struct s_square
 	double edge_size;
 	t_vector color;
 }t_square;
+
+typedef struct s_cylinder
+{
+	t_vector coord;
+	t_vector normal;
+	double height;
+	double diameter;
+	t_vector color;
+}t_cylinder;
+
 
 
 typedef struct s_ray
@@ -66,12 +84,14 @@ typedef struct  s_camera
 typedef struct  s_object
 {
 	void *object;
+
 	t_vector *color;
 	t_vector origin;
 	t_vector orientation;
 	char object_type;
 	t_vector v3[3];
 	double size;
+	double diameter;
 	struct s_object *next;
 }t_object;
 
@@ -115,8 +135,8 @@ double hit_sphere(t_ray ray,t_sphere *s);
 double hit_plane(t_ray ray,t_plane *plane);
 double hit_triangle(t_ray ray,t_triangle *triangle);
 double hit_square(t_ray ray,t_square *s_square);
-
-
+double hit_cylinder(t_ray ray,t_cylinder *cylinder);
+double hit_disk(t_ray ray,t_disk *disk);
 /***********************  LIGHT.C  ***********************/
 t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object);
 t_vector ft_diffuse(t_light *light,t_ray ray,double t,t_object *object,t_vector *colors);

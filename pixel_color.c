@@ -17,6 +17,9 @@ double rgbconvert(int ir, int ig, int ib)
 }
 int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *light)
 {
+	double t1;
+	double t2;
+	t_vector d;
 	t_vector colors;
 	double amcolor = 0;
 	int check = 0;
@@ -39,6 +42,10 @@ int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *lig
 			closet_object1 = hit_triangle(ray,temp->object);
 		else if (temp->object_type == 'q')
 			closet_object1 = hit_square(ray,temp->object);
+		else if (temp->object_type == 'c')
+			closet_object1 = hit_cylinder(ray,temp->object);
+		else if (temp->object_type == 'd')
+			closet_object1 = hit_disk(ray,temp->object);
 		if (closet_object1 != 0)
 		{
 			if (closet_object1 < closet_object)
@@ -46,27 +53,15 @@ int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *lig
 				check = 1;
 				closet_object = closet_object1;
 				color = *temp->color;
-				i_specular = ft_specular(light,ray,closet_object,temp);
+				if(temp->object_type == 's')
+					i_specular = ft_specular(light,ray,closet_object,temp);
+				else
+				{
+					i_specular.x= 0;
+					i_specular.y= 0;
+					i_specular.z= 0; 
+				}
 				i_diffuse = ft_diffuse(light,ray,closet_object,temp,&color);
-				if(temp->object_type == 'p')
-				{
-					t_vector d = ft_diffuse(light,ray,closet_object,temp,&color);
-					i_diffuse = d;
-					t_vector s = {0,0,0};
-					i_specular = s;
-				}
-				if(temp->object_type == 't')
-				{
-					t_vector d = ft_diffuse(light,ray,closet_object,temp,&color);
-					i_diffuse = d;
-				}
-				if(temp->object_type == 'q')
-				{
-					t_vector d = ft_diffuse(light,ray,closet_object,temp,&color);
-					i_diffuse = d;
-					t_vector s = {0,0,0};
-					i_specular = s;
-				}
 				i_ambient = ft_ambient(ambient,&color);
 				shadow = ft_shadow(temp,object,light,ray,closet_object);
 				colors.y =  i_ambient.y * 255 +  shadow *	( i_diffuse.y * 255 +       i_specular.y * 255);

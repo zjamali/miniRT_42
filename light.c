@@ -141,6 +141,10 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 			closet_object1 = hit_triangle(light_ray,temps->object);
 		else if(temps->object_type == 'q')
 			closet_object1 = hit_square(light_ray,temps->object);
+		else if(temps->object_type == 'c')
+		 	closet_object1 = hit_cylinder(light_ray,temps->object);
+		else if(temps->object_type == 'd')
+			closet_object1 = hit_disk(light_ray,temps->object);
 		if (closet_object1 > 0)
 		{
 			if (closet_object1 < closet_object)
@@ -207,10 +211,14 @@ t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 }
 t_vector ft_diffuse(t_light *light,t_ray ray,double t,t_object *object,t_vector *colors)
 {
+	double m;
+	double static new;
 	t_vector scale_direction_to_P = vectorscal(&ray.direction,t);
 	t_vector p = vectorsadd(&ray.origin,&scale_direction_to_P);
 	t_vector n = vectorsSub(&p,&object->origin);
 	if (object->object_type == 'p')
+		n = object->orientation;
+	if (object->object_type == 'q')
 		n = object->orientation;
 	if (object->object_type == 't')
 	{
@@ -219,7 +227,17 @@ t_vector ft_diffuse(t_light *light,t_ray ray,double t,t_object *object,t_vector 
 		t_vector h = vecttorscross(&edge1,&edge2);
 		n = normalize(&h);
 	}
-	if (object->object_type == 'q')
+	if (object->object_type == 'c')
+	{
+		object->orientation = normalize(&object->orientation);
+		t_vector oc =  vectorsSub(&ray.origin,&object->origin);
+		m = vectorsDot(&ray.direction,&object->orientation) * t + vectorsDot(&oc,&object->orientation);
+		//    N = nrm( P-C-V*m )
+		t_vector normal = vectorsSub(&p,&object->origin);
+		t_vector line_point = vectorscal(&object->orientation,m);
+		n = vectorsSub(&normal,&line_point);
+	}
+	if (object->object_type == 'd')
 		n = object->orientation;
 	n = normalize(&n);
 	t_vector l_p;
