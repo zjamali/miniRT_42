@@ -17,6 +17,16 @@
 #define max(a,b) ((double)a > (double)b ? (double)a : (double)b)
 #define min(a,b) ((double)a > (double)b ? (double)b : (double)a)
 #define PI 3.1415926535897932
+
+typedef struct  s_imag {
+    void        *img;
+    char        *addr;
+    int         bits_per_pixel;
+    int         line_length;
+    int         endian;
+}               t_imag;
+
+
 typedef struct s_vector
 {
 	float x,y,z;

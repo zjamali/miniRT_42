@@ -174,7 +174,7 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 	}
 	if (check == 1)
 	{
-		return 0;
+		return 0.02;
 	}
 	 return 1;
 }

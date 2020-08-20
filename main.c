@@ -12,9 +12,19 @@
 
 #include "minirt.h"
 
+
+
+void            my_mlx_pixel_put(t_imag *img, int x, int y, int color)
+{
+    char    *dst;
+
+    dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+    *(int*)dst = color;
+}
+
 int main(){
-	int H = 720;
 	int W = 1080;
+	int H = 720;
 	int i,j;
 	void	*mlx_ptr = mlx_init();
 	void	*win_ptr = mlx_new_window(mlx_ptr,W,H,"window");
@@ -54,10 +64,10 @@ int main(){
 /***********************************************/
 
 	t_plane plane;
-	t_vector cord = {0,-10,0};
+	t_vector cord = {0,-10,-20}; /// 0 -10 0
 	
 	plane.coord = cord;
-	t_vector v = {0,1,0};
+	t_vector v = {0,1,0}; /// 010
 	plane.orientation = v;
 	plane.color.x = 255;
 	plane.color.y = 255;
@@ -80,13 +90,13 @@ int main(){
 
 	/***********************/
 	t_camera camera;
-	camera.lookfrom.x = 0;//0;
-	camera.lookfrom.y = 0;//0;
+	camera.lookfrom.x = 0;//0;  //// 10
+	camera.lookfrom.y = 0;//0;  ///// 8
 	camera.lookfrom.z = 0;//0;
 	camera.fov = 90;
 	camera.orientaion.x = 0;
 	camera.orientaion.y = 0; //0
-	camera.orientaion.z = 1; // -1
+	camera.orientaion.z = -1; // -1
 	/***********************/
 
 	/***********************/
@@ -168,7 +178,7 @@ int main(){
 	object6.orientation = sq.normal;
 	object6.size = sq.edge_size;
 	object6.color = &sq.color;
-	object6.next = &object7;
+	object6.next = &object7; /// object7 ///////////////////////////////////////
 
 
 	t_object object5;
@@ -179,7 +189,7 @@ int main(){
 	object5.v3[1] = tr.vectors[1];
 	object5.v3[2] = tr.vectors[2];
 	object5.color = &tr.color;
-	object5.next = &object6;
+	object5.next = &object6; /////////////////////////
 
 	t_object object4;
 	object4.object = &plane;
@@ -233,10 +243,23 @@ int main(){
 	light.intensity = 0.9;
 	light.origin.x = 0; // -10
 	light.origin.y = 0;
-	light.origin.z = -10; // -10
+	light.origin.z = 10; // -10
 /***********************************************/
 
+
+/***************************  image ********************/
+
+t_imag imag;
+
+    imag.img = mlx_new_image(mlx_ptr, W, H);
+	imag.addr = mlx_get_data_addr(imag.img, &imag.bits_per_pixel, &imag.line_length,
+                                 &imag.endian);
+/************************ image   ***********************/
+
+
+
 	i = 0;
+	int k = 0;
 	while(i < W)
 	{
 		j = 0;
@@ -252,11 +275,19 @@ int main(){
 			ray.origin = camera.lookfrom;
 			ray.direction = ft_camera(camera,H,W,i,j);
 			ray.direction = normalize(&ray.direction);
-			int colors = ft_color_of_pixel(ray,&object,&ambient,&light);
-			mlx_pixel_put(mlx_ptr,win_ptr,i,j,colors);
+			int colors = ft_color_of_pixel(ray,&object4,&ambient,&light);
+
+			my_mlx_pixel_put(&imag, i, j, colors);
+
+			//img_data[k++] = colors;
+			//img_data[j * 8] = rgbconvert(255,255,0);
+
+
+			//mlx_pixel_put(mlx_ptr,win_ptr,i,j,colors);
 			j++;
 		}
 		i++;
 	}
+	mlx_put_image_to_window(mlx_ptr, win_ptr, imag.img, 0, 0);
 mlx_loop(mlx_ptr);
 }
