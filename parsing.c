@@ -68,7 +68,7 @@ void parsing_line(char *line,t_scene *scene)
         parsing_resolution(split,scene);
    else if (ft_strncmp(split[0],"A",1) == 0)
         parsing_ambiant(split,scene);
-    else if (ft_strncmp(split[0],"c",1) == 0)
+    else if (ft_strncmp(split[0],"c",2) == 0)
         parsing_camera(split,scene);
 }
 
