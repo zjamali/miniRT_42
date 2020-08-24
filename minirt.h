@@ -9,8 +9,14 @@
 /*   Updated: 2020/03/14 17:22:05 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#ifndef MINIRT_H
+# define MINIRT_H
 
+#include "get_next_line.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <math.h>
 #include <mlx.h>
 //#include "/usr/X11/include/mlx.h"
@@ -25,7 +31,6 @@ typedef struct  s_imag {
     int         line_length;
     int         endian;
 }               t_imag;
-
 
 typedef struct s_vector
 {
@@ -105,13 +110,6 @@ typedef struct  s_object
 	struct s_object *next;
 }t_object;
 
-typedef struct  s_scene
-{
-	int lenght; // how many object not including cam and light 
-	t_object *objects;
-	t_camera *cm;
-}t_scene;
-
 typedef struct s_ambient
 {
 	double intensity;
@@ -124,6 +122,27 @@ typedef struct s_light
 	double intensity;
 	t_vector color;
 }t_light;
+
+typedef struct resolution
+{
+	int height;
+	int width;
+}t_resolution;
+
+
+typedef struct  s_scene
+{
+	int lenght; // how many object not including cam and light 
+	t_object *objects;
+	t_camera *camera;
+	t_light *light;
+	t_ambient *ambient;
+	t_resolution *resolution;
+
+	int x;
+	int y;
+
+}t_scene;
 /***********************  VECTOR.C  ***********************/
 t_vector  vectorsadd(t_vector *v1,t_vector *v2);
 t_vector vectorscal(t_vector *v ,double s);
@@ -137,7 +156,7 @@ t_vector vecttorscross(t_vector *v1,t_vector *v2);
 
 
 /***********************  CAMERA.C  ***********************/
-t_vector ft_camera(t_camera camera,double H,double W,double x,double y);
+t_vector ft_camera(t_camera *camera,double H,double W,double x,double y);
 
 
 /***********************  INTERSECTION.C  ***********************/
@@ -157,4 +176,17 @@ double ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,double
 int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *light);
 double rgbconvert(int ir, int ig, int ib);
 
+/***********************  FT_SPLIT.C  ***********************/
+char			**ft_split(char const *s, char c);
+/***********************  ft_atoi.C  ***********************/
+int				ft_atoi(const char *str);
+/***********************  ft_atof.C  ***********************/
+double	ft_atof(const char *str);
 
+/***********************  PARCING.C  ***********************/
+t_scene *parsing(int fd);
+
+/***********************  strncmp.C  ***********************/
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+
+# endif

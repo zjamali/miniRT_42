@@ -13,6 +13,10 @@
 #include "minirt.h"
 
 
+void ft_putchar(char c)
+{
+	write(1,&c,1);
+}
 
 void            my_mlx_pixel_put(t_imag *img, int x, int y, int color)
 {
@@ -22,12 +26,22 @@ void            my_mlx_pixel_put(t_imag *img, int x, int y, int color)
     *(int*)dst = color;
 }
 
-int main(){
-	int W = 1080;
-	int H = 720;
-	int i,j;
+
+int main(int argc, char **argv){
+
+	t_scene *scene;
+	int i;
+	int j;
+	/*******************************************************************************/
+    if(argc > 1)
+	{
+		int fd;
+		fd = open(argv[1],O_RDONLY);
+		scene = parsing(fd);
+	}
+	/*******************************************************************************/
 	void	*mlx_ptr = mlx_init();
-	void	*win_ptr = mlx_new_window(mlx_ptr,W,H,"window");
+	void	*win_ptr = mlx_new_window(mlx_ptr,scene->resolution->width,scene->resolution->height,"window");
 
 	/***********************/
 	t_sphere sphere;
@@ -87,17 +101,6 @@ int main(){
 	tr.vectors[2].z = 0;
 	t_vector trcolore = {255,0,0};
 	tr.color = trcolore;
-
-	/***********************/
-	t_camera camera;
-	camera.lookfrom.x = 0;//0;  //// 10
-	camera.lookfrom.y = 0;//0;  ///// 8
-	camera.lookfrom.z = 0;//0;
-	camera.fov = 90;
-	camera.orientaion.x = 0;
-	camera.orientaion.y = 0; //0
-	camera.orientaion.z = -1; // -1
-	/***********************/
 
 	/***********************/
 	t_square sq;
@@ -231,11 +234,6 @@ int main(){
 	
 /***********************************************/
 
-	t_ambient ambient;
-	//t_vector ambcolor = {255,255,255};
-	//ambient.color = ambcolor;
-	ambient.intensity =0.15;
-
 	t_light light;
 	t_vector lightcolor = {255,255,255};
 	t_vector coord ;
@@ -251,19 +249,16 @@ int main(){
 
 t_imag imag;
 
-    imag.img = mlx_new_image(mlx_ptr, W, H);
+    imag.img = mlx_new_image(mlx_ptr, scene->resolution->width, scene->resolution->height);
 	imag.addr = mlx_get_data_addr(imag.img, &imag.bits_per_pixel, &imag.line_length,
                                  &imag.endian);
 /************************ image   ***********************/
 
-
-
 	i = 0;
-	int k = 0;
-	while(i < W)
+	while(i < scene->resolution->width)
 	{
 		j = 0;
-		while(j < H)
+		while(j < scene->resolution->height)
 		{
 			t_ray ray;
 			//ray.origin.x = 0;//0;
@@ -272,18 +267,12 @@ t_imag imag;
 
 			//t_vector v = {0,0,0};
 			//ray.direction = v;
-			ray.origin = camera.lookfrom;
-			ray.direction = ft_camera(camera,H,W,i,j);
+			ray.origin = scene->camera->lookfrom;
+			ray.direction = ft_camera(scene->camera,scene->resolution->height,scene->resolution->width,i,j);
 			ray.direction = normalize(&ray.direction);
-			int colors = ft_color_of_pixel(ray,&object4,&ambient,&light);
+			int colors = ft_color_of_pixel(ray,&object,scene->ambient,&light);
 
 			my_mlx_pixel_put(&imag, i, j, colors);
-
-			//img_data[k++] = colors;
-			//img_data[j * 8] = rgbconvert(255,255,0);
-
-
-			//mlx_pixel_put(mlx_ptr,win_ptr,i,j,colors);
 			j++;
 		}
 		i++;

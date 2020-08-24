@@ -18,8 +18,9 @@ CFLAGE =  -Wall -Wextra -Werror
 
 INC = minirt.h
 
-SRCS = main.c minirt.c  vector.c pixel_color.c intersection.c \
-        camera.c light.c \
+SRCS = main.c vector.c pixel_color.c intersection.c \
+        camera.c light.c get_next_line.c get_next_line_utils.c parsing.c ft_split.c \
+		ft_atoi.c ft_atof.c ft_strncmp.c\
 
 OBJ = $(SRCS:.c=.o)
 

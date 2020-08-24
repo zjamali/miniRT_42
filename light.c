@@ -251,8 +251,10 @@ t_vector ft_diffuse(t_light *light,t_ray ray,double t,t_object *object,t_vector 
 }
 t_vector ft_ambient(t_ambient *ambient,t_vector *color)
 {
-	t_vector i_ambient = {ambient->intensity * color->x /255,
-	ambient->intensity * color->y /255 , ambient->intensity * color->z /255};
+	/*t_vector i_ambient = {ambient->intensity * color->x /255,
+	ambient->intensity * color->y /255 , ambient->intensity * color->z /255};*/
+	t_vector i_ambient = {ambient->intensity * color->x /255 + ambient->color.x/255 * ambient->intensity,
+	ambient->intensity * color->y /255 + ambient->color.y/255 * ambient->intensity, ambient->intensity * color->z /255 + ambient->color.z/255 * ambient->intensity};
 	i_ambient.x = min(1, i_ambient.x);
 	i_ambient.y = min(1, i_ambient.y);
 	i_ambient.z = min(1, i_ambient.z);
