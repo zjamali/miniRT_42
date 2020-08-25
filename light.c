@@ -253,6 +253,9 @@ t_vector ft_ambient(t_ambient *ambient,t_vector *color)
 {
 	/*t_vector i_ambient = {ambient->intensity * color->x /255,
 	ambient->intensity * color->y /255 , ambient->intensity * color->z /255};*/
+	//printf("%f,%f,%f",color->x,color->y,color->z);
+	//printf("%f,%f,%f",ambient->color.x,ambient->color.y,ambient->color.z);
+	
 	t_vector i_ambient = {ambient->intensity * color->x /255 + ambient->color.x/255 * ambient->intensity,
 	ambient->intensity * color->y /255 + ambient->color.y/255 * ambient->intensity, ambient->intensity * color->z /255 + ambient->color.z/255 * ambient->intensity};
 	i_ambient.x = min(1, i_ambient.x);

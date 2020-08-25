@@ -16,7 +16,7 @@
 # include <stdlib.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE	100
+#  define BUFFER_SIZE	100000
 # endif
 
 typedef	struct	s_list

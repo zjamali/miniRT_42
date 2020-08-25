@@ -14,6 +14,7 @@
 
 double hit_sphere(t_ray ray,t_sphere *sphere)
 {
+	
 	// a*t^2 + b*t +c = 0;
 	t_vector oc =  vectorsSub(&ray.origin,&sphere->origin);
 	double A = vectorsDot(&ray.direction,&ray.direction);
@@ -43,6 +44,8 @@ double hit_sphere(t_ray ray,t_sphere *sphere)
 
 double hit_plane(t_ray ray,t_plane *plane)
 {
+
+	//printf("%f,%f,%f\n",plane->coord.x,plane->coord.y,plane->coord.z);
 	///////////////////// this the correct
 	// P - C | V = 0
 	// t = DOT1 (-X,V) / DOT1(D,V) 

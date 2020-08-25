@@ -132,16 +132,11 @@ typedef struct resolution
 
 typedef struct  s_scene
 {
-	int lenght; // how many object not including cam and light 
 	t_object *objects;
 	t_camera *camera;
 	t_light *light;
 	t_ambient *ambient;
 	t_resolution *resolution;
-
-	int x;
-	int y;
-
 }t_scene;
 /***********************  VECTOR.C  ***********************/
 t_vector  vectorsadd(t_vector *v1,t_vector *v2);
