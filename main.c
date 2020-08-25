@@ -60,6 +60,6 @@ int main(int argc, char **argv)
 			i++;
 		}
 		mlx_put_image_to_window(mlx_ptr, win_ptr, imag.img, 0, 0);
-	mlx_loop(mlx_ptr);
+		mlx_loop(mlx_ptr);
 	}
 }
