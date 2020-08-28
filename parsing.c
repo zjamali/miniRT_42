@@ -424,8 +424,9 @@ t_scene *parsing(int fd)
     while(get_next_line(fd,&line) > 0)
 		{
             parsing_line(line,scene);
-            printf("\n");
 			free(line);
 		}
+    parsing_line(line,scene);
+    free(line);
     return scene;
 }
