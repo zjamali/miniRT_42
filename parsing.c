@@ -385,14 +385,14 @@ void parsing_line(char *line,t_scene *scene)
 {
     char **split;
     split = ft_split(line, ' ');
-    if (ft_strncmp(split[0],"R",1) == 0)
+    if (split[0][0] == 'R')
         parsing_resolution(split,scene);
-    else if (ft_strncmp(split[0],"A",1) == 0)
+    else if (split[0][0] == 'A')
         parsing_ambiant(split,scene);
+    else if (split[0][0] == 'l')
+        parsing_light(split,scene);
     else if (ft_strncmp(split[0],"c",2) == 0)
         parsing_camera(split,scene);
-    else if (ft_strncmp(split[0],"l",1) == 0)
-        parsing_light(split,scene);
     else if (ft_strncmp(split[0],"pl",2) == 0)
         parsing_plan(split,scene);
     else if (ft_strncmp(split[0],"sp",2) == 0)
