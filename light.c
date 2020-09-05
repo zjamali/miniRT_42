@@ -121,7 +121,7 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 {
 	t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
 	t_vector p = vectorsadd(&ray.origin,&scale_direction_to_p);
-	int check = 0;
+	int dark = 0;
 	double shadaws = 0;
 	t_vector color;
 	color.x = 0;
@@ -157,7 +157,7 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 				if (closet_object1 < closet_object)
 					{
 						//printf("%f\n",closet_object1);
-						closet_object1 = closet_object1 + 0.001; // for points
+						closet_object1 = closet_object1 + 0.01; // for points
 						t_vector scale_direction_to_i = vectorscal(&light_ray.direction,closet_object1);
 						//t_vector newray = {light_ray.origin.x - 0.001,light_ray.origin.y - 0.001,light_ray.origin.z - 0.001,};
 						t_vector i = vectorsadd(&light_ray.origin,&scale_direction_to_i);
@@ -170,27 +170,23 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 						c = lenght(&l_pa);
 						//double k = vectorsDot(&i_l,&l_pa);
 						//printf("%f\n",k);
-						if (d < c)
+						if (d < c && dark <= 1)
 						{
-							 check = 1;
+							 dark = 1;
 							closet_object = closet_object1;
 						}
+						else
+						{
+							dark = 2;
+						}						
 					}
 			}
 			temps = temps->next;
 		}
 		light = light->next;
-		if (check == 1)
-			shadaws = shadaws + 0.5;
 	}
-	if (check == 1)
-	{
-	//	printf("|||%f|||\n",shadaws);
-		if (shadaws >= 1)
-			return 0.0;
-		else if (shadaws == 0.5)
-			return 0.2;
-	}
+	if (dark == 1)
+		return 0.2;
 	 return 1;
 }
 t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
