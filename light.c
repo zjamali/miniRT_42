@@ -121,60 +121,75 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 {
 	t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
 	t_vector p = vectorsadd(&ray.origin,&scale_direction_to_p);
-	t_vector l_p = vectorsSub(&p,&light->origin);
-	t_ray light_ray;
-	light_ray.origin = light->origin;
-	light_ray.direction = normalize(&l_p);
-
 	int check = 0;
-	double closet_object1 = 0;
-	double closet_object = 1000000000000;
-	t_object *temps ;
-	temps = object;
-	while (temps != NULL)
+	double shadaws = 0;
+	t_vector color;
+	color.x = 0;
+	color.y = 0;
+	color.z = 0;
+	while (light != NULL)
 	{
-		if (temps->object_type == 's')
-			closet_object1 = hit_sphere(light_ray,temps->object);
-		else if (temps->object_type == 'p')
-			closet_object1 = hit_plane(light_ray,temps->object);
-		else if(temps->object_type == 't')
-			closet_object1 = hit_triangle(light_ray,temps->object);
-		else if(temps->object_type == 'q')
-			closet_object1 = hit_square(light_ray,temps->object);
-		else if(temps->object_type == 'c')
-		 	closet_object1 = hit_cylinder(light_ray,temps->object);
-		else if(temps->object_type == 'd')
-			closet_object1 = hit_disk(light_ray,temps->object);
-		if (closet_object1 > 0)
+		t_vector l_p = vectorsSub(&p,&light->origin);
+		t_ray light_ray;
+		light_ray.origin = light->origin;
+		light_ray.direction = normalize(&l_p);
+
+		double closet_object1 = 0;
+		double closet_object = 1000000000000;
+		t_object *temps ;
+		temps = object;
+		while (temps != NULL)
 		{
-			if (closet_object1 < closet_object)
-				{
-					//printf("%f\n",closet_object1);
-					closet_object1 = closet_object1 + 0.001; // for points
-					t_vector scale_direction_to_i = vectorscal(&light_ray.direction,closet_object1);
-					//t_vector newray = {light_ray.origin.x - 0.001,light_ray.origin.y - 0.001,light_ray.origin.z - 0.001,};
-					t_vector i = vectorsadd(&light_ray.origin,&scale_direction_to_i);
-					//printf("%f,%f,%f  %f,%f,%f  %f,%f,%f\n",i.x,i.y,i.z,
-						//p.x,p.y,p.z,l_p.x,l_p.y,l_p.z);
-					t_vector i_l = vectorsSub(&light_ray.origin,&i);
-					t_vector l_pa = vectorsSub(&light_ray.origin,&p);
-					double d,c;
-					d = lenght(&i_l);
-					c = lenght(&l_pa);
-					//double k = vectorsDot(&i_l,&l_pa);
-					//printf("%f\n",k);
-					if (d < c)
+			if (temps->object_type == 's')
+				closet_object1 = hit_sphere(light_ray,temps->object);
+			else if (temps->object_type == 'p')
+				closet_object1 = hit_plane(light_ray,temps->object);
+			else if(temps->object_type == 't')
+				closet_object1 = hit_triangle(light_ray,temps->object);
+			else if(temps->object_type == 'q')
+				closet_object1 = hit_square(light_ray,temps->object);
+			else if(temps->object_type == 'c')
+			 	closet_object1 = hit_cylinder(light_ray,temps->object);
+			else if(temps->object_type == 'd')
+				closet_object1 = hit_disk(light_ray,temps->object);
+			if (closet_object1 > 0)
+			{
+				if (closet_object1 < closet_object)
 					{
-						check = 1;
-						closet_object = closet_object1;
+						//printf("%f\n",closet_object1);
+						closet_object1 = closet_object1 + 0.001; // for points
+						t_vector scale_direction_to_i = vectorscal(&light_ray.direction,closet_object1);
+						//t_vector newray = {light_ray.origin.x - 0.001,light_ray.origin.y - 0.001,light_ray.origin.z - 0.001,};
+						t_vector i = vectorsadd(&light_ray.origin,&scale_direction_to_i);
+						//printf("%f,%f,%f  %f,%f,%f  %f,%f,%f\n",i.x,i.y,i.z,
+							//p.x,p.y,p.z,l_p.x,l_p.y,l_p.z);
+						t_vector i_l = vectorsSub(&light_ray.origin,&i);
+						t_vector l_pa = vectorsSub(&light_ray.origin,&p);
+						double d,c;
+						d = lenght(&i_l);
+						c = lenght(&l_pa);
+						//double k = vectorsDot(&i_l,&l_pa);
+						//printf("%f\n",k);
+						if (d < c)
+						{
+							 check = 1;
+							closet_object = closet_object1;
+						}
 					}
-				}
+			}
+			temps = temps->next;
 		}
-		temps = temps->next;
+		light = light->next;
+		if (check == 1)
+			shadaws = shadaws + 0.5;
 	}
 	if (check == 1)
 	{
-		return 0.02;
+	//	printf("|||%f|||\n",shadaws);
+		if (shadaws >= 1)
+			return 0.0;
+		else if (shadaws == 0.5)
+			return 0.2;
 	}
 	 return 1;
 }
@@ -183,7 +198,7 @@ t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 	t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
 	t_vector p = vectorsadd(&ray.origin,&scale_direction_to_p);
 	t_vector n = vectorsSub(&p,&object->origin);
-	if (object->object_type == 't')
+/*	if (object->object_type == 't')
 	{
 		t_vector edge1 = vectorsSub(&object->v3[1],&object->v3[0]); // 1 0 
 		t_vector edge2 = vectorsSub(&object->v3[2],&object->v3[0]); // 2 0
@@ -193,8 +208,10 @@ t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 	if (object->object_type == 'q')
 		n = object->orientation;
 	n = normalize(&n);
+	*/
 	t_vector from_camera_to_p = vectorscal(&p,-1);
 	from_camera_to_p = normalize(&from_camera_to_p);
+/*
  	t_vector l_p = vectorsSub(&p,&light->origin);
 	l_p = normalize(&l_p);
 	double dot = vectorsDot(&l_p,&n);
@@ -207,6 +224,45 @@ t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 	t_vector color = {light->color.x /255 * i_specular  * light->intensity,
 	  i_specular  * light->color.y /255 * light->intensity,
 	  light->color.z  * i_specular /255 * light->intensity};
+	return color;
+*/
+	int specular = 232; ///// 232
+/*	double m;
+	if (object->object_type == 'c')
+	{
+		specular = 232;
+		putchar('g');
+		object->orientation = normalize(&object->orientation);
+		t_vector oc =  vectorsSub(&ray.origin,&object->origin);
+		m = vectorsDot(&ray.direction,&object->orientation) * t + vectorsDot(&oc,&object->orientation);
+		//    N = nrm( P-C-V*m )
+		t_vector normal = vectorsSub(&p,&object->origin);
+		t_vector line_point = vectorscal(&object->orientation,m);
+		n = vectorsSub(&normal,&line_point);
+	}
+*/
+	t_vector color;
+	color.x = 0;
+	color.y = 0;
+	color.z = 0;
+	while (light != NULL)
+	{
+		t_vector l_p = vectorsSub(&p,&light->origin);
+		l_p = normalize(&l_p);
+		double dot = vectorsDot(&l_p,&n);
+		t_vector r = vectorscal(&n,dot * 2);
+		t_vector reflection = vectorsSub(&r,&l_p);
+		reflection = normalize(&reflection);
+		dot = vectorsDot(&from_camera_to_p,&reflection);
+		dot =  min (dot,0.0);
+		double i_specular = pow(dot,specular);
+		t_vector color1 = {light->color.x /255 * i_specular  * light->intensity,
+		  i_specular  * light->color.y /255 * light->intensity,
+		  light->color.z  * i_specular /255 * light->intensity};
+		
+		light = light->next;
+		color = vectorsadd(&color,&color1);
+	}
 	return color;
 }
 t_vector ft_diffuse(t_light *light,t_ray ray,double t,t_object *object,t_vector *colors)
@@ -240,13 +296,23 @@ t_vector ft_diffuse(t_light *light,t_ray ray,double t,t_object *object,t_vector 
 	if (object->object_type == 'd')
 		n = object->orientation;
 	n = normalize(&n);
-	t_vector l_p;
-	l_p = vectorsSub(&light->origin,&p);
-	l_p = normalize(&l_p);
-	double i_diffuse = vectorsDot(&l_p,&n);
-	i_diffuse = max(0,i_diffuse);
-	t_vector color = { colors->x / 255 *light->color.x /255 * light->intensity * i_diffuse ,
-	colors->y  /255* light->intensity  * i_diffuse  * light->color.y /255,colors->z /255 * light->color.z /225 * light->intensity * i_diffuse};
+
+	t_vector color;
+	color.x = 0;
+	color.y = 0;
+	color.z = 0;
+	while (light != NULL)
+	{
+		t_vector l_p;
+		l_p = vectorsSub(&light->origin,&p);
+		l_p = normalize(&l_p);
+		double i_diffuse = vectorsDot(&l_p,&n);
+		i_diffuse = max(0,i_diffuse);
+		t_vector color1 = { colors->x / 255 *light->color.x /255 * light->intensity * i_diffuse ,
+		colors->y  /255* light->intensity  * i_diffuse  * light->color.y /255,colors->z /255 * light->color.z /225 * light->intensity * i_diffuse};
+		light = light->next;
+		color = vectorsadd(&color,&color1);
+	}
 	return color;
 }
 t_vector ft_ambient(t_ambient *ambient,t_vector *color)

@@ -38,6 +38,32 @@ void ft_lstadd_back(t_object **alst, t_object *new)
 		*alst = new;
 }
 
+t_light *ft_lstlast_light(t_light *lst)
+{	
+	if(lst)
+	{
+		while (lst->next)
+		{
+			lst = lst->next;
+		}
+		return (lst);
+	}
+	return (NULL);
+}
+
+void ft_lstadd_back_light(t_light **alst, t_light *new)
+{
+	if(*alst)
+	{
+		t_light *temp;
+		temp = ft_lstlast_light(*alst);
+		temp->next = new;
+		new->next = NULL;
+	}
+	else
+		*alst = new;
+}
+
 void parsing_resolution(char **resol,t_scene *scene)
 {
     t_resolution *resolution;
@@ -51,15 +77,12 @@ void parsing_ambiant(char **amb,t_scene *scene)
 {
     t_ambient *ambient;
     char **color;
-
     ambient = malloc(sizeof(t_ambient));
     ambient->intensity = ft_atof(amb[1]);
-
     color  = ft_split(amb[2],',');
     ambient->color.x = ft_atoi(color[0]);
     ambient->color.y = ft_atoi(color[1]);
     ambient->color.z = ft_atoi(color[2]);
-
 
     scene->ambient = ambient;
 }
@@ -73,14 +96,14 @@ void parsing_camera(char **cam,t_scene *scene)
     camera = malloc(sizeof(t_camera));
 
     origin  = ft_split(cam[1],',');
-    camera->lookfrom.x = ft_atoi(origin[0]);
-    camera->lookfrom.y = ft_atoi(origin[1]);
-    camera->lookfrom.z = ft_atoi(origin[2]);
+    camera->lookfrom.x = ft_atof(origin[0]);
+    camera->lookfrom.y = ft_atof(origin[1]);
+    camera->lookfrom.z = ft_atof(origin[2]);
 
     normal  = ft_split(cam[2],',');
-    camera->orientaion.x = ft_atoi(normal[0]);
-    camera->orientaion.y = ft_atoi(normal[1]);
-    camera->orientaion.z = ft_atoi(normal[2]);    
+    camera->orientaion.x = ft_atof(normal[0]);
+    camera->orientaion.y = ft_atof(normal[1]);
+    camera->orientaion.z = ft_atof(normal[2]);    
 
     camera->fov = ft_atoi(cam[3]);
 
@@ -97,18 +120,19 @@ void parsing_light(char ** lit,t_scene *scene)
     light = malloc(sizeof(t_light));
 
     origin  = ft_split(lit[1],',');
-    light->origin.x = ft_atoi(origin[0]);
-    light->origin.y = ft_atoi(origin[1]);
-    light->origin.z = ft_atoi(origin[2]);
-
+    light->origin.x = ft_atof(origin[0]);
+    light->origin.y = ft_atof(origin[1]);
+    light->origin.z = ft_atof(origin[2]);
     light->intensity = ft_atof(lit[2]);
 
     color  = ft_split(lit[3],',');
     light->color.x = ft_atoi(color[0]);
     light->color.y = ft_atoi(color[1]);
     light->color.z = ft_atoi(color[2]);
+    light->next = NULL;
 
-    scene->light = light;
+    //scene->light = light;
+    ft_lstadd_back_light(&scene->light,light);
 }
 
 void parsing_plan(char **pl,t_scene *scene)
@@ -122,14 +146,14 @@ void parsing_plan(char **pl,t_scene *scene)
     plane = malloc(sizeof(t_plane));
 
     origin  = ft_split(pl[1],',');
-    plane->coord.x = ft_atoi(origin[0]);
-    plane->coord.y = ft_atoi(origin[1]);
-    plane->coord.z = ft_atoi(origin[2]);
+    plane->coord.x = ft_atof(origin[0]);
+    plane->coord.y = ft_atof(origin[1]);
+    plane->coord.z = ft_atof(origin[2]);
     
     normal  = ft_split(pl[2],',');
-    plane->orientation.x = ft_atoi(normal[0]);
-    plane->orientation.y = ft_atoi(normal[1]);
-    plane->orientation.z = ft_atoi(normal[2]); 
+    plane->orientation.x = ft_atof(normal[0]);
+    plane->orientation.y = ft_atof(normal[1]);
+    plane->orientation.z = ft_atof(normal[2]); 
 
     color  = ft_split(pl[3],',');
     plane->color.x = ft_atoi(color[0]);
@@ -176,9 +200,9 @@ void parsing_sphere(char **sph,t_scene *scene)
     sphere = malloc(sizeof(t_sphere));
 
     origin  = ft_split(sph[1],',');
-    sphere->origin.x = ft_atoi(origin[0]);
-    sphere->origin.y = ft_atoi(origin[1]);
-    sphere->origin.z = ft_atoi(origin[2]);
+    sphere->origin.x = ft_atof(origin[0]);
+    sphere->origin.y = ft_atof(origin[1]);
+    sphere->origin.z = ft_atof(origin[2]);
     
     sphere->radius  = ft_atof(sph[2]);
 
@@ -220,14 +244,14 @@ void parsing_square(char **sqr,t_scene *scene)
     square = malloc(sizeof(t_square));
 
     origin  = ft_split(sqr[1],',');
-    square->center.x = ft_atoi(origin[0]);
-    square->center.y = ft_atoi(origin[1]);
-    square->center.z = ft_atoi(origin[2]);
+    square->center.x = ft_atof(origin[0]);
+    square->center.y = ft_atof(origin[1]);
+    square->center.z = ft_atof(origin[2]);
 
     normal  = ft_split(sqr[2],',');
-    square->normal.x = ft_atoi(normal[0]);
-    square->normal.y = ft_atoi(normal[1]);
-    square->normal.z = ft_atoi(normal[2]);
+    square->normal.x = ft_atof(normal[0]);
+    square->normal.y = ft_atof(normal[1]);
+    square->normal.z = ft_atof(normal[2]);
     
     square->edge_size  = ft_atof(sqr[3]);
 
@@ -403,7 +427,6 @@ void parsing_line(char *line,t_scene *scene)
         parsing_triangle(split,scene);
     else if (ft_strncmp(split[0],"cy",2) == 0)
         parsing_cylinder(split,scene);
-
 }
 
 void initial_scene(t_scene *scene)

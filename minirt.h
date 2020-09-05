@@ -121,6 +121,8 @@ typedef struct s_light
 	t_vector origin;
 	double intensity;
 	t_vector color;
+	struct s_light *next;
+	
 }t_light;
 
 typedef struct resolution
