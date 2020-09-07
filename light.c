@@ -222,12 +222,13 @@ t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 	  light->color.z  * i_specular /255 * light->intensity};
 	return color;
 */
-	int specular = 232; ///// 232
-/*	double m;
+	int specular = 0; ///// 232
+	double m;
+	if (object->object_type == 's')
+		specular = 232;
 	if (object->object_type == 'c')
 	{
-		specular = 232;
-		putchar('g');
+		specular = 6;
 		object->orientation = normalize(&object->orientation);
 		t_vector oc =  vectorsSub(&ray.origin,&object->origin);
 		m = vectorsDot(&ray.direction,&object->orientation) * t + vectorsDot(&oc,&object->orientation);
@@ -236,7 +237,7 @@ t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 		t_vector line_point = vectorscal(&object->orientation,m);
 		n = vectorsSub(&normal,&line_point);
 	}
-*/
+
 	t_vector color;
 	color.x = 0;
 	color.y = 0;

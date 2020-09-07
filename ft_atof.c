@@ -1,7 +1,7 @@
 #include "minirt.h"
 
-
-/*size_t		ft_strlen(const char *s)
+/*
+size_t		ft_strlen(const char *s)
 {
 	size_t counter;
 
@@ -61,9 +61,14 @@ double	ft_atof(const char *str)
 	double	res2;
 	char	*c;
 	int		len;
+	int 	s;
 
+	s = 1;
 	c = (char *)str;
+	if (*c == '-')
+		s = -1;
 	res = (double)ft_atoi(c);
+	printf("%f",res);
 	while (*c && *c != '.')
 		c++;
 	if (*c == '.')
@@ -76,16 +81,16 @@ double	ft_atof(const char *str)
     
    // return res + res2;
 
-    if (res >= 0)
+    if (res >= 0 && s > 0)
         return res + res2;
     else
         return res - res2;
-    
+
 }
 /*
 int main()
 {
-    char *str = "5647.75859";
+    char *str = "-0.75859";
 
     double d = ft_atof(str);
     printf("%f",d);

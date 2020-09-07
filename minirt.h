@@ -95,6 +95,8 @@ typedef struct  s_camera
 	t_vector lookfrom;
 	t_vector orientaion;
 	double fov;
+	struct s_camera *next;
+	
 }t_camera;
 typedef struct  s_object
 {

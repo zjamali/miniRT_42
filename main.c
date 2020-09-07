@@ -43,6 +43,7 @@ int main(int argc, char **argv)
     	imag.img = mlx_new_image(mlx_ptr, scene->resolution->width, scene->resolution->height);
 		imag.addr = mlx_get_data_addr(imag.img, &imag.bits_per_pixel, &imag.line_length,
     	                             &imag.endian);
+
 		i = 0;
 		while(i < scene->resolution->width)
 		{

@@ -64,6 +64,32 @@ void ft_lstadd_back_light(t_light **alst, t_light *new)
 		*alst = new;
 }
 
+t_camera *ft_lstlast_camera(t_camera *lst)
+{	
+	if(lst)
+	{
+		while (lst->next)
+		{
+			lst = lst->next;
+		}
+		return (lst);
+	}
+	return (NULL);
+}
+
+void ft_lstadd_back_camera(t_camera **alst, t_camera *new)
+{
+	if(*alst)
+	{
+		t_camera *temp;
+		temp = ft_lstlast_camera(*alst);
+		temp->next = new;
+		new->next = NULL;
+	}
+	else
+		*alst = new;
+}
+
 void parsing_resolution(char **resol,t_scene *scene)
 {
     t_resolution *resolution;
@@ -103,11 +129,13 @@ void parsing_camera(char **cam,t_scene *scene)
     normal  = ft_split(cam[2],',');
     camera->orientaion.x = ft_atof(normal[0]);
     camera->orientaion.y = ft_atof(normal[1]);
-    camera->orientaion.z = ft_atof(normal[2]);    
+    camera->orientaion.z = ft_atof(normal[2]); 
+    camera->next = NULL;   
 
     camera->fov = ft_atoi(cam[3]);
 
-    scene->camera = camera;
+    //scene->camera = camera;
+    ft_lstadd_back_camera(&scene->camera,camera);
 }
 
 void parsing_light(char ** lit,t_scene *scene)
@@ -343,13 +371,13 @@ void parsing_cylinder(char **cy,t_scene *scene)
     cylinder->normal.x = ft_atof(normal[0]);
     cylinder->normal.y = ft_atof(normal[1]);
     cylinder->normal.z = ft_atof(normal[2]);
-    color  = ft_split(cy[3],',');
+    color  = ft_split(cy[5],',');
     cylinder->color.x = ft_atoi(color[0]);
     cylinder->color.y = ft_atoi(color[1]);
     cylinder->color.z = ft_atoi(color[2]);
 
-    cylinder->diameter = ft_atof(cy[4]);
-    cylinder->height = ft_atof(cy[5]);
+    cylinder->diameter = ft_atof(cy[3]);
+    cylinder->height = ft_atof(cy[4]);
 
     t_disk *cap0;
     cap0 = malloc(sizeof(t_disk));
