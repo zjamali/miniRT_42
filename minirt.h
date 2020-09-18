@@ -60,7 +60,7 @@ typedef struct s_triangle
 typedef struct s_disk
 {
 	t_vector coord;
-	t_vector orientation;
+	t_vector orientation;		
 	double radius;
 	t_vector color;
 }t_disk;
@@ -96,8 +96,9 @@ typedef struct  s_camera
 	t_vector orientaion;
 	double fov;
 	struct s_camera *next;
-	
+	struct s_camera *prev;
 }t_camera;
+
 typedef struct  s_object
 {
 	void *object;

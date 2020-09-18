@@ -85,6 +85,7 @@ void ft_lstadd_back_camera(t_camera **alst, t_camera *new)
 		temp = ft_lstlast_camera(*alst);
 		temp->next = new;
 		new->next = NULL;
+        new->prev = *alst;
 	}
 	else
 		*alst = new;
@@ -130,12 +131,14 @@ void parsing_camera(char **cam,t_scene *scene)
     camera->orientaion.x = ft_atof(normal[0]);
     camera->orientaion.y = ft_atof(normal[1]);
     camera->orientaion.z = ft_atof(normal[2]); 
-    camera->next = NULL;   
+    camera->next = NULL;  
+    camera->prev = NULL; 
 
     camera->fov = ft_atoi(cam[3]);
 
     //scene->camera = camera;
     ft_lstadd_back_camera(&scene->camera,camera);
+
 }
 
 void parsing_light(char ** lit,t_scene *scene)
