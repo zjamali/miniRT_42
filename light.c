@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/03/14 17:23:59 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/19 14:36:08 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,11 +189,13 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 		return 0.2;
 	 return 1;
 }
+
+
 t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 {
+	t_vector n;
 	t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
 	t_vector p = vectorsadd(&ray.origin,&scale_direction_to_p);
-	t_vector n = vectorsSub(&p,&object->origin);
 /*	if (object->object_type == 't')
 	{
 		t_vector edge1 = vectorsSub(&object->v3[1],&object->v3[0]); // 1 0 
@@ -225,10 +227,14 @@ t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 	int specular = 0; ///// 232
 	double m;
 	if (object->object_type == 's')
-		specular = 232;
-	if (object->object_type == 'c')
 	{
-		specular = 6;
+		n = vectorsSub(&p,&object->origin);
+		n = normalize(&n);
+		specular = 256;
+	}
+	else if (object->object_type == 'c')
+	{
+		specular = 2;
 		object->orientation = normalize(&object->orientation);
 		t_vector oc =  vectorsSub(&ray.origin,&object->origin);
 		m = vectorsDot(&ray.direction,&object->orientation) * t + vectorsDot(&oc,&object->orientation);
@@ -236,6 +242,7 @@ t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 		t_vector normal = vectorsSub(&p,&object->origin);
 		t_vector line_point = vectorscal(&object->orientation,m);
 		n = vectorsSub(&normal,&line_point);
+		n = normalize(&n);
 	}
 
 	t_vector color;
@@ -250,7 +257,9 @@ t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 		t_vector r = vectorscal(&n,dot * 2);
 		t_vector reflection = vectorsSub(&r,&l_p);
 		reflection = normalize(&reflection);
+		////////////
 		dot = vectorsDot(&from_camera_to_p,&reflection);
+		/////////
 		dot =  min (dot,0.0);
 		double i_specular = pow(dot,specular);
 		t_vector color1 = {light->color.x /255 * i_specular  * light->intensity,

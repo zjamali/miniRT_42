@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:09:11 by zjamali           #+#    #+#             */
-/*   Updated: 2020/03/14 17:46:19 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/19 11:56:41 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,7 @@ int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *lig
 		if (temp->object_type == 's')
 			closet_object1 = hit_sphere(ray,temp->object);
 		else if (temp->object_type == 'p')
-		{
-			/*printf("%f,%f,%f  %f,%f,%f  %f,%f,%f\n",temp->origin.x,temp->origin.y,temp->origin.z,
-						temp->orientation.x,temp->orientation.y,temp->orientation.z,
-                        temp->color->x,temp->color->y,temp->color->z);
-			*/
-			//closet_object1 = hit_plane(ray,temp->object); //////////////////////////////////////////////////// default
 			closet_object1 = hit_plane(ray,temp->object);
-			//printf("%f",closet_object1);
-		}
 		else if (temp->object_type == 't')
 			closet_object1 = hit_triangle(ray,temp->object);
 		else if (temp->object_type == 'q')

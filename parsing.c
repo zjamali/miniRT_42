@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/03/14 18:21:01 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/19 12:48:38 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,10 @@ void parsing_light(char ** lit,t_scene *scene)
     ft_lstadd_back_light(&scene->light,light);
 }
 
+/******************************** switching plane to a max square **********************/
+
+
+
 void parsing_plan(char **pl,t_scene *scene)
 {
     char **origin;
@@ -204,22 +208,9 @@ void parsing_plan(char **pl,t_scene *scene)
 
 
     ft_lstadd_back(&scene->objects,new_object);
-    //printf("%f,%f,%f  %f,%f,%f  %f,%f,%f\n",plane->coord.x,plane->coord.y,plane->coord.z,
-						//plane->orientation.x,plane->orientation.y,plane->orientation.z,
-                        //plane->color.x,plane->color.y,plane->color.z);
-/*    if (scene->first_object == NULL)
-    {
-        scene->first_object = new_object;
-        scene->objects = new_object;
-        scene->objects->next = NULL;
-    }
-    else
-        scene->objects->next= new_object;
-*/
-    //printf("%f,%f,%f  %f,%f,%f  %f,%f,%f\n",scene->objects->origin.x,scene->objects->origin.y,scene->objects->origin.z,
-						//scene->objects->orientation.x,scene->objects->orientation.y,scene->objects->orientation.z,
-                        //scene->objects->color->x,scene->objects->color->y,scene->objects->color->z);
 }
+
+/************************************* end switching plane to a max square ************************/
 
 void parsing_sphere(char **sph,t_scene *scene)
 {
@@ -283,14 +274,12 @@ void parsing_square(char **sqr,t_scene *scene)
     square->normal.x = ft_atof(normal[0]);
     square->normal.y = ft_atof(normal[1]);
     square->normal.z = ft_atof(normal[2]);
-    
     square->edge_size  = ft_atof(sqr[3]);
-
+    
     color  = ft_split(sqr[4],',');
     square->color.x = ft_atoi(color[0]);
     square->color.y = ft_atoi(color[1]);
-    square->color.z = ft_atoi(color[2]);
-
+    square->color.z = ft_atoi(color[2]);   
     t_object *new_object;
     new_object = malloc(sizeof(t_object));
 
