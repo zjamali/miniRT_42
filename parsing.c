@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/19 12:48:38 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/20 08:50:46 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -428,7 +428,7 @@ void parsing_cylinder(char **cy,t_scene *scene)
 void parsing_line(char *line,t_scene *scene)
 {
     char **split;
-    split = ft_split(line, ' ');
+    split = ft_split(line, ' '); /// need adding /t ... to spliting line  
     if (split[0][0] == 'R')
         parsing_resolution(split,scene);
     else if (split[0][0] == 'A')

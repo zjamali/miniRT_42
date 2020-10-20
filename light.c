@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/19 14:36:08 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/20 13:30:11 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 	t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
 	t_vector p = vectorsadd(&ray.origin,&scale_direction_to_p);
 	int dark = 0;
+	int if_light = 0;
 	double shadaws = 0;
 	t_vector color;
 	color.x = 0;
@@ -129,60 +130,77 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 	color.z = 0;
 	while (light != NULL)
 	{
-		t_vector l_p = vectorsSub(&p,&light->origin);
-		t_ray light_ray;
-		light_ray.origin = light->origin;
-		light_ray.direction = normalize(&l_p);
+		t_vector p_l = vectorsSub(&light->origin,&p);
+		t_ray p_ray;
+		p_ray.origin.x = p.x + 0.00001;
+		p_ray.origin.y = p.y + 0.00001;
+		p_ray.origin.z = p.z + 0.00001;
+		p_ray.direction = normalize(&p_l);
 
-		double closet_object1 = 0;
-		double closet_object = 1000000000000;
-		t_object *temps ;
+		double closet_object1_t = 0;
+		double closet_object_t = 1000000000000;
+		t_object *temps;
 		temps = object;
 		while (temps != NULL)
 		{
 			if (temps->object_type == 's')
-				closet_object1 = hit_sphere(light_ray,temps->object);
+				closet_object1_t = hit_sphere(p_ray,temps->object);
 			else if (temps->object_type == 'p')
-				closet_object1 = hit_plane(light_ray,temps->object);
+				closet_object1_t = hit_plane(p_ray,temps->object);
 			else if(temps->object_type == 't')
-				closet_object1 = hit_triangle(light_ray,temps->object);
+				closet_object1_t = hit_triangle(p_ray,temps->object);
 			else if(temps->object_type == 'q')
-				closet_object1 = hit_square(light_ray,temps->object);
+				closet_object1_t = hit_square(p_ray,temps->object);
 			else if(temps->object_type == 'c')
-			 	closet_object1 = hit_cylinder(light_ray,temps->object);
+			 	closet_object1_t = hit_cylinder(p_ray,temps->object);
 			else if(temps->object_type == 'd')
-				closet_object1 = hit_disk(light_ray,temps->object);
-			if (closet_object1 > 0)
+				closet_object1_t = hit_disk(p_ray,temps->object);
+			if (closet_object1_t > 0)
 			{
-				if (closet_object1 < closet_object)
+				if (closet_object1_t < closet_object_t)
 					{
-						//printf("%f\n",closet_object1);
-						closet_object1 = closet_object1 + 0.01; // for points
-						t_vector scale_direction_to_i = vectorscal(&light_ray.direction,closet_object1);
-						//t_vector newray = {light_ray.origin.x - 0.001,light_ray.origin.y - 0.001,light_ray.origin.z - 0.001,};
-						t_vector i = vectorsadd(&light_ray.origin,&scale_direction_to_i);
-						//printf("%f,%f,%f  %f,%f,%f  %f,%f,%f\n",i.x,i.y,i.z,
-							//p.x,p.y,p.z,l_p.x,l_p.y,l_p.z);
-						t_vector i_l = vectorsSub(&light_ray.origin,&i);
-						t_vector l_pa = vectorsSub(&light_ray.origin,&p);
-						double d,c;
-						d = lenght(&i_l);
-						c = lenght(&l_pa);
-						//double k = vectorsDot(&i_l,&l_pa);
-						//printf("%f\n",k);
-						if (d < c && dark <= 1)
-						{
-							 dark = 1;
-							closet_object = closet_object1;
-						}
-						else
-						{
-							dark = 2;
-						}						
+						///printf("%f\n",closet_object1_t);
+						closet_object1_t = closet_object1_t; //  ////// for noises in sceane
+						closet_object_t = closet_object1_t; 
+						//t_vector scale_direction_to_i = vectorscal(&light_ray.direction,closet_object1_t);
+						////t_vector newray = {light_ray.origin.x - 0.001,light_ray.origin.y - 0.001,light_ray.origin.z - 0.001,};
+						//t_vector i = vectorsadd(&light_ray.origin,&scale_direction_to_i);
+						////printf("%f,%f,%f  %f,%f,%f  %f,%f,%f\n",i.x,i.y,i.z,
+						//	//p.x,p.y,p.z,l_p.x,l_p.y,l_p.z);
+						//t_vector i_l = vectorsSub(&light_ray.origin,&i);
+						//t_vector l_pa = vectorsSub(&light_ray.origin,&p);
+						//double d,c;
+						//d = lenght(&i_l);
+						//c = lenght(&l_pa);
+						////double k = vectorsDot(&i_l,&l_pa);
+						////printf("%f\n",k);
+						//if (d < c && dark <= 1)
+						//{
+						//	 dark = 1;
+						//	closet_object_t = closet_object1_t;
+						//}
+						//else
+						//{
+						//	dark = 2;
+						//}						
 					}
 			}
 			temps = temps->next;
 		}
+		
+		t_vector scale_direction_to_C = vectorscal(&p_ray.direction,closet_object_t);
+		t_vector C = vectorsadd(&p_ray.origin,&scale_direction_to_C);
+		t_vector p_C = vectorsSub(&C,&p);
+		
+		double p_length = lenght(&p_l);
+		///p_length = p_length  + 0.1;  ////// for noises in sceane
+		double c_length = lenght(&p_C);
+		
+		///printf("%f|%f\n",p_length,c_length);
+		if (p_length > c_length && dark <= 1)
+			dark = 1;
+		else
+			dark = 2;
 		light = light->next;
 	}
 	if (dark == 1)
@@ -230,7 +248,7 @@ t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 	{
 		n = vectorsSub(&p,&object->origin);
 		n = normalize(&n);
-		specular = 256;
+		specular = 64;
 	}
 	else if (object->object_type == 'c')
 	{

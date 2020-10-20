@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:01:20 by zjamali           #+#    #+#             */
-/*   Updated: 2020/03/14 16:14:06 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/20 09:21:34 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,16 @@ double hit_plane(t_ray ray,t_plane *plane)
 	t_vector X = vectorsSub(&ray.origin,&plane->coord);
 	t_vector V = plane->orientation;
 	V = normalize(&V);
-	double DOT2 = vectorsDot(&ray.direction,&V);
+	t_vector D;
+	D = normalize(&ray.direction);
+	double DOT2 = vectorsDot(&D,&V);
 	if (DOT2 != 0)
 	{
-		t_vector x = vectorscal(&V,-1);
-		double DOT1 = vectorsDot(&X,&x);
-		t = DOT1 / DOT2;
+		//t_vector x = vectorscal(&V,-1);
+		//double DOT1 = vectorsDot(&X,&x);
+		//X = normalize(&X);
+		double DOT1 = vectorsDot(&X,&V);
+		t = -DOT1 / DOT2;
 		if (t < 0)
 		 	return 0;
 		return t;
