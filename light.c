@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/20 13:30:11 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/20 14:22:23 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 	 return 1;
 }
 */
+
 double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,double t)
 {
 	t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
@@ -207,7 +208,6 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 		return 0.2;
 	 return 1;
 }
-
 
 t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 {
