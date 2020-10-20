@@ -248,7 +248,7 @@ t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 	{
 		n = vectorsSub(&p,&object->origin);
 		n = normalize(&n);
-		specular = 64;
+		specular = 256;
 	}
 	else if (object->object_type == 'c')
 	{
