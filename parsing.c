@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/20 08:50:46 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/21 12:11:53 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -370,7 +370,6 @@ void parsing_cylinder(char **cy,t_scene *scene)
 
     cylinder->diameter = ft_atof(cy[3]);
     cylinder->height = ft_atof(cy[4]);
-
     t_disk *cap0;
     cap0 = malloc(sizeof(t_disk));
     cap0->orientation = vectorscal(&cylinder->normal,-1);
@@ -399,6 +398,7 @@ void parsing_cylinder(char **cy,t_scene *scene)
     new_object->orientation = cylinder->normal;
     new_object->size = cylinder->height;
     new_object->diameter = cylinder->diameter;
+    //new_object->id = cylinder->id;
     new_object->next = NULL;
 
     ft_lstadd_back(&scene->objects,new_object);

@@ -6,12 +6,12 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/03/14 17:22:05 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/21 12:14:34 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef MINIRT_H
-# define MINIRT_H
 
+
+# define MINIRT_H
 #include "get_next_line.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -102,7 +102,6 @@ typedef struct  s_camera
 typedef struct  s_object
 {
 	void *object;
-
 	t_vector *color;
 	t_vector origin;
 	t_vector orientation;
@@ -189,4 +188,4 @@ t_scene *parsing(int fd);
 /***********************  strncmp.C  ***********************/
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
-# endif
+//# endif

@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/20 14:22:23 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/21 11:46:06 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,9 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 	{
 		t_vector p_l = vectorsSub(&light->origin,&p);
 		t_ray p_ray;
-		p_ray.origin.x = p.x + 0.00001;
-		p_ray.origin.y = p.y + 0.00001;
-		p_ray.origin.z = p.z + 0.00001;
+		p_ray.origin.x = p.x + 0.001;
+		p_ray.origin.y = p.y + 0.001;
+		p_ray.origin.z = p.z + 0.001;
 		p_ray.direction = normalize(&p_l);
 
 		double closet_object1_t = 0;
@@ -144,6 +144,8 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 		temps = object;
 		while (temps != NULL)
 		{
+			if (temp->object_type != 'c')
+				closet_object1_t = hit_cylinder(p_ray,temps->object);
 			if (temps->object_type == 's')
 				closet_object1_t = hit_sphere(p_ray,temps->object);
 			else if (temps->object_type == 'p')
@@ -152,8 +154,8 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 				closet_object1_t = hit_triangle(p_ray,temps->object);
 			else if(temps->object_type == 'q')
 				closet_object1_t = hit_square(p_ray,temps->object);
-			else if(temps->object_type == 'c')
-			 	closet_object1_t = hit_cylinder(p_ray,temps->object);
+			//else if(temps->object_type == 'c')
+			 	//closet_object1_t = hit_cylinder(p_ray,temps->object);
 			else if(temps->object_type == 'd')
 				closet_object1_t = hit_disk(p_ray,temps->object);
 			if (closet_object1_t > 0)
@@ -280,12 +282,14 @@ t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object)
 		/////////
 		dot =  min (dot,0.0);
 		double i_specular = pow(dot,specular);
-		t_vector color1 = {light->color.x /255 * i_specular  * light->intensity,
-		  i_specular  * light->color.y /255 * light->intensity,
-		  light->color.z  * i_specular /255 * light->intensity};
-		
+		//t_vector color1 = {light->color.x /255 * i_specular  * light->intensity,
+		//  i_specular  * light->color.y /255 * light->intensity,
+		//  light->color.z  * i_specular /255 * light->intensity};
+		//
+		t_vector color1 = vectorscal(&light->color,i_specular);
 		light = light->next;
-		color = vectorsadd(&color,&color1);
+		//color = vectorsadd(&color,&color1);
+		color = color1;
 	}
 	return color;
 }
@@ -332,22 +336,24 @@ t_vector ft_diffuse(t_light *light,t_ray ray,double t,t_object *object,t_vector 
 		l_p = normalize(&l_p);
 		double i_diffuse = vectorsDot(&l_p,&n);
 		i_diffuse = max(0,i_diffuse);
-		t_vector color1 = { colors->x / 255 *light->color.x /255 * light->intensity * i_diffuse ,
-		colors->y  /255* light->intensity  * i_diffuse  * light->color.y /255,colors->z /255 * light->color.z /225 * light->intensity * i_diffuse};
+		//t_vector color1 = { colors->x / 255 *light->color.x /255 * light->intensity * i_diffuse ,
+		//colors->y  /255* light->intensity  * i_diffuse  * light->color.y /255,colors->z /255 * light->color.z /225 * light->intensity * i_diffuse};
+		t_vector color1 = vectorscal(colors,i_diffuse);
 		light = light->next;
-		color = vectorsadd(&color,&color1);
+		//color = vectorsadd(&color,&color1);
+		color = color1;
 	}
 	return color;
 }
 t_vector ft_ambient(t_ambient *ambient,t_vector *color)
 {
-	/*t_vector i_ambient = {ambient->intensity * color->x /255,
-	ambient->intensity * color->y /255 , ambient->intensity * color->z /255};*/
+	t_vector i_ambient = {ambient->intensity * color->x /255,
+	ambient->intensity * color->y /255 , ambient->intensity * color->z /255};
 	//printf("%f,%f,%f",color->x,color->y,color->z);
 	//printf("%f,%f,%f",ambient->color.x,ambient->color.y,ambient->color.z);
 	
-	t_vector i_ambient = {ambient->intensity * color->x /255 + ambient->color.x/255 * ambient->intensity,
-	ambient->intensity * color->y /255 + ambient->color.y/255 * ambient->intensity, ambient->intensity * color->z /255 + ambient->color.z/255 * ambient->intensity};
+	//t_vector i_ambient = {ambient->intensity * color->x /255 + ambient->color.x/255 * ambient->intensity,
+	//ambient->intensity * color->y /255 + ambient->color.y/255 * ambient->intensity, ambient->intensity * color->z /255 + ambient->color.z/255 * ambient->intensity};
 	i_ambient.x = min(1, i_ambient.x);
 	i_ambient.y = min(1, i_ambient.y);
 	i_ambient.z = min(1, i_ambient.z);

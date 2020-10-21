@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:09:11 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/20 13:46:37 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/21 11:41:34 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,13 @@ int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *lig
 			i_specular.z= 0; 
 		}
 		i_diffuse = ft_diffuse(light,ray,closet_object_t,closet_object,&color);
-		shadow = ft_shadow(closet_object,object,light,ray,closet_object_t);
+		if (closet_object->object_type != 'c' || closet_object->object_type != 'd')
+			shadow = ft_shadow(closet_object,object,light,ray,closet_object_t);
 		////printf("%f,%f,%f",temp->color->x,temp->color->y,temp->color->z);
 		i_ambient = ft_ambient(ambient,&color);
-		colors.y =  i_ambient.y * 255 +  shadow *	( i_diffuse.y * 255 +       i_specular.y * 255);
-		colors.x =  i_ambient.x * 255 +  shadow *	( i_diffuse.x * 255 +       i_specular.x * 255);
-		colors.z =  i_ambient.z * 255 +  shadow *	( i_diffuse.z * 255 +       i_specular.z * 255);
+		colors.y =  i_ambient.y * 255 +  shadow *	( i_diffuse.y /** 255*/ + i_specular.y /** 255*/);
+		colors.x =  i_ambient.x * 255 +  shadow *	( i_diffuse.x /** 255*/ + i_specular.x /** 255*/);
+		colors.z =  i_ambient.z * 255 +  shadow *	( i_diffuse.z /** 255*/ + i_specular.z /** 255*/);
 	}
 	
 	/************************************/
