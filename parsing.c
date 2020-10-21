@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/21 12:11:53 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/21 14:46:15 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ void parsing_sphere(char **sph,t_scene *scene)
     sphere->origin.y = ft_atof(origin[1]);
     sphere->origin.z = ft_atof(origin[2]);
     
-    sphere->radius  = ft_atof(sph[2]);
+    sphere->radius  = ft_atof(sph[2]) / 2;
 
     color  = ft_split(sph[3],',');
     sphere->color.x = ft_atoi(color[0]);
