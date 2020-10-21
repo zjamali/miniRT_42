@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/21 11:46:06 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/21 12:20:51 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,8 +144,6 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 		temps = object;
 		while (temps != NULL)
 		{
-			if (temp->object_type != 'c')
-				closet_object1_t = hit_cylinder(p_ray,temps->object);
 			if (temps->object_type == 's')
 				closet_object1_t = hit_sphere(p_ray,temps->object);
 			else if (temps->object_type == 'p')
@@ -154,8 +152,8 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 				closet_object1_t = hit_triangle(p_ray,temps->object);
 			else if(temps->object_type == 'q')
 				closet_object1_t = hit_square(p_ray,temps->object);
-			//else if(temps->object_type == 'c')
-			 	//closet_object1_t = hit_cylinder(p_ray,temps->object);
+			else if(temps->object_type == 'c')
+			 	closet_object1_t = hit_cylinder(p_ray,temps->object);
 			else if(temps->object_type == 'd')
 				closet_object1_t = hit_disk(p_ray,temps->object);
 			if (closet_object1_t > 0)
