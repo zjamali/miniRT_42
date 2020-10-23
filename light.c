@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/21 14:30:29 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/22 11:56:46 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,9 @@ double  ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,doubl
 	{
 		t_vector p_l = vectorsSub(&light->origin,&p);
 		t_ray p_ray;
-		p_ray.origin.x = p.x + 0.001;
-		p_ray.origin.y = p.y + 0.001;
-		p_ray.origin.z = p.z + 0.001;
+		p_ray.origin.y = p.y + 0.00001;
+		p_ray.origin.x = p.x + 0.00001;
+		p_ray.origin.z = p.z + 0.00001;
 		p_ray.direction = normalize(&p_l);
 
 		double closet_object1_t = 0;

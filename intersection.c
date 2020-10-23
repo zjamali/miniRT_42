@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:01:20 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/20 09:21:34 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/22 12:26:16 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ double hit_cylinder(t_ray ray,t_cylinder *cylinder)
 				(vectorsDot(&ray.direction,&cylinder->normal) * vectorsDot(&oc,&cylinder->normal)));
 	double c = vectorsDot(&oc,&oc) -
 				vectorsDot(&oc,&cylinder->normal) * vectorsDot(&oc,&cylinder->normal) -
-				(cylinder->diameter/2) * (cylinder->diameter/2);
+				(cylinder->diameter / 2) * (cylinder->diameter / 2);
 	double delta =  b * b - 4 * a * c;
 	
 	if (delta < 0)

@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:09:11 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/21 14:34:28 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/22 12:13:48 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *lig
 			if (closet_object1_t < closet_object_t)
 			{
 				check = 1;
-				closet_object_t = closet_object1_t;
+				closet_object_t = closet_object1_t + 0.000001;
 				closet_object = temp;
 				color = *temp->color;
 				//if(temp->object_type == 's' || temp->object_type == 'c')
