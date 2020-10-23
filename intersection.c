@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:01:20 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/22 12:26:16 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/23 14:25:16 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,27 @@ double hit_sphere(t_ray ray,t_sphere *sphere)
 	double t;
 	double t1 = (-B + sqrt(delta)) / (2 * A);
 	double t2 = (-B - sqrt(delta)) / (2 * A);
-	if (t1 < 0)
-		return (0);
-
-	if (t1 > t2)
-		t = t2;
-	else
+	//////if (t1 < 0)
+	//////	return (0);
+	//if (t2 > 0 && t1 < 0) //////
+	//	return t2;        /////
+	/////if (t1 > t2)
+	/////	t = t2;
+	/////else
+	/////	t = t1;
+/////
+if (t1 > 0 && t2 > 0)
+{
+	if (t2 < 0)
+		return 0;
+	if (t2 > t1)
 		t = t1;
-
+	else
+		t = t2;
+	
 	return t;
+}
+return 0;
 }
 
 
