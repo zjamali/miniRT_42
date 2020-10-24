@@ -172,7 +172,7 @@ t_vector ft_ambient(t_ambient *ambient,t_vector *color);
 double ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,double t);
 
 /***********************  PIXEL_COLOR.C  ***********************/
-int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *light);
+int ft_color_of_pixel(t_camera camera,t_ray ray,t_object *object,t_ambient *ambient,t_light *light);
 double rgbconvert(int ir, int ig, int ib);
 
 /***********************  FT_SPLIT.C  ***********************/

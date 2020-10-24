@@ -55,9 +55,8 @@ int main(int argc, char **argv)
 				ray.origin = scene->camera->lookfrom;
 				ray.direction = ft_camera(scene->camera,scene->resolution->height,scene->resolution->width,i,j);
 				ray.direction = normalize(&ray.direction);
-				if (check_camera_inside_an_object(scene->camera,scene->objects))
-					return 0;
-				int colors = ft_color_of_pixel(ray,scene->objects,scene->ambient,scene->light);
+				//
+				int colors = ft_color_of_pixel(*scene->camera,ray,scene->objects,scene->ambient,scene->light);
 				my_mlx_pixel_put(&imag, i, j, colors);
 				j++;
 			}
@@ -69,7 +68,7 @@ int main(int argc, char **argv)
 }
 
 
-
+/*
 int check_camera_inside_an_object(t_camera *camera,t_object *object)
 {
 	//t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
@@ -212,3 +211,4 @@ int check_camera_inside_an_object(t_camera *camera,t_object *object)
 	return 0;
 	
 }
+*/

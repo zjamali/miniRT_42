@@ -15,8 +15,8 @@ double rgbconvert(int ir, int ig, int ib)
 {
 	    return (ir * 65536 + ig * 256+ ib);
 }
-/*
-int check_camera_inside_an_object(t_ray ray,t_object *object)
+
+int check_camera_inside_an_object(t_camera camera,t_object *object)
 {
 	//t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
 	//t_vector p = vectorsadd(&ray.origin,&scale_direction_to_p);
@@ -59,14 +59,24 @@ int check_camera_inside_an_object(t_ray ray,t_object *object)
 	//p_ray.direction = normalize(&p_l);
 
 	//write(1,"hello\n",6);
+
+
+	t_ray ray;
+	ray.direction = camera.orientaion;
+	ray.origin = camera.lookfrom;
+
 	t_ray ray1;
-	ray1.origin = vectorscal(&ray.origin,1);
-	ray1.origin.z = ray.origin.z + 10000000000; /// cam 1
+	//ray1.origin = vectorscal(&ray.origin,1);
+	ray1.origin.x = ray.origin.x * 100;
+	ray1.origin.y = ray.origin.y * 100;
+	ray1.origin.z = ray.origin.z * 100; /// cam 1
 	ray1.direction = vectorsSub(&ray.origin,&ray1.origin);
 	ray1.direction = normalize(&ray1.direction);
 	t_ray ray2;
-	ray2.origin = vectorscal(&ray.origin,1);
-	ray2.origin.z = ray.origin.z - 10000000000; /// cam 2
+	///ray2.origin = vectorscal(&ray.origin,1);
+	ray2.origin.x = ray.origin.x * -100;
+	ray2.origin.y = ray.origin.y * -100;
+	ray2.origin.z = ray.origin.z * -100; /// cam 2
 	ray2.direction = vectorsSub(&ray.origin,&ray2.origin);
 	ray2.direction = normalize(&ray2.direction);
 
@@ -78,62 +88,98 @@ int check_camera_inside_an_object(t_ray ray,t_object *object)
 	temp = object;
 	t_object *temp1;
 	temp1 = object;
-	while (temp != NULL)
-	{
+	t_object *closet_object;
+	t_object *closet_object1;
+	//while (temp != NULL)
+	//{
+		//write(1,"hello\n",6);
 		///////////////// p1 
 	//	write(1,"hello\n",6);
-		if (temp->object_type == 's')
-			closet_object1_t = hit_sphere(ray1,temp->object);
-		else if (temp->object_type == 'p')
-			closet_object1_t = hit_plane(ray1,temp->object);
-		else if (temp->object_type == 't')
-			closet_object1_t = hit_triangle(ray1,temp->object);
-		else if (temp->object_type == 'q')
-			closet_object1_t = hit_square(ray1,temp->object);
-		else if (temp->object_type == 'c')
-			closet_object1_t = hit_cylinder(ray1,temp->object);
-		else if (temp->object_type == 'd')
-			closet_object1_t = hit_disk(ray1,temp->object);
+		double t1 = 100000000;
+		double t2 = 100000000;
+		while (temp != NULL)
+		{
+			
+			if (temp->object_type == 's')
+				closet_object1_t = hit_sphere(ray1,temp->object);
+			else if (temp->object_type == 'p')
+				closet_object1_t = hit_plane(ray1,temp->object);
+			else if (temp->object_type == 't')
+				closet_object1_t = hit_triangle(ray1,temp->object);
+			else if (temp->object_type == 'q')
+				closet_object1_t = hit_square(ray1,temp->object);
+			else if (temp->object_type == 'c')
+				closet_object1_t = hit_cylinder(ray1,temp->object);
+			else if (temp->object_type == 'd')
+				closet_object1_t = hit_disk(ray1,temp->object);
+			
+			if (closet_object1_t < t1)
+			{
+				t1 = closet_object1_t;
+				closet_object = temp;
+			}
+			temp = temp->next;
+		}
+
+		closet_object1_t = t1;
 		if (closet_object1_t <= 0)
 			return 0;
+		
+
 		//////////// p2
-		if (temp1->object_type == 's')
-			closet_object_t = hit_sphere(ray1,temp1->object);
-		else if (temp1->object_type == 'p')
-			closet_object_t = hit_plane(ray1,temp1->object);
-		else if (temp1->object_type == 't')
-			closet_object_t = hit_triangle(ray1,temp1->object);
-		else if (temp1->object_type == 'q')
-			closet_object_t = hit_square(ray1,temp1->object);
-		else if (temp1->object_type == 'c')
-			closet_object_t = hit_cylinder(ray1,temp1->object);
-		else if (temp1->object_type == 'd')
-			closet_object_t = hit_disk(ray1,temp1->object);
+		while (temp1 != NULL)
+		{
+			if (temp1->object_type == 's')
+				closet_object_t = hit_sphere(ray1,temp1->object);
+			else if (temp1->object_type == 'p')
+				closet_object_t = hit_plane(ray1,temp1->object);
+			else if (temp1->object_type == 't')
+				closet_object_t = hit_triangle(ray1,temp1->object);
+			else if (temp1->object_type == 'q')
+				closet_object_t = hit_square(ray1,temp1->object);
+			else if (temp1->object_type == 'c')
+				closet_object_t = hit_cylinder(ray1,temp1->object);
+			else if (temp1->object_type == 'd')
+				closet_object_t = hit_disk(ray1,temp1->object);
+
+			if (closet_object_t < t2)
+			{
+				t2 = closet_object_t;
+				closet_object1 = temp1;
+			}
+			temp1 = temp1->next;
+		}
+
+		closet_object_t = t2;
 		if (closet_object_t <= 0)
 			return 0;
 		
-		if (closet_object1_t > 0 && closet_object_t > 0 && temp->object == temp1->object)
+		if (closet_object1_t > 0 && closet_object_t > 0 && closet_object == closet_object1)
 		{
-			write(1,"hello\n",6);
+			//printf("%c|%c\n",temp->object_type,temp1->object_type);
 			t_vector scale_direction_to_p1 = vectorscal(&ray1.direction,closet_object1_t);
 			t_vector p1 = vectorsadd(&ray1.origin,&scale_direction_to_p1);
 
 			t_vector scale_direction_to_p2 = vectorscal(&ray2.direction,closet_object_t);
 			t_vector p2 = vectorsadd(&ray2.origin,&scale_direction_to_p2);
 
-			if (p1.x == ray.origin.x && p1.y == ray.origin.y &&
-			 	p2.x == ray.origin.x && p2.y == ray.origin.y)
-			{
+			//if (p1.x == ray.origin.x && p1.y == ray.origin.y &&
+			// 	p2.x == ray.origin.x && p2.y == ray.origin.y)
+			//{
 				t_vector o;
-				o.x = ray.origin.x;
-				o.y = ray.origin.y;
-				o.z =  (p1.z + p2.z) / 2;
+				o.x = fabs(p1.x + p2.x)/2;
+				o.y = fabs(p1.y + p2.y)/2;
+				o.z = fabs(p1.z + p2.z) / 2;
 				
 				t_vector o_p1 = vectorsSub(&p1,&o);
 				t_vector o_c = vectorsSub(&ray.origin,&o);
-				double r = fabs(o.z);
+				double r = fabs(o.x);
+				double r1 = fabs(o.y);
+				double r2 = fabs(o.z);
 				
-				if(fabs(o_c.z) > r)
+				//write(1,"hello\n",6);
+
+				if(fabs(o_c.x) > r || fabs(o_c.y) > r1 || fabs(o_c.z) > r2)
 				{
 					//write(1,"hello\n",6);
 					return 1;
@@ -144,18 +190,18 @@ int check_camera_inside_an_object(t_ray ray,t_object *object)
 				}
 				
 				///r = abs(r) / 2;
-			}
+			//}
 			return 0;
-		}
+		//}
 			
-		temp = temp->next;
-		temp1 = temp1->next;
+		//temp = temp->next;
+		//temp1 = temp1->next;
 	}
 	return 0;
 	
 }
-*/
-int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *light)
+
+int ft_color_of_pixel(t_camera camera,t_ray ray,t_object *object,t_ambient *ambient,t_light *light)
 {
 	t_object *closet_object;
 	closet_object = NULL;
@@ -174,8 +220,8 @@ int ft_color_of_pixel(t_ray ray,t_object *object,t_ambient *ambient,t_light *lig
 	double shadow = 1;
 	t_object *temp ;
 	temp = object;
-	//if (check_camera_inside_an_object(ray,object))
-	//	return 0;
+	if (check_camera_inside_an_object(camera,object))
+		return 0;
 	while (temp != NULL)
 	{
 		if (temp->object_type == 's')
