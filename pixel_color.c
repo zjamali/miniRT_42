@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:09:11 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/23 20:42:31 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/24 20:48:46 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,26 +64,34 @@ int check_camera_inside_an_object(t_camera camera,t_object *object)
 	t_ray ray;
 	ray.direction = camera.orientaion;
 	ray.origin = camera.lookfrom;
-
+	
 	t_ray ray1;
-	//ray1.origin = vectorscal(&ray.origin,1);
-	ray1.origin.x = ray.origin.x * 100;
-	ray1.origin.y = ray.origin.y * 100;
-	ray1.origin.z = ray.origin.z * 100; /// cam 1
-	ray1.direction = vectorsSub(&ray.origin,&ray1.origin);
-	ray1.direction = normalize(&ray1.direction);
 	t_ray ray2;
+	ray1.origin = vectorscal(&ray.origin,1000);
+	//ray1.origin.x = ray.origin.x * 1000;
+	//ray1.origin.y = ray.origin.y * 1000;
+	//ray1.origin.z = ray.origin.z * 1000; /// cam 1
+	ray1.direction = vectorsSub(&ray.origin,&ray1.origin);
+	//ray1.direction = normalize(&ray1.direction);
+	ray.direction = vectorscal(&ray.direction,1);
 	///ray2.origin = vectorscal(&ray.origin,1);
-	ray2.origin.x = ray.origin.x * -100;
-	ray2.origin.y = ray.origin.y * -100;
-	ray2.origin.z = ray.origin.z * -100; /// cam 2
+	//ray2.origin.x = ray.origin.x * 1000;
+	//ray2.origin.y = ray.origin.y * 1000;
+	//ray2.origin.z = ray.origin.z * 1000; /// cam
+	ray2.origin = vectorscal(&ray.origin,1000);
+	ray2.origin = vectorscal(&ray2.origin,-1);
 	ray2.direction = vectorsSub(&ray.origin,&ray2.origin);
-	ray2.direction = normalize(&ray2.direction);
+	//ray2.direction = normalize(&ray2.direction);
+	///ray2.direction = vectorscal(&ray.direction,-1);
+	
+	//printf("%f,%f,%f|",ray1.origin.x,ray1.origin.y,ray1.origin.z);
+	//printf("%f,%f,%f|",ray2.origin.x,ray2.origin.y,ray2.origin.z);
+	//printf("%f,%f,%f\n",ray.origin.x,ray.origin.y,ray.origin.z);
 
-
-	double closet_object1_t = 0;
-	double closet_object_t = 000000000000;
-
+	double closet_object1_t = 100000000;
+	double closet_object_t  = 100000000;
+	static int i = 0;
+	static int j = 0;
 	t_object *temp;
 	temp = object;
 	t_object *temp1;
@@ -95,15 +103,15 @@ int check_camera_inside_an_object(t_camera camera,t_object *object)
 		//write(1,"hello\n",6);
 		///////////////// p1 
 	//	write(1,"hello\n",6);
-		double t1 = 100000000;
-		double t2 = 100000000;
+		double t1 = 0;
+		double t2 = 0;
 		while (temp != NULL)
 		{
 			
 			if (temp->object_type == 's')
 				closet_object1_t = hit_sphere(ray1,temp->object);
-			else if (temp->object_type == 'p')
-				closet_object1_t = hit_plane(ray1,temp->object);
+			//else if (temp->object_type == 'p')
+			//	closet_object1_t = hit_plane(ray1,temp->object);
 			else if (temp->object_type == 't')
 				closet_object1_t = hit_triangle(ray1,temp->object);
 			else if (temp->object_type == 'q')
@@ -112,16 +120,22 @@ int check_camera_inside_an_object(t_camera camera,t_object *object)
 				closet_object1_t = hit_cylinder(ray1,temp->object);
 			else if (temp->object_type == 'd')
 				closet_object1_t = hit_disk(ray1,temp->object);
-			
-			if (closet_object1_t < t1)
+			if (closet_object1_t > 0 && i == 0)
 			{
+				//write(1,"hello\n",6);
+				t1 = closet_object1_t;
+				i++;	
+			}
+			if (closet_object1_t >= t1 && closet_object1_t > 0)
+			{
+				//write(1,"hello\n",6);
 				t1 = closet_object1_t;
 				closet_object = temp;
 			}
 			temp = temp->next;
 		}
-
 		closet_object1_t = t1;
+		//printf("%f\n",closet_object1_t);
 		if (closet_object1_t <= 0)
 			return 0;
 		
@@ -131,8 +145,8 @@ int check_camera_inside_an_object(t_camera camera,t_object *object)
 		{
 			if (temp1->object_type == 's')
 				closet_object_t = hit_sphere(ray1,temp1->object);
-			else if (temp1->object_type == 'p')
-				closet_object_t = hit_plane(ray1,temp1->object);
+			//else if (temp1->object_type == 'p')
+			//	closet_object_t = hit_plane(ray1,temp1->object);
 			else if (temp1->object_type == 't')
 				closet_object_t = hit_triangle(ray1,temp1->object);
 			else if (temp1->object_type == 'q')
@@ -141,9 +155,14 @@ int check_camera_inside_an_object(t_camera camera,t_object *object)
 				closet_object_t = hit_cylinder(ray1,temp1->object);
 			else if (temp1->object_type == 'd')
 				closet_object_t = hit_disk(ray1,temp1->object);
-
-			if (closet_object_t < t2)
+			if (closet_object_t > 0 && j == 0)
 			{
+				t2 = closet_object_t;
+				j++;	
+			}
+			if (closet_object_t >= t2 && closet_object_t > 0)
+			{
+				//write(1,"hello1\n",7);
 				t2 = closet_object_t;
 				closet_object1 = temp1;
 			}
@@ -163,42 +182,36 @@ int check_camera_inside_an_object(t_camera camera,t_object *object)
 			t_vector scale_direction_to_p2 = vectorscal(&ray2.direction,closet_object_t);
 			t_vector p2 = vectorsadd(&ray2.origin,&scale_direction_to_p2);
 
-			//if (p1.x == ray.origin.x && p1.y == ray.origin.y &&
-			// 	p2.x == ray.origin.x && p2.y == ray.origin.y)
-			//{
-				t_vector o;
-				o.x = fabs(p1.x + p2.x)/2;
-				o.y = fabs(p1.y + p2.y)/2;
-				o.z = fabs(p1.z + p2.z) / 2;
-				
-				t_vector o_p1 = vectorsSub(&p1,&o);
-				t_vector o_c = vectorsSub(&ray.origin,&o);
-				double r = fabs(o.x);
-				double r1 = fabs(o.y);
-				double r2 = fabs(o.z);
-				
-				//write(1,"hello\n",6);
-
-				if(fabs(o_c.x) > r || fabs(o_c.y) > r1 || fabs(o_c.z) > r2)
-				{
-					//write(1,"hello\n",6);
-					return 1;
-				}
-				else
-				{
-					return 0;
-				}
-				
-				///r = abs(r) / 2;
-			//}
-			return 0;
-		//}
+			t_vector o;
+			o.x = (p1.x + p2.x) /2;
+			o.y = (p1.y + p2.y )/2;
+			o.z = (p1.z + p2.z )/2;
+			//printf("%f,%f,%f|",p1.x,p1.y,p1.z);
+			//printf("%f,%f,%f|",p2.x,p2.y,p2.z);
+			//printf("%f,%f,%f\n",o.x,o.y,o.z);
+			t_vector p1_p2 = vectorsSub(&p1,&p2);
 			
-		//temp = temp->next;
-		//temp1 = temp1->next;
-	}
+			t_vector o_p1 = vectorsSub(&p1,&o);
+			t_vector o_c = vectorsSub(&ray.origin,&o);
+			//t_vector u = vectorsSub(&p1,&o);
+			double r = fabs(o_p1.x);
+			double r1 = fabs(o_p1.y);
+			double r2 = fabs(o_p1.z);
+			
+			
+			if(fabs(o_c.x) <= r && fabs(o_c.y) <= r1 && fabs(o_c.z) <= r2)
+			{
+				///write(1,"hello\n",6);
+				return 1;
+			}
+			//else
+			//{
+			//	return 0;
+			//}	
+			return 0;
+			
+		}
 	return 0;
-	
 }
 
 int ft_color_of_pixel(t_camera camera,t_ray ray,t_object *object,t_ambient *ambient,t_light *light)
