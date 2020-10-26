@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/21 12:14:34 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/26 13:09:55 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,14 +133,24 @@ typedef struct resolution
 	int width;
 }t_resolution;
 
+typedef struct window
+{
+	void *mlx_ptr; 
+	void *win_ptr;
+}t_window;
+
+
 
 typedef struct  s_scene
 {
+	t_ray *ray;
 	t_object *objects;
 	t_camera *camera;
 	t_light *light;
 	t_ambient *ambient;
 	t_resolution *resolution;
+	t_imag *img;
+	t_window *window;
 }t_scene;
 /***********************  VECTOR.C  ***********************/
 t_vector  vectorsadd(t_vector *v1,t_vector *v2);
@@ -166,13 +176,14 @@ double hit_square(t_ray ray,t_square *s_square);
 double hit_cylinder(t_ray ray,t_cylinder *cylinder);
 double hit_disk(t_ray ray,t_disk *disk);
 /***********************  LIGHT.C  ***********************/
-t_vector ft_specular(t_light *light,t_ray ray,double t,t_object *object);
-t_vector ft_diffuse(t_light *light,t_ray ray,double t,t_object *object,t_vector *colors);
+t_vector ft_specular(t_scene *scene,double t,t_object *object);
+t_vector ft_diffuse(t_scene *scene,double t,t_object *object);
 t_vector ft_ambient(t_ambient *ambient,t_vector *color);
-double ft_shadow(t_object *temp,t_object *object,t_light *light,t_ray ray,double t);
+double  ft_shadow(t_scene *scene,t_object *object,double t);
 
 /***********************  PIXEL_COLOR.C  ***********************/
-int ft_color_of_pixel(t_camera camera,t_ray ray,t_object *object,t_ambient *ambient,t_light *light);
+
+int ft_color_of_pixel(t_scene *scene);
 double rgbconvert(int ir, int ig, int ib);
 
 /***********************  FT_SPLIT.C  ***********************/
