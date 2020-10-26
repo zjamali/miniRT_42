@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:01:20 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/23 14:25:16 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/26 14:40:26 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,7 @@ double hit_sphere(t_ray ray,t_sphere *sphere)
 	double t;
 	double t1 = (-B + sqrt(delta)) / (2 * A);
 	double t2 = (-B - sqrt(delta)) / (2 * A);
-	//////if (t1 < 0)
-	//////	return (0);
-	//if (t2 > 0 && t1 < 0) //////
-	//	return t2;        /////
-	/////if (t1 > t2)
-	/////	t = t2;
-	/////else
-	/////	t = t1;
-/////
+
 if (t1 > 0 && t2 > 0)
 {
 	if (t2 < 0)
@@ -51,12 +43,8 @@ if (t1 > 0 && t2 > 0)
 return 0;
 }
 
-
-
-
 double hit_plane(t_ray ray,t_plane *plane)
 {
-
 	//printf("%f,%f,%f\n",plane->coord.x,plane->coord.y,plane->coord.z);
 	///////////////////// this the correct
 	// P - C | V = 0
@@ -205,122 +193,3 @@ double hit_disk(t_ray ray,t_disk *disk)
 	}
 	return 0;
 }
-
-/*
-t_plane cap_0;
-	cap_0.color = cylinder->color;
-	cap_0.coord = cylinder->coord;
-	cap_0.orientation = vectorscal(&cylinder->normal,-1);
-
-	t_plane cap_1;
-	cap_1.color = cylinder->color;
-	// cap_1.coord.x = cylinder->coord.x + cylinder->height;
-	// cap_1.coord.y = cylinder->coord.y + cylinder->height;
-	// cap_1.coord.z = cylinder->coord.z + cylinder->height;
-	cap_1.coord = vectorscal(&cylinder->normal,cylinder->height);
-	cap_1.coord = vectorsadd(&cap_1.coord,&cylinder->coord);
-	cap_1.orientation = cylinder->normal;
-	t = 0;
-	double tp1;
-	double tp0;
-	double tp;
-	tp0 = hit_plane(ray,&cap_0);
-	tp1 = hit_plane(ray,&cap_1);
-	//////if (t > 0)
-	//{
-		t_vector scale_direction_to_P0 = vectorscal(&ray.direction,tp0);
-		t_vector p0 = vectorsadd(&ray.origin,&scale_direction_to_P0);
-		t_vector op0 = vectorsSub(&p0,&cap_0.coord);
-
-		t_vector scale_direction_to_P1 = vectorscal(&ray.direction,tp1);
-		t_vector p1 = vectorsadd(&ray.origin,&scale_direction_to_P1);
-		t_vector op1 = vectorsSub(&p1,&cap_1.coord);
-
-		if(lenght(&op0) <= cylinder->diameter/2)
-		{
-			//printf("%f,%f,%f\n",p.x,p.y,p.z);
-			if (tp1 > tp0)
-				tp = tp0;
-		}
-		if(lenght(&op1) <= cylinder->diameter/2)
-		{
-			//printf("%f,%f,%f\n",p.x,p.y,p.z);
-			if (tp1 < tp0)
-				tp = tp1;
-		}
-		if (tp < t)
-		{
-			printf("f ");
-			return tp;
-		}
-		//else if (tp < t && tp > 0)
-			//return tp;
-		
-	//}
-	return 0;
-
-*/
-
-/*
-double hit_plane(t_ray ray,t_plane *plane)
-{
-	// P - C | V = 0
-	// t = DOT1 (-X,V) / DOT1(D,V) 
-	double t;
-
-	t_vector V = normalize(&plane->orientation);
-	double DOT2 = vectorsDot(&ray.direction,&V);
-	if (DOT2 != 0.0)
-	{
-		t_vector X = vectorsSub(&ray.origin,&plane->coord);
-		t_vector x = vectorscal(&V,-1);
-		double DOT1 = vectorsDot(&X,&x);
-		t = DOT1 / DOT2;
-		if (t >= 0)
-		 	return t;
-		return 0;
-	}
-	return 0;
-}
-
-double hit_plane(t_ray ray,t_plane *plane)
-{
-	// P - C | V = 0
-	// t = DOT1 (-X,V) / DOT1(D,V) 
-	double t;
-	double DOT2 = vectorsDot(&ray.direction,&plane->orientation);
-	if (DOT2 != 0)
-	{
-		t_vector x = vectorsSub(&plane->coord,&ray.origin);
-		double DOT1 = vectorsDot(&x,&ray.origin);
-		t = DOT1 / DOT2;
-		if (t > 0)
-		 	return 0;
-		return t;
-	}
-	return 0;
-}
-
-
-
-double hit_plane(t_ray ray,t_plane *plane)
-{
-	double a;
-	double b;
-	double t;
-	t_vector oc;
-
-	a = vectorsDot(&plane->orientation,&ray.direction);
-	//printf("%f\n",a);
-	if (a != 0.0)
-	{
-		oc =  vectorsSub(&plane->coord,&ray.origin);
-		b = vectorsDot(&oc, &plane->orientation);
-		t = b/ a;
-		//printf("%f\n",b);
-		if (t > 0.0)
-			return (t);
-	}
-	return 0;
-}
-*/

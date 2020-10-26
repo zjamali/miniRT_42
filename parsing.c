@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/22 12:19:59 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/24 16:53:07 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,6 @@ void parsing_light(char ** lit,t_scene *scene)
     light->color.z = ft_atoi(color[2]);
     light->next = NULL;
 
-    //scene->light = light;
     ft_lstadd_back_light(&scene->light,light);
 }
 
@@ -403,27 +402,27 @@ void parsing_cylinder(char **cy,t_scene *scene)
 
     ft_lstadd_back(&scene->objects,new_object);
 
-    //t_object *new_object1;
-    //new_object1 = malloc(sizeof(t_object));
-    //new_object1->object = cap0;
-	//new_object1->color = &cap0->color;
-	//new_object1->object_type = 'd';
-    //new_object1->origin = cap0->coord;
-    //new_object1->orientation = normalize(&cap0->orientation);
-    //new_object1->size = cap0->radius;
-    //new_object1->next = NULL;
-    //ft_lstadd_back(&scene->objects,new_object1);
-    //
-    //t_object *new_object2;
-    //new_object2 = malloc(sizeof(t_object));
-    //new_object2->object = cap1;
-	//new_object2->color = &cap1->color;
-	//new_object2->object_type = 'd';
-    //new_object2->origin = cap1->coord;
-    //new_object2->orientation = normalize(&cap1->orientation);
-    //new_object2->size = cap1->radius;
-    //new_object2->next = NULL;
-    //ft_lstadd_back(&scene->objects,new_object2);
+    t_object *new_object1;
+    new_object1 = malloc(sizeof(t_object));
+    new_object1->object = cap0;
+	new_object1->color = &cap0->color;
+	new_object1->object_type = 'd';
+    new_object1->origin = cap0->coord;
+    new_object1->orientation = normalize(&cap0->orientation);
+    new_object1->size = cap0->radius;
+    new_object1->next = NULL;
+    ft_lstadd_back(&scene->objects,new_object1);
+    
+    t_object *new_object2;
+    new_object2 = malloc(sizeof(t_object));
+    new_object2->object = cap1;
+	new_object2->color = &cap1->color;
+	new_object2->object_type = 'd';
+    new_object2->origin = cap1->coord;
+    new_object2->orientation = normalize(&cap1->orientation);
+    new_object2->size = cap1->radius;
+    new_object2->next = NULL;
+    ft_lstadd_back(&scene->objects,new_object2);
 }
 void parsing_line(char *line,t_scene *scene)
 {
