@@ -18,49 +18,6 @@ double rgbconvert(int ir, int ig, int ib)
 
 int check_camera_inside_an_object(t_camera camera,t_object *object)
 {
-	//t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
-	//t_vector p = vectorsadd(&ray.origin,&scale_direction_to_p);
-
-	//t_vector p_l = vectorsSub(&ray.origin,&p);
-	//t_vector p_l = vectorscal(&ray.direction,-1);
-	//t_ray p_ray;
-	
-	//p_ray.origin.y = p.y - 0.000001;
-	//p_ray.origin.x = p.x - 0.000001;
-	//p_ray.origin.z = p.z - 0.000001;
-	//if (ray.direction.x >= 0 && p.x > 0)
-	//	p_ray.origin.x = p.x - 0.000001;
-	//else
-	//	p_ray.origin.x = p.x + 0.000001;
-	//if (ray.direction.y >= 0 && p.y > 0)
-	//	p_ray.origin.y = p.y - 0.000001;
-	//else
-	//	p_ray.origin.y = p.y + 0.000001;
-	//if (ray.direction.z >= 0 && p.z > 0)
-	//	p_ray.origin.z = p.z - 0.000001;
-	//else
-	//	p_ray.origin.z = p.z + 0.000001;
-	///if (p_ray.direction.y < 0)
-	///	p_ray.origin.y = p.y - 0.000001;
-	///else
-	///	p_ray.origin.y = p.y + 0.000001;
-	//if (ray.origin.z <= 0)
-	//{	
-	//	p_ray.origin.x = p.x - 0.000001;
-	//	p_ray.origin.y = p.y - 0.000001;
-	//	p_ray.origin.z = p.z - 0.000001;
-	//}
-	//else
-	//{
-	//	p_ray.origin.x = p.x;// + 0.1;
-	//	p_ray.origin.y = p.y;// + 0.1;
-	//	p_ray.origin.z = p.z;// + 0.1;
-	//}
-	//p_ray.direction = normalize(&p_l);
-
-	//write(1,"hello\n",6);
-
-
 	t_ray ray;
 	ray.direction = camera.orientaion;
 	ray.origin = camera.lookfrom;
@@ -90,114 +47,102 @@ int check_camera_inside_an_object(t_camera camera,t_object *object)
 	temp1 = object;
 	t_object *closet_object;
 	t_object *closet_object1;
-	//while (temp != NULL)
-	//{
-		//write(1,"hello\n",6);
-		///////////////// p1 
-	//	write(1,"hello\n",6);
-		double t1 = 100000000;
-		double t2 = 100000000;
-		while (temp != NULL)
-		{
-			
-			if (temp->object_type == 's')
-				closet_object1_t = hit_sphere(ray1,temp->object);
-			else if (temp->object_type == 'p')
-				closet_object1_t = hit_plane(ray1,temp->object);
-			else if (temp->object_type == 't')
-				closet_object1_t = hit_triangle(ray1,temp->object);
-			else if (temp->object_type == 'q')
-				closet_object1_t = hit_square(ray1,temp->object);
-			else if (temp->object_type == 'c')
-				closet_object1_t = hit_cylinder(ray1,temp->object);
-			else if (temp->object_type == 'd')
-				closet_object1_t = hit_disk(ray1,temp->object);
-			
-			if (closet_object1_t < t1)
-			{
-				t1 = closet_object1_t;
-				closet_object = temp;
-			}
-			temp = temp->next;
-		}
-
-		closet_object1_t = t1;
-		if (closet_object1_t <= 0)
-			return 0;
+	double t1 = 100000000;
+	double t2 = 100000000;
+	while (temp != NULL)
+	{
+		write(1,"hello\n",6);
+		if (temp->object_type == 's')
+			closet_object1_t = hit_sphere(ray1,temp->object);
+		else if (temp->object_type == 'p')
+			closet_object1_t = hit_plane(ray1,temp->object);
+		else if (temp->object_type == 't')
+			closet_object1_t = hit_triangle(ray1,temp->object);
+		else if (temp->object_type == 'q')
+			closet_object1_t = hit_square(ray1,temp->object);
+		else if (temp->object_type == 'c')
+			closet_object1_t = hit_cylinder(ray1,temp->object);
+		else if (temp->object_type == 'd')
+			closet_object1_t = hit_disk(ray1,temp->object);
 		
-
-		//////////// p2
-		while (temp1 != NULL)
+		if (closet_object1_t < t1)
 		{
-			if (temp1->object_type == 's')
-				closet_object_t = hit_sphere(ray1,temp1->object);
-			else if (temp1->object_type == 'p')
-				closet_object_t = hit_plane(ray1,temp1->object);
-			else if (temp1->object_type == 't')
-				closet_object_t = hit_triangle(ray1,temp1->object);
-			else if (temp1->object_type == 'q')
-				closet_object_t = hit_square(ray1,temp1->object);
-			else if (temp1->object_type == 'c')
-				closet_object_t = hit_cylinder(ray1,temp1->object);
-			else if (temp1->object_type == 'd')
-				closet_object_t = hit_disk(ray1,temp1->object);
-
-			if (closet_object_t < t2)
-			{
-				t2 = closet_object_t;
-				closet_object1 = temp1;
-			}
-			temp1 = temp1->next;
+			t1 = closet_object1_t;
+			closet_object = temp;
 		}
-
-		closet_object_t = t2;
-		if (closet_object_t <= 0)
-			return 0;
-		
-		if (closet_object1_t > 0 && closet_object_t > 0 && closet_object == closet_object1)
-		{
-			//printf("%c|%c\n",temp->object_type,temp1->object_type);
-			t_vector scale_direction_to_p1 = vectorscal(&ray1.direction,closet_object1_t);
-			t_vector p1 = vectorsadd(&ray1.origin,&scale_direction_to_p1);
-
-			t_vector scale_direction_to_p2 = vectorscal(&ray2.direction,closet_object_t);
-			t_vector p2 = vectorsadd(&ray2.origin,&scale_direction_to_p2);
-
-			//if (p1.x == ray.origin.x && p1.y == ray.origin.y &&
-			// 	p2.x == ray.origin.x && p2.y == ray.origin.y)
-			//{
-				t_vector o;
-				o.x = fabs(p1.x + p2.x)/2;
-				o.y = fabs(p1.y + p2.y)/2;
-				o.z = fabs(p1.z + p2.z) / 2;
-				
-				t_vector o_p1 = vectorsSub(&p1,&o);
-				t_vector o_c = vectorsSub(&ray.origin,&o);
-				double r = fabs(o.x);
-				double r1 = fabs(o.y);
-				double r2 = fabs(o.z);
-				
-				//write(1,"hello\n",6);
-
-				if(fabs(o_c.x) > r || fabs(o_c.y) > r1 || fabs(o_c.z) > r2)
-				{
-					//write(1,"hello\n",6);
-					return 1;
-				}
-				else
-				{
-					return 0;
-				}
-				
-				///r = abs(r) / 2;
-			//}
-			return 0;
-		//}
-			
-		//temp = temp->next;
-		//temp1 = temp1->next;
+		temp = temp->next;
 	}
-	return 0;
+	closet_object1_t = t1;
+	if (closet_object1_t <= 0)
+		return 0;
+	
+	//////////// p2
+	while (temp1 != NULL)
+	{
+		if (temp1->object_type == 's')
+			closet_object_t = hit_sphere(ray1,temp1->object);
+		else if (temp1->object_type == 'p')
+			closet_object_t = hit_plane(ray1,temp1->object);
+		else if (temp1->object_type == 't')
+			closet_object_t = hit_triangle(ray1,temp1->object);
+		else if (temp1->object_type == 'q')
+			closet_object_t = hit_square(ray1,temp1->object);
+		else if (temp1->object_type == 'c')
+			closet_object_t = hit_cylinder(ray1,temp1->object);
+		else if (temp1->object_type == 'd')
+			closet_object_t = hit_disk(ray1,temp1->object);
+		if (closet_object_t < t2)
+		{
+			t2 = closet_object_t;
+			closet_object1 = temp1;
+		}
+		temp1 = temp1->next;
+	}
+	closet_object_t = t2;
+	if (closet_object_t <= 0)
+		return 0;
+	
+	if (closet_object1_t > 0 && closet_object_t > 0 && closet_object == closet_object1)
+	{
+		//printf("%c|%c\n",temp->object_type,temp1->object_type);
+		t_vector scale_direction_to_p1 = vectorscal(&ray1.direction,closet_object1_t);
+		t_vector p1 = vectorsadd(&ray1.origin,&scale_direction_to_p1);
+		t_vector scale_direction_to_p2 = vectorscal(&ray2.direction,closet_object_t);
+		t_vector p2 = vectorsadd(&ray2.origin,&scale_direction_to_p2);
+		//if (p1.x == ray.origin.x && p1.y == ray.origin.y &&
+		// 	p2.x == ray.origin.x && p2.y == ray.origin.y)
+		//{
+			t_vector o;
+			o.x = fabs(p1.x + p2.x)/2;
+			o.y = fabs(p1.y + p2.y)/2;
+			o.z = fabs(p1.z + p2.z) / 2;
+			
+			t_vector o_p1 = vectorsSub(&p1,&o);
+			t_vector o_c = vectorsSub(&ray.origin,&o);
+			double r = fabs(o.x);
+			double r1 = fabs(o.y);
+			double r2 = fabs(o.z);
+			
+			//write(1,"hello\n",6);
+			if(fabs(o_c.x) > r || fabs(o_c.y) > r1 || fabs(o_c.z) > r2)
+			{
+				//write(1,"hello\n",6);
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+			
+			///r = abs(r) / 2;
+		//}
+		return 0;
+	//}
+		
+	//temp = temp->next;
+	//temp1 = temp1->next;
+	}
+return 0;
 	
 }
 
