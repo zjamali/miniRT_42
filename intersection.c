@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:01:20 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/26 14:40:26 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/27 19:17:38 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,31 @@
 
 double hit_sphere(t_ray ray,t_sphere *sphere)
 {
-	
+	t_sphere_variables sp;
 	// a*t^2 + b*t +c = 0;
-	t_vector oc =  vectorsSub(&ray.origin,&sphere->origin);
-	double A = vectorsDot(&ray.direction,&ray.direction);
-	double B = 2.0 * vectorsDot(&oc,&ray.direction);
-	double C = vectorsDot(&oc,&oc) - sphere->radius*sphere->radius;
+	sp.oc =  vectorsSub(&ray.origin,&sphere->origin);
+	sp.a = vectorsDot(&ray.direction,&ray.direction);
+	sp.b = 2.0 * vectorsDot(&sp.oc,&ray.direction);
+	sp.c = vectorsDot(&sp.oc,&sp.oc) - sphere->radius*sphere->radius;
 
-	double delta =  B * B - 4 * A * C;
+	sp.delta =  sp.b * sp.b - 4 * sp.a * sp.c;
 	
-	if (delta < 0)
+	if (sp.delta < 0)
 		return 0;
-	double t;
-	double t1 = (-B + sqrt(delta)) / (2 * A);
-	double t2 = (-B - sqrt(delta)) / (2 * A);
+	sp.t1 = (-sp.b + sqrt(sp.delta)) / (2 * sp.a);
+	sp.t2 = (-sp.b - sqrt(sp.delta)) / (2 * sp.a);
 
-if (t1 > 0 && t2 > 0)
-{
-	if (t2 < 0)
-		return 0;
-	if (t2 > t1)
-		t = t1;
-	else
-		t = t2;
-	
-	return t;
-}
-return 0;
+	if (sp.t1 > 0 && sp.t2 > 0)
+	{
+		if (sp.t2 < 0)
+			return 0;
+		if (sp.t2 > sp.t1)
+			sp.t = sp.t1;
+		else
+			sp.t = sp.t2;
+		return sp.t;
+	}
+	return 0;
 }
 
 double hit_plane(t_ray ray,t_plane *plane)
@@ -49,58 +47,61 @@ double hit_plane(t_ray ray,t_plane *plane)
 	///////////////////// this the correct
 	// P - C | V = 0
 	// t = DOT1 (-X,V) / DOT1(D,V) 
-	double t;
 
-	t_vector X = vectorsSub(&ray.origin,&plane->coord);
-	t_vector V = plane->orientation;
-	V = normalize(&V);
-	t_vector D;
-	D = normalize(&ray.direction);
-	double DOT2 = vectorsDot(&D,&V);
-	if (DOT2 != 0)
+	t_plane_variables pl;
+	
+
+	pl.x = vectorsSub(&ray.origin,&plane->coord);
+	pl.v = plane->orientation;
+	pl.v = normalize(&pl.v);
+
+	pl.d = normalize(&ray.direction);
+	pl.dot2 = vectorsDot(&pl.d,&pl.v);
+	if (pl.dot2 != 0)
 	{
 		//t_vector x = vectorscal(&V,-1);
 		//double DOT1 = vectorsDot(&X,&x);
 		//X = normalize(&X);
-		double DOT1 = vectorsDot(&X,&V);
-		t = -DOT1 / DOT2;
-		if (t < 0)
+		pl.dot1 = vectorsDot(&pl.x,&pl.v);
+		pl.t = -pl.dot1 / pl.dot2;
+		if (pl.t < 0)
 		 	return 0;
-		return t;
+		return pl.t;
 	}
 	return 0;
 }
 double hit_triangle(t_ray ray,t_triangle *triangle)
 {
-	double epsilon = 0.0000001;
-	t_vector edge1, edge2, h, s, q;
-	double a, f, u, v, t;
+	t_triangle_variables tr;
+	//double epsilon = 0.0000001;
+	//t_vector edge1, edge2, h, s, q;
+	//double a, f, u, v, t;
 
-	edge1 = vectorsSub(&triangle->vectors[1],&triangle->vectors[0]);
-	edge2 = vectorsSub(&triangle->vectors[2],&triangle->vectors[0]);
-	h = vecttorscross(&ray.direction,&edge2);
-	a = vectorsDot(&edge1,&h);
+	tr.epsilon = 0.0000001;
+
+	tr.edge1 = vectorsSub(&triangle->vectors[1],&triangle->vectors[0]);
+	tr.edge2 = vectorsSub(&triangle->vectors[2],&triangle->vectors[0]);
+	tr.h = vecttorscross(&ray.direction,&tr.edge2);
+	tr.a = vectorsDot(&tr.edge1,&tr.h);
 	//printf("a");
-	if (a > -epsilon && a < epsilon)
+	if (tr.a > -tr.epsilon && tr.a < tr.epsilon)
         return 0;    // This ray is parallel to this triangle.
-    f = 1.0/a;
-	s = vectorsSub(&ray.origin,&triangle->vectors[0]);
-	u = vectorsDot(&s,&h);
-	u = f * u;
-	//printf("u");
-	if (u < 0.0 || u > 1.0)
+    tr.f = 1.0/tr.a;
+	tr.s = vectorsSub(&ray.origin,&triangle->vectors[0]);
+	tr.u = vectorsDot(&tr.s,&tr.h);
+	tr.u = tr.f * tr.u;
+	if (tr.u < 0.0 || tr.u > 1.0)
         return 0;
-	q = vecttorscross(&s,&edge1);
-	v = vectorsDot(&ray.direction,&q);
-	v = f * v;
-	//printf("v");
-	if (v < 0.0 || u + v > 1.0)
+	tr.q = vecttorscross(&tr.s,&tr.edge1);
+	tr.v = vectorsDot(&ray.direction,&tr.q);
+	tr.v = tr.f * tr.v;
+	if (tr.v < 0.0 || tr.u + tr.v > 1.0)
         return 0;
     // At this stage we can compute t to find out where the intersection point is on the line.
-	t = vectorsDot(&q,&edge2);
-	t = f * t;
-	if (t > epsilon) // ray intersection
-        return t;
+	tr.t = vectorsDot(&tr.q,&tr.edge2);
+	tr.t = tr.f * tr.t;
+	if (tr.t > tr.epsilon) // ray intersection
+        return tr.t;
     else // This means that there is a line intersection but not a ray intersection.
         return 0;
 }
@@ -108,21 +109,22 @@ double hit_triangle(t_ray ray,t_triangle *triangle)
 double hit_square(t_ray ray,t_square *square)
 {
 	double t;
-	double size;
-	t_vector e1,e2;
-
+	//double size;
+	//t_vector e1,e2;
+	t_square_variables sq;
+	
 	t = hit_plane(ray,(t_plane*)square);
 
 	if (t >=0)
 	{
-		t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
-		t_vector p = vectorsadd(&ray.origin,&scale_direction_to_p);
+		sq.scale_direction_to_p = vectorscal(&ray.direction,t);
+		sq.p = vectorsadd(&ray.origin,&sq.scale_direction_to_p);
 
-		t_vector u = vectorsSub(&p,&square->center);
+		sq.u = vectorsSub(&sq.p,&square->center);
 
-		double r = square->edge_size/2;
+		sq.r = square->edge_size/2;
 
-		if (fabs(u.x) > r || fabs(u.y) > r || fabs(u.z) > r)
+		if (fabs(sq.u.x) > sq.r || fabs(sq.u.y) > sq.r || fabs(sq.u.z) > sq.r)
 			return 0;
 		return t;
 	}
@@ -132,38 +134,40 @@ double hit_square(t_ray ray,t_square *square)
 
 double hit_cylinder(t_ray ray,t_cylinder *cylinder)
 {
-	double t = 0;
+	t_cylinder_variables cy;
+	
+	//double t = 0;
 	// a*t^2 + b*t +c = 0;
 	cylinder->normal = normalize(&cylinder->normal);
-	t_vector oc =  vectorsSub(&ray.origin,&cylinder->coord);
-	double a = vectorsDot(&ray.direction,&ray.direction) - 
+	cy.oc =  vectorsSub(&ray.origin,&cylinder->coord);
+	cy.a = vectorsDot(&ray.direction,&ray.direction) - 
 				(vectorsDot(&ray.direction,&cylinder->normal) * vectorsDot(&ray.direction,&cylinder->normal));
-	double b = 2 * (vectorsDot(&ray.direction,&oc) - 
-				(vectorsDot(&ray.direction,&cylinder->normal) * vectorsDot(&oc,&cylinder->normal)));
-	double c = vectorsDot(&oc,&oc) -
-				vectorsDot(&oc,&cylinder->normal) * vectorsDot(&oc,&cylinder->normal) -
+	cy.b = 2 * (vectorsDot(&ray.direction,&cy.oc) - 
+				(vectorsDot(&ray.direction,&cylinder->normal) * vectorsDot(&cy.oc,&cylinder->normal)));
+	cy.c = vectorsDot(&cy.oc,&cy.oc) -
+				vectorsDot(&cy.oc,&cylinder->normal) * vectorsDot(&cy.oc,&cylinder->normal) -
 				(cylinder->diameter / 2) * (cylinder->diameter / 2);
-	double delta =  b * b - 4 * a * c;
+	cy.delta =  cy.b * cy.b - 4 * cy.a * cy.c;
 	
-	if (delta < 0)
+	if (cy.delta < 0)
 		return 0;
-	double t1 = (-b + sqrt(delta)) / (2 * a);
-	double t2 = (-b - sqrt(delta)) / (2 * a);
+	cy.t1 = (-cy.b + sqrt(cy.delta)) / (2 * cy.a);
+	cy.t2 = (-cy.b - sqrt(cy.delta)) / (2 * cy.a);
 
-	if (t1 < 0)
+	if (cy.t1 < 0)
 		return (0);
 	
-	if (t1 > t2)
-		t = t2;
+	if (cy.t1 > cy.t2)
+		cy.t = cy.t2;
 	else
-		t = t1;
+		cy.t = cy.t1;
 	//    m = D|V*t + X|V
-	double min = vectorsDot(&ray.direction,&cylinder->normal) * t2 + vectorsDot(&oc,&cylinder->normal);
-	double max = vectorsDot(&ray.direction,&cylinder->normal) * t1 + vectorsDot(&oc,&cylinder->normal);
+	double min = vectorsDot(&ray.direction,&cylinder->normal) * cy.t2 + vectorsDot(&cy.oc,&cylinder->normal);
+	double max = vectorsDot(&ray.direction,&cylinder->normal) * cy.t1 + vectorsDot(&cy.oc,&cylinder->normal);
 	if (min >= 0 && min <= cylinder->height)
-		return t2;
+		return cy.t2;
 	if (max >= 0 && max <= cylinder->height)
-		return t1;
+		return cy.t1;
 	return 0;
 }
 
@@ -172,24 +176,25 @@ double hit_disk(t_ray ray,t_disk *disk)
 	///////////////////// this the correct
 	// P - C | V = 0
 	// t = DOT1 (-X,V) / DOT1(D,V) 
-	double t;
-	t_vector X = vectorsSub(&ray.origin,&disk->coord);
-	t_vector V = disk->orientation;
-	V = normalize(&V);
-	double DOT2 = vectorsDot(&ray.direction,&V);
-	if (DOT2 != 0)
+	t_disk_variables dsk;
+	t_vector x;
+	dsk.x = vectorsSub(&ray.origin,&disk->coord);
+	dsk.v = disk->orientation;
+	dsk.v = normalize(&dsk.v);
+	dsk.dot2 = vectorsDot(&ray.direction,&dsk.v);
+	if (dsk.dot2 != 0)
 	{
-		t_vector x = vectorscal(&V,-1);
-		double DOT1 = vectorsDot(&X,&x);
-		t = DOT1 / DOT2;
-		if (t < 0)
+		x = vectorscal(&dsk.v,-1);
+		dsk.dot1 = vectorsDot(&dsk.x,&x);
+		dsk.t = dsk.dot1 / dsk.dot2;
+		if (dsk.t < 0)
 		 	return 0;
-		t_vector scale_direction_to_p = vectorscal(&ray.direction,t);
-		t_vector p = vectorsadd(&ray.origin,&scale_direction_to_p);
-		t_vector op = vectorsSub(&p,&disk->coord);
-		double h = vectorsDot(&op,&op);
-		if (sqrtf(h) <= disk->radius)
-			return t;
+		dsk.scale_direction_to_p = vectorscal(&ray.direction,dsk.t);
+		dsk.p = vectorsadd(&ray.origin,&dsk.scale_direction_to_p);
+		dsk.op = vectorsSub(&dsk.p,&disk->coord);
+		dsk.h = vectorsDot(&dsk.op,&dsk.op);
+		if (sqrtf(dsk.h) <= disk->radius)
+			return dsk.t;
 	}
 	return 0;
 }

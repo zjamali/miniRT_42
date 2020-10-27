@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/27 14:13:10 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/27 18:23:21 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,29 +23,29 @@ t_vector bzero_vector(t_vector v3)
 t_vector ft_calcule_normal(t_scene *scene,t_object *object,t_vector p,double t)
 {
 	t_vector n;
-	double m;
+	t_noraml_variables nrml;
+
 	if (object->object_type == 's')
 		n  = vectorsSub(&p,&object->origin);
-	if (object->object_type == 'p')
-		n = object->orientation;
-	if (object->object_type == 'q')
+	if (object->object_type == 'p' || object->object_type == 'q')
 		n = object->orientation;
 	if (object->object_type == 't')
 	{
-		t_vector edge1 = vectorsSub(&object->v3[1],&object->v3[0]); // 1 0 
-		t_vector edge2 = vectorsSub(&object->v3[2],&object->v3[0]); // 2 0
-		t_vector h = vecttorscross(&edge1,&edge2);
-		n = normalize(&h);
+		nrml.edge1 = vectorsSub(&object->v3[1],&object->v3[0]); // 1 0 
+		nrml.edge2 = vectorsSub(&object->v3[2],&object->v3[0]); // 2 0
+		nrml.h = vecttorscross(&nrml.edge1,&nrml.edge2);
+		n = normalize(&nrml.h);
 	}
 	if (object->object_type == 'c')
 	{
 		object->orientation = normalize(&object->orientation);
-		t_vector oc =  vectorsSub(&scene->ray->origin,&object->origin);
-		m = vectorsDot(&scene->ray->direction,&object->orientation) * t + vectorsDot(&oc,&object->orientation);
+		nrml.oc =  vectorsSub(&scene->ray->origin,&object->origin);
+		nrml.m = vectorsDot(&scene->ray->direction,&object->orientation) * t 
+					+ vectorsDot(&nrml.oc,&object->orientation);
 		//    N = nrm( P-C-V*m )
-		t_vector normal = vectorsSub(&p,&object->origin);
-		t_vector line_point = vectorscal(&object->orientation,m);
-		n = vectorsSub(&normal,&line_point);
+		nrml.normal = vectorsSub(&p,&object->origin);
+		nrml.line_point = vectorscal(&object->orientation,nrml.m);
+		n = vectorsSub(&nrml.normal,&nrml.line_point);
 	}
 	if (object->object_type == 'd')
 		n = object->orientation;
@@ -56,8 +56,6 @@ double ft_get_first_intersection(t_object *temps,t_object *object,t_ray p_ray)
 {
 	double closet_object1_t = 0;
 	double closet_object_t = 1000000000000;
-	//t_object *temps;
-	//temps = object;
 	while (temps != NULL)
 		{
 			if (temps->object_type == 'c')
@@ -78,50 +76,42 @@ double ft_get_first_intersection(t_object *temps,t_object *object,t_ray p_ray)
 			else if(temps->object_type == 'd')
 				closet_object1_t = hit_disk(p_ray,temps->object);
 			if (closet_object1_t > 0)
-			{
 				if (closet_object1_t < closet_object_t)
-					{
-						//closet_object1_t = closet_object1_t + 0.0001; //  ////// for noises in sceane
-						closet_object_t = closet_object1_t; 				
-					}
-			}
+						closet_object_t = closet_object1_t;
 			temps = temps->next;
 		}
 		return closet_object_t;
 }
 double  ft_shadow(t_scene *scene,t_object *object,double t)
 {
-	t_vector scale_direction_to_p = vectorscal(&scene->ray->direction,t);
-	t_vector p = vectorsadd(&scene->ray->origin,&scale_direction_to_p);
-	int dark = 0;
+	t_shadow_variables sdw;
+	sdw.scale_direction_to_p = vectorscal(&scene->ray->direction,t);
+	sdw.p = vectorsadd(&scene->ray->origin,&sdw.scale_direction_to_p);
+	sdw.dark = 0;
 	t_light *light;
 	light = scene->light;
 	while (light != NULL)
 	{
-		t_vector p_l = vectorsSub(&light->origin,&p);
-		t_ray p_ray;
-		p_ray.origin.y = p.y + 0.00001;
-		p_ray.origin.x = p.x + 0.00001;
-		p_ray.origin.z = p.z + 0.00001;
-		p_ray.direction = normalize(&p_l);
-
-		double closet_object_t;
-		t_object *temps;
-		temps = scene->objects;
-		closet_object_t = ft_get_first_intersection(temps,object,p_ray);
-		t_vector scale_direction_to_C = vectorscal(&p_ray.direction,closet_object_t);
-		t_vector C = vectorsadd(&p_ray.origin,&scale_direction_to_C);
-		t_vector p_C = vectorsSub(&C,&p);
+		sdw.p_l = vectorsSub(&light->origin,&sdw.p);
+		sdw.p_ray.origin.y = sdw.p.y + 0.00001;
+		sdw.p_ray.origin.x = sdw.p.x + 0.00001;
+		sdw.p_ray.origin.z = sdw.p.z + 0.00001;
+		sdw.p_ray.direction = normalize(&sdw.p_l);
+		sdw.temps = scene->objects;
+		sdw.closet_object_t = ft_get_first_intersection(sdw.temps,object,sdw.p_ray);
+		sdw.scale_direction_to_c = vectorscal(&sdw.p_ray.direction,sdw.closet_object_t);
+		sdw.c = vectorsadd(&sdw.p_ray.origin,&sdw.scale_direction_to_c);
+		sdw.p_c = vectorsSub(&sdw.c,&sdw.p);
 		
-		double p_length = lenght(&p_l);
-		double c_length = lenght(&p_C);
-		if (p_length > c_length && dark <= 1)
-			dark = 1;
+		sdw.p_length = lenght(&sdw.p_l);
+		sdw.c_length = lenght(&sdw.p_c);
+		if (sdw.p_length > sdw.c_length && sdw.dark <= 1)
+			sdw.dark = 1;
 		else
-			dark = 2;
+			sdw.dark = 2;
 		light = light->next;
 	}
-	if (dark == 1)
+	if (sdw.dark == 1)
 		return 0.2;
 	 return 1;
 }

@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/27 13:26:29 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/27 18:32:06 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,9 @@ int main(int argc, char **argv)
 		scene->win_ptr = mlx_new_window(scene->mlx_ptr,
 			scene->resolution->width,scene->resolution->height,argv[1]);
 		scene->img = ft_creat_img(scene,scene->mlx_ptr,scene->win_ptr);
+		////
 		ft_render(scene);
+		////
 		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
 			scene->img->img, 0, 0);
 		mlx_loop(scene->mlx_ptr);

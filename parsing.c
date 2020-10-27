@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/27 11:14:44 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/27 19:35:42 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,41 +171,30 @@ void parsing_light(char ** lit,t_scene *scene)
 
 void parsing_plan(char **pl,t_scene *scene)
 {
-    char **origin;
-    char **normal;
-    char **color;
-
+    t_obj_properties obj;
     t_plane *plane;
+    t_object *new_object;
 
     plane = malloc(sizeof(t_plane));
-
-    origin  = ft_split(pl[1],',');
-    plane->coord.x = ft_atof(origin[0]);
-    plane->coord.y = ft_atof(origin[1]);
-    plane->coord.z = ft_atof(origin[2]);
-    
-    normal  = ft_split(pl[2],',');
-    plane->orientation.x = ft_atof(normal[0]);
-    plane->orientation.y = ft_atof(normal[1]);
-    plane->orientation.z = ft_atof(normal[2]); 
-
-    color  = ft_split(pl[3],',');
-    plane->color.x = ft_atoi(color[0]);
-    plane->color.y = ft_atoi(color[1]);
-    plane->color.z = ft_atoi(color[2]);
-
-
-    t_object *new_object;
+    obj.origin  = ft_split(pl[1],',');
+    plane->coord.x = ft_atof(obj.origin[0]);
+    plane->coord.y = ft_atof(obj.origin[1]);
+    plane->coord.z = ft_atof(obj.origin[2]);
+    obj.normal  = ft_split(pl[2],',');
+    plane->orientation.x = ft_atof(obj.normal[0]);
+    plane->orientation.y = ft_atof(obj.normal[1]);
+    plane->orientation.z = ft_atof(obj.normal[2]); 
+    obj.color  = ft_split(pl[3],',');
+    plane->color.x = ft_atoi(obj.color[0]);
+    plane->color.y = ft_atoi(obj.color[1]);
+    plane->color.z = ft_atoi(obj.color[2]);
     new_object = malloc(sizeof(t_object));
-
     new_object->object_type = 'p';
     new_object->object = plane;
     new_object->origin = plane->coord;
     new_object->orientation = plane->orientation;
     new_object->color = &plane->color;
     new_object->next = NULL;
-
-
     ft_lstadd_back(&scene->objects,new_object);
 }
 
@@ -213,75 +202,50 @@ void parsing_plan(char **pl,t_scene *scene)
 
 void parsing_sphere(char **sph,t_scene *scene)
 {
-    char **origin;
-    char **color;
-
+    t_obj_properties obj;
     t_sphere *sphere;
+    t_object *new_object;
 
     sphere = malloc(sizeof(t_sphere));
-
-    origin  = ft_split(sph[1],',');
-    sphere->origin.x = ft_atof(origin[0]);
-    sphere->origin.y = ft_atof(origin[1]);
-    sphere->origin.z = ft_atof(origin[2]);
-    
+    obj.origin  = ft_split(sph[1],',');
+    sphere->origin.x = ft_atof(obj.origin[0]);
+    sphere->origin.y = ft_atof(obj.origin[1]);
+    sphere->origin.z = ft_atof(obj.origin[2]);
     sphere->radius  = ft_atof(sph[2]) / 2;
-
-    color  = ft_split(sph[3],',');
-    sphere->color.x = ft_atoi(color[0]);
-    sphere->color.y = ft_atoi(color[1]);
-    sphere->color.z = ft_atoi(color[2]);
-
-
-    t_object *new_object;
+    obj.color  = ft_split(sph[3],',');
+    sphere->color.x = ft_atoi(obj.color[0]);
+    sphere->color.y = ft_atoi(obj.color[1]);
+    sphere->color.z = ft_atoi(obj.color[2]);
     new_object = malloc(sizeof(t_object));
-
     new_object->object_type = 's';
     new_object->object = sphere;
     new_object->origin = sphere->origin;
     new_object->color = &sphere->color;
     new_object->next = NULL;
-/*
-    if (scene->first_object == NULL)
-    {
-        scene->first_object = new_object;
-        scene->objects = new_object;
-        new_object->next = NULL;
-    }
-    else
-        objects->next= new_object;
-*/
     ft_lstadd_back(&scene->objects,new_object);
 }
 
 void parsing_square(char **sqr,t_scene *scene)
 {
-    char **origin;
-    char **color;
-    char **normal;
-
+    t_obj_properties obj;
     t_square *square;
+    t_object *new_object;
 
     square = malloc(sizeof(t_square));
-
-    origin  = ft_split(sqr[1],',');
-    square->center.x = ft_atof(origin[0]);
-    square->center.y = ft_atof(origin[1]);
-    square->center.z = ft_atof(origin[2]);
-
-    normal  = ft_split(sqr[2],',');
-    square->normal.x = ft_atof(normal[0]);
-    square->normal.y = ft_atof(normal[1]);
-    square->normal.z = ft_atof(normal[2]);
+    obj.origin  = ft_split(sqr[1],',');
+    square->center.x = ft_atof(obj.origin[0]);
+    square->center.y = ft_atof(obj.origin[1]);
+    square->center.z = ft_atof(obj.origin[2]);
+    obj.normal  = ft_split(sqr[2],',');
+    square->normal.x = ft_atof(obj.normal[0]);
+    square->normal.y = ft_atof(obj.normal[1]);
+    square->normal.z = ft_atof(obj.normal[2]);
     square->edge_size  = ft_atof(sqr[3]);
-    
-    color  = ft_split(sqr[4],',');
-    square->color.x = ft_atoi(color[0]);
-    square->color.y = ft_atoi(color[1]);
-    square->color.z = ft_atoi(color[2]);   
-    t_object *new_object;
+    obj.color  = ft_split(sqr[4],',');
+    square->color.x = ft_atoi(obj.color[0]);
+    square->color.y = ft_atoi(obj.color[1]);
+    square->color.z = ft_atoi(obj.color[2]);   
     new_object = malloc(sizeof(t_object));
-
     new_object->object_type = 'q';
     new_object->object = square;
     new_object->origin = square->center;
@@ -289,52 +253,33 @@ void parsing_square(char **sqr,t_scene *scene)
     new_object->size = square->edge_size;
     new_object->color = &square->color;
     new_object->next = NULL;
-/*
-    if (scene->first_object == NULL)
-    {
-        scene->first_object = new_object;
-        scene->objects = new_object;
-        scene->objects->next = NULL;
-    }
-    else
-        scene->objects = new_object;
-*/
     ft_lstadd_back(&scene->objects,new_object);
 }
 
 void parsing_triangle(char **tr,t_scene *scene)
 {
-    char **cord1;
-    char **cord2;
-    char **cord3;
-    char **color;
-
+    t_obj_properties obj;
     t_triangle *triangle;
+    t_object *new_object;
 
     triangle = malloc(sizeof(t_triangle));
-
-    cord1  = ft_split(tr[1],',');
-    triangle->vectors[0].x = ft_atof(cord1[0]);
-    triangle->vectors[0].y = ft_atof(cord1[1]);
-    triangle->vectors[0].z = ft_atof(cord1[2]);
-    
-    cord2  = ft_split(tr[2],',');
-    triangle->vectors[1].x = ft_atof(cord2[0]);
-    triangle->vectors[1].y = ft_atof(cord2[1]);
-    triangle->vectors[1].z = ft_atof(cord2[2]);
-    cord3  = ft_split(tr[3],',');
-    triangle->vectors[2].x = ft_atof(cord3[0]);
-    triangle->vectors[2].y = ft_atof(cord3[1]);
-    triangle->vectors[2].z = ft_atof(cord3[2]);
-    
-    color  = ft_split(tr[4],',');
-    triangle->color.x = ft_atoi(color[0]);
-    triangle->color.y = ft_atoi(color[1]);
-    triangle->color.z = ft_atoi(color[2]);
-
-    t_object *new_object;
+    obj.cord1  = ft_split(tr[1],',');
+    triangle->vectors[0].x = ft_atof(obj.cord1[0]);
+    triangle->vectors[0].y = ft_atof(obj.cord1[1]);
+    triangle->vectors[0].z = ft_atof(obj.cord1[2]);
+    obj.cord2  = ft_split(tr[2],',');
+    triangle->vectors[1].x = ft_atof(obj.cord2[0]);
+    triangle->vectors[1].y = ft_atof(obj.cord2[1]);
+    triangle->vectors[1].z = ft_atof(obj.cord2[2]);
+    obj.cord3  = ft_split(tr[3],',');
+    triangle->vectors[2].x = ft_atof(obj.cord3[0]);
+    triangle->vectors[2].y = ft_atof(obj.cord3[1]);
+    triangle->vectors[2].z = ft_atof(obj.cord3[2]);
+    obj.color  = ft_split(tr[4],',');
+    triangle->color.x = ft_atoi(obj.color[0]);
+    triangle->color.y = ft_atoi(obj.color[1]);
+    triangle->color.z = ft_atoi(obj.color[2]);
     new_object = malloc(sizeof(t_object));
-
     new_object->object = triangle;
 	new_object->color = &triangle->color;
 	new_object->object_type = 't';
@@ -342,53 +287,30 @@ void parsing_triangle(char **tr,t_scene *scene)
 	new_object->v3[1] = triangle->vectors[1];
 	new_object->v3[2] = triangle->vectors[2];
     new_object->next = NULL;
-
     ft_lstadd_back(&scene->objects,new_object);
 }
 
 void parsing_cylinder(char **cy,t_scene *scene)
 {
-    char **coord;
-    char **normal;
-    char **color;
-
+    t_obj_properties obj;
     t_cylinder *cylinder;
+    t_object *new_object;
+    
     cylinder = malloc(sizeof(t_cylinder));
-    coord  = ft_split(cy[1],',');
-    cylinder->coord.x = ft_atof(coord[0]);
-    cylinder->coord.y = ft_atof(coord[1]);
-    cylinder->coord.z = ft_atof(coord[2]);
-    normal  = ft_split(cy[2],',');
-    cylinder->normal.x = ft_atof(normal[0]);
-    cylinder->normal.y = ft_atof(normal[1]);
-    cylinder->normal.z = ft_atof(normal[2]);
-    color  = ft_split(cy[5],',');
-    cylinder->color.x = ft_atoi(color[0]);
-    cylinder->color.y = ft_atoi(color[1]);
-    cylinder->color.z = ft_atoi(color[2]);
-
+    obj.origin  = ft_split(cy[1],',');
+    cylinder->coord.x = ft_atof(obj.origin[0]);
+    cylinder->coord.y = ft_atof(obj.origin[1]);
+    cylinder->coord.z = ft_atof(obj.origin[2]);
+    obj.normal  = ft_split(cy[2],',');
+    cylinder->normal.x = ft_atof(obj.normal[0]);
+    cylinder->normal.y = ft_atof(obj.normal[1]);
+    cylinder->normal.z = ft_atof(obj.normal[2]);
+    obj.color  = ft_split(cy[5],',');
+    cylinder->color.x = ft_atoi(obj.color[0]);
+    cylinder->color.y = ft_atoi(obj.color[1]);
+    cylinder->color.z = ft_atoi(obj.color[2]);
     cylinder->diameter = ft_atof(cy[3]);
     cylinder->height = ft_atof(cy[4]);
-    t_disk *cap0;
-    cap0 = malloc(sizeof(t_disk));
-    cap0->orientation = vectorscal(&cylinder->normal,-1);
-	cap0->orientation = normalize(&cap0->orientation);
-	cap0->color = cylinder->color;
-	cap0->radius = cylinder->diameter / 2.0;
-	cap0->coord = cylinder->coord;
-    
-    t_disk *cap1;
-    cap1 = malloc(sizeof(t_disk));
-	cap1->orientation = normalize(&cylinder->normal);
-	cap1->color = cylinder->color;
-	cap1->radius = cylinder->diameter / 2.0;
-	cap1->coord = normalize(&cylinder->normal);
-	cap1->coord = vectorscal(&cap1->coord,cylinder->height);
-	cap1->coord = vectorsadd(&cylinder->coord,&cap1->coord);
-
-
-
-    t_object *new_object;
     new_object = malloc(sizeof(t_object));
     new_object->object = cylinder;
 	new_object->color = &cylinder->color;
@@ -397,11 +319,18 @@ void parsing_cylinder(char **cy,t_scene *scene)
     new_object->orientation = cylinder->normal;
     new_object->size = cylinder->height;
     new_object->diameter = cylinder->diameter;
-    //new_object->id = cylinder->id;
     new_object->next = NULL;
-
     ft_lstadd_back(&scene->objects,new_object);
 
+                /** disk **/
+    t_disk *cap0;   // disk 1
+    cap0 = malloc(sizeof(t_disk));
+    cap0->orientation = vectorscal(&cylinder->normal,-1);
+	cap0->orientation = normalize(&cap0->orientation);
+	cap0->color = cylinder->color;
+	cap0->radius = cylinder->diameter / 2.0;
+	cap0->coord = cylinder->coord;
+    
     t_object *new_object1;
     new_object1 = malloc(sizeof(t_object));
     new_object1->object = cap0;
@@ -412,6 +341,15 @@ void parsing_cylinder(char **cy,t_scene *scene)
     new_object1->size = cap0->radius;
     new_object1->next = NULL;
     ft_lstadd_back(&scene->objects,new_object1);
+    
+    t_disk *cap1; /// disk 2
+    cap1 = malloc(sizeof(t_disk));
+	cap1->orientation = normalize(&cylinder->normal);
+	cap1->color = cylinder->color;
+	cap1->radius = cylinder->diameter / 2.0;
+	cap1->coord = normalize(&cylinder->normal);
+	cap1->coord = vectorscal(&cap1->coord,cylinder->height);
+	cap1->coord = vectorsadd(&cylinder->coord,&cap1->coord);
     
     t_object *new_object2;
     new_object2 = malloc(sizeof(t_object));

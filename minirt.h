@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/27 14:11:54 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/27 19:25:57 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ typedef struct  s_scene
 	void *mlx_ptr;
 	void *win_ptr;
 }t_scene;
-
+/**********          variables        ********************/
 typedef struct s_camera_variables
 {
 	t_vector castRay;
@@ -192,6 +192,133 @@ typedef struct s_phong_variables
 	int specular_shiness;
 	
 }t_phong_variables;
+
+typedef struct s_shadow_variables
+{
+	
+	t_vector scale_direction_to_p;
+	t_vector p;
+	int dark;
+	t_vector p_l;
+	t_ray p_ray;
+	double closet_object_t;
+	t_object *temps;
+	t_vector scale_direction_to_c;
+	t_vector c;
+	t_vector p_c;
+	double p_length;
+	double c_length;
+	
+}t_shadow_variables;
+
+typedef struct s_normal_variables
+{
+	double m;
+	t_vector edge1;
+	t_vector edge2;
+	t_vector h;
+	t_vector oc;
+	t_vector normal;
+	t_vector line_point;
+}t_noraml_variables;
+
+/******** object variables *******/
+typedef struct s_sphere_varibales
+{
+	t_vector oc;
+	double a;
+	double b;
+	double c;
+	double delta;
+	double t;
+	double t1;
+	double t2;
+	
+}t_sphere_variables;
+
+typedef struct s_plane_variables
+{
+	double t;
+	t_vector x;
+	t_vector v;
+	t_vector d;
+	double dot2;
+	double dot1;
+	
+}t_plane_variables;
+
+typedef struct s_traingle_variables
+{
+	double epsilon;
+	
+	t_vector edge1;
+	t_vector edge2;
+	t_vector h;
+	t_vector s;
+	t_vector q;
+	double a;
+	double f;
+	double u;
+	double v;
+	double t;
+	
+}t_triangle_variables;
+
+typedef struct s_square_variables
+{
+	double size;
+	t_vector e1;
+	t_vector e2;
+	t_vector scale_direction_to_p;
+	t_vector p;
+	t_vector u;
+	double r;
+}t_square_variables;
+
+typedef struct s_cylinder_variables
+{
+	double t;
+	t_vector oc;
+	double a;
+	double b;
+	double c;
+	double delta;
+	double t1;
+	double t2;
+
+	double min;
+	double max;
+}t_cylinder_variables;
+
+typedef struct s_disk_variables
+{
+	double t;
+	t_vector x;
+	t_vector v;
+	double dot1;
+	double dot2;
+	t_vector scale_direction_to_p;
+	t_vector p;
+	t_vector op;
+	double h;
+	
+}t_disk_variables;
+
+
+/***************     objects properties *******/
+
+typedef struct s_obj_properties
+{
+	char **origin;
+    char **normal;
+	
+	char **cord1;
+    char **cord2;
+    char **cord3;
+
+	
+    char **color;
+}t_obj_properties;
 
 
 /***********************  VECTOR.C  ***********************/
