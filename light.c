@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/27 11:12:49 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/27 14:13:10 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,73 +128,66 @@ double  ft_shadow(t_scene *scene,t_object *object,double t)
 
 t_vector ft_specular(t_scene *scene,double t,t_object *object)
 {
-	t_vector n;
+	t_phong_variables spr;
+	t_light *light;
 
-	t_vector scale_direction_to_p = vectorscal(&scene->ray->direction,t);
-	t_vector p = vectorsadd(&scene->ray->origin,&scale_direction_to_p);
-	t_vector from_camera_to_p = vectorscal(&p,-1);
-	from_camera_to_p = normalize(&from_camera_to_p);
-	int specular = 0;
+	spr.scale_direction_to_p = vectorscal(&scene->ray->direction,t);
+	spr.p = vectorsadd(&scene->ray->origin,&spr.scale_direction_to_p);
+	spr.from_camera_to_p = vectorscal(&spr.p,-1);
+	spr.from_camera_to_p = normalize(&spr.from_camera_to_p);
+	spr.specular_shiness = 0;
 	if (object->object_type == 's' || object->object_type == 'c')
 	{
 		if(object->object_type == 's')
-			specular = 256;
+			spr.specular_shiness = 256;
 		else if (object->object_type == 'c')
-			specular = 2;
-		n = ft_calcule_normal(scene,object,p,t);
+			spr.specular_shiness = 2;
+		spr.n = ft_calcule_normal(scene,object,spr.p,t);
 	}
-	t_vector color;
-	color = bzero_vector(color);
-
-	t_light *light;
+	spr.color = bzero_vector(spr.color);
 	light = scene->light;
 	while (light != NULL)
 	{
-		t_vector l_p = vectorsSub(&p,&light->origin);
-		l_p = normalize(&l_p);
-		double dot = vectorsDot(&l_p,&n);
-		t_vector r = vectorscal(&n,dot * 2);
-		t_vector reflection = vectorsSub(&r,&l_p);
-		reflection = normalize(&reflection);
-		dot = vectorsDot(&from_camera_to_p,&reflection);
-		dot =  min (dot,0.0);
-		double i_specular =  1 * pow(dot,specular);
-		t_vector color1 = vectorscal(&light->color,i_specular);
+		spr.l_p = vectorsSub(&spr.p,&light->origin);
+		spr.l_p = normalize(&spr.l_p);
+		spr.dot = vectorsDot(&spr.l_p,&spr.n);
+		spr.r = vectorscal(&spr.n,spr.dot * 2);
+		spr.reflection = vectorsSub(&spr.r,&spr.l_p);
+		spr.reflection = normalize(&spr.reflection);
+		spr.dot = vectorsDot(&spr.from_camera_to_p,&spr.reflection);
+		spr.dot =  min (spr.dot,0.0);
+		spr.i_specular =  1 * pow(spr.dot,spr.specular_shiness);
+		spr.color1 = vectorscal(&light->color,spr.i_specular);
+		spr.color = vectorsadd(&spr.color,&spr.color1);
 		light = light->next;
-		color = vectorsadd(&color,&color1);
 	}
-	return color;
+	return spr.color;
 }
 
 t_vector ft_diffuse(t_scene *scene,double t,t_object *object)
 {
-	double m;
-	t_vector color;
-	t_vector scale_direction_to_P = vectorscal(&scene->ray->direction,t);
-	t_vector p = vectorsadd(&scene->ray->origin,&scale_direction_to_P);
-	t_vector n;
+	t_phong_variables dfs;
+	dfs.scale_direction_to_p = vectorscal(&scene->ray->direction,t);
+	dfs.p = vectorsadd(&scene->ray->origin,&dfs.scale_direction_to_p);
 
-	n = ft_calcule_normal(scene,object,p,t);
-	color = bzero_vector(color);
-	//color.x = 0;
-	//color.y = 0;
-	//color.z = 0;
+	dfs.n = ft_calcule_normal(scene,object,dfs.p,t);
+	dfs.color = bzero_vector(dfs.color);
 	t_light *light;
 	light = scene->light;
 	while (light != NULL)
 	{
-		t_vector l_p;
-		l_p = vectorsSub(&light->origin,&p);
-		l_p = normalize(&l_p);
-		double i_diffuse = vectorsDot(&l_p,&n);
-		i_diffuse = i_diffuse;
-		i_diffuse = max(0,i_diffuse);
-		t_vector color1 = { object->color->x /255  * light->color.x  * light->intensity * i_diffuse ,
-		object->color->y  /255  * light->intensity  * i_diffuse  * light->color.y ,object->color->z   /255  * light->color.z  * light->intensity * i_diffuse};
+		dfs.l_p = vectorsSub(&light->origin,&dfs.p);
+		dfs.l_p = normalize(&dfs.l_p);
+		dfs.i_diffuse = vectorsDot(&dfs.l_p,&dfs.n);
+		dfs.i_diffuse = dfs.i_diffuse;
+		dfs.i_diffuse = max(0,dfs.i_diffuse);
+		dfs.color1.x  = object->color->x /255  * light->color.x  * light->intensity * dfs.i_diffuse;
+		dfs.color1.y  = object->color->y /255  * light->color.y  * light->intensity * dfs.i_diffuse;
+		dfs.color1.z  = object->color->z /255  * light->color.z  * light->intensity * dfs.i_diffuse;
 		light = light->next;
-		color = vectorsadd(&color,&color1);
+		dfs.color = vectorsadd(&dfs.color,&dfs.color1);
 	}
-	return color;
+	return dfs.color;
 }
 t_vector ft_ambient(t_ambient *ambient,t_vector *color)
 {

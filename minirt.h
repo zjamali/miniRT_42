@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/27 13:26:40 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/27 14:11:54 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,51 @@ typedef struct  s_scene
 	void *mlx_ptr;
 	void *win_ptr;
 }t_scene;
+
+typedef struct s_camera_variables
+{
+	t_vector castRay;
+	t_vector up;
+	t_vector n;
+	t_vector u;
+	t_vector c;
+	t_vector l;
+	t_vector v;
+	
+	double theta;
+	double aspectRatio;
+	double viewPlaneHalfWidth;
+	double viewPlaneHalfHeight;
+	
+	double W;
+	double H;
+	
+}t_camera_variables;
+
+
+typedef struct s_phong_variables
+{
+	double m;
+	t_vector color;
+	t_vector color1;
+	t_vector l_p;
+	t_vector scale_direction_to_p;
+	t_vector from_camera_to_p;
+	t_vector p;
+	t_vector n;
+	
+	double i_diffuse;
+	
+	int specular;
+	double dot;
+	t_vector r;
+	t_vector reflection;
+	double i_specular;
+	int specular_shiness;
+	
+}t_phong_variables;
+
+
 /***********************  VECTOR.C  ***********************/
 t_vector  vectorsadd(t_vector *v1,t_vector *v2);
 t_vector vectorscal(t_vector *v ,double s);

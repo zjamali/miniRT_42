@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 18:59:10 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/27 13:26:24 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/27 13:42:55 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,42 +15,29 @@
 t_vector ft_camera_ray(t_scene *scene,double x,double y)
 {
 	t_vector castRay;
-	t_vector up;
-	t_vector n;
-	t_vector u;
-	t_vector c;
-	t_vector l;
-	t_vector v;
+	t_camera_variables vbs;
 	
-	double theta;
-	double aspectRatio;
-	double viewPlaneHalfWidth;
-	double viewPlaneHalfHeight;
-	
-	double W = scene->resolution->width;
-	double H = scene->resolution->height;
-	
-	up.x = 0;
-	up.y = 1;
-	up.z = 0;
-	n = normalize(&scene->camera->orientaion);
-	n = vectorscal(&n,-1);
-	n = normalize(&n);
-	u = vecttorscross(&up,&n);
-	u = normalize(&u);
-	v = vecttorscross(&n,&u);
-	theta = scene->camera->fov*PI/180;
-	aspectRatio = W/H;
-	viewPlaneHalfWidth = aspectRatio * tan(theta/2);
-	viewPlaneHalfHeight= -1 * tan(theta/2);
-	c = vectorscal(&n,-1);
-	l.x = c.x - u.x * viewPlaneHalfWidth/2 - v.x * viewPlaneHalfHeight /2;
-	l.y = c.y - u.y * viewPlaneHalfWidth/2 - v.y * viewPlaneHalfHeight /2;
-	l.z = c.z - u.z * viewPlaneHalfWidth/2 - v.z * viewPlaneHalfHeight /2;
-	castRay.x = l.x + u.x * x * viewPlaneHalfWidth/W + v.x * y * viewPlaneHalfHeight/H;
-	castRay.y = l.y + u.y * x * viewPlaneHalfWidth/W + v.y * y * viewPlaneHalfHeight/H;
-	castRay.z = l.z + u.z * x * viewPlaneHalfWidth/W + v.z * y * viewPlaneHalfHeight/H;
+	vbs.W = scene->resolution->width;
+	vbs.H = scene->resolution->height;
+	vbs.up.x = 0;
+	vbs.up.y = 1;
+	vbs.up.z = 0;
+	vbs.n = normalize(&scene->camera->orientaion);
+	vbs.n = vectorscal(&vbs.n,-1);
+	vbs.n = normalize(&vbs.n);
+	vbs.u = vecttorscross(&vbs.up,&vbs.n);
+	vbs.u = normalize(&vbs.u);
+	vbs.v = vecttorscross(&vbs.n,&vbs.u);
+	vbs.theta = scene->camera->fov*PI/180;
+	vbs.aspectRatio = vbs.W/vbs.H;
+	vbs.viewPlaneHalfWidth = vbs.aspectRatio * tan(vbs.theta/2);
+	vbs.viewPlaneHalfHeight= -1 * tan(vbs.theta/2);
+	vbs.c = vectorscal(&vbs.n,-1);
+	vbs.l.x = vbs.c.x - vbs.u.x * vbs.viewPlaneHalfWidth/2 - vbs.v.x * vbs.viewPlaneHalfHeight /2;
+	vbs.l.y = vbs.c.y - vbs.u.y * vbs.viewPlaneHalfWidth/2 - vbs.v.y * vbs.viewPlaneHalfHeight /2;
+	vbs.l.z = vbs.c.z - vbs.u.z * vbs.viewPlaneHalfWidth/2 - vbs.v.z * vbs.viewPlaneHalfHeight /2;
+	castRay.x = vbs.l.x + vbs.u.x * x * vbs.viewPlaneHalfWidth/vbs.W + vbs.v.x * y * vbs.viewPlaneHalfHeight/vbs.H;
+	castRay.y = vbs.l.y + vbs.u.y * x * vbs.viewPlaneHalfWidth/vbs.W + vbs.v.y * y * vbs.viewPlaneHalfHeight/vbs.H;
+	castRay.z = vbs.l.z + vbs.u.z * x * vbs.viewPlaneHalfWidth/vbs.W + vbs.v.z * y * vbs.viewPlaneHalfHeight/vbs.H;
 	return castRay;
-	
-	
 }
