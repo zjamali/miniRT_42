@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/27 18:32:06 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/27 20:53:14 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,27 @@ void ft_render(t_scene *scene)
 		i++;
 	}
 }
+int key_press(int keycode,t_scene *scene)
+{
+	printf("%f\n",scene->objects->origin.x);
+	double x = 0.5;
+	if (keycode == 7)
+	{
+		exit(0);
+	}
+	if (keycode == 124)
+	{
+		if (scene->objects->object_type == 's')
+		{
+			scene->objects->origin.x += x;
+			printf("%f\n",scene->objects->origin.x);
+		}
+	}
+	ft_render(scene);
+	mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
+			scene->img->img, 0, 0);
+	return 0;
+}
 
 int main(int argc, char **argv)
 {
@@ -87,11 +108,10 @@ int main(int argc, char **argv)
 		scene->win_ptr = mlx_new_window(scene->mlx_ptr,
 			scene->resolution->width,scene->resolution->height,argv[1]);
 		scene->img = ft_creat_img(scene,scene->mlx_ptr,scene->win_ptr);
-		////
 		ft_render(scene);
-		////
 		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
 			scene->img->img, 0, 0);
+		mlx_hook(scene->win_ptr, 2,0, key_press,scene);
 		mlx_loop(scene->mlx_ptr);
 	}
 }
