@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/27 12:38:15 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/27 13:26:29 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ t_ray *ft_ray_creating(t_scene *scene,int i,int j)
 	t_ray *ray;
 	ray = malloc(sizeof(t_ray));
 	ray->origin = scene->camera->lookfrom;
-	ray->direction = ft_camera(scene->camera,scene->resolution->height,
-		scene->resolution->width,i,j);
+	ray->direction = ft_camera_ray(scene,i,j); 
 	ray->direction = normalize(&ray->direction);
 	return ray;
 }
@@ -84,7 +83,7 @@ int main(int argc, char **argv)
 	{
 		scene = ft_scene_init(argv[1]);
 		scene = parsing(scene->fd);
-		scene->mlx_ptr =mlx_init();
+		scene->mlx_ptr = mlx_init();
 		scene->win_ptr = mlx_new_window(scene->mlx_ptr,
 			scene->resolution->width,scene->resolution->height,argv[1]);
 		scene->img = ft_creat_img(scene,scene->mlx_ptr,scene->win_ptr);

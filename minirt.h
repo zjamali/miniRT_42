@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/27 12:02:45 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/27 13:26:40 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,6 @@ typedef struct resolution
 }t_resolution;
 
 
-
-
 typedef struct  s_scene
 {
 	int color_of_pixel;
@@ -164,8 +162,7 @@ t_vector vecttorscross(t_vector *v1,t_vector *v2);
 
 
 /***********************  CAMERA.C  ***********************/
-t_vector ft_camera(t_camera *camera,double H,double W,double x,double y);
-
+t_vector ft_camera_ray(t_scene *scene,double x,double y);
 
 /***********************  INTERSECTION.C  ***********************/
 double hit_sphere(t_ray ray,t_sphere *s);
