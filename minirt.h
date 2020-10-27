@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/26 13:09:55 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/27 12:02:45 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,16 +133,13 @@ typedef struct resolution
 	int width;
 }t_resolution;
 
-typedef struct window
-{
-	void *mlx_ptr; 
-	void *win_ptr;
-}t_window;
 
 
 
 typedef struct  s_scene
 {
+	int color_of_pixel;
+	int fd;
 	t_ray *ray;
 	t_object *objects;
 	t_camera *camera;
@@ -150,7 +147,9 @@ typedef struct  s_scene
 	t_ambient *ambient;
 	t_resolution *resolution;
 	t_imag *img;
-	t_window *window;
+
+	void *mlx_ptr;
+	void *win_ptr;
 }t_scene;
 /***********************  VECTOR.C  ***********************/
 t_vector  vectorsadd(t_vector *v1,t_vector *v2);

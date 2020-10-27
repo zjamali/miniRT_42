@@ -6,11 +6,19 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/26 14:43:05 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/27 11:12:49 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+t_vector bzero_vector(t_vector v3)
+{
+	v3.x = 0;
+	v3.y = 0;
+	v3.z = 0;
+	return v3;	
+}
 
 t_vector ft_calcule_normal(t_scene *scene,t_object *object,t_vector p,double t)
 {
@@ -44,33 +52,13 @@ t_vector ft_calcule_normal(t_scene *scene,t_object *object,t_vector p,double t)
 	n = normalize(&n);
 	return n;
 }
-
-double  ft_shadow(t_scene *scene,t_object *object,double t)
+double ft_get_first_intersection(t_object *temps,t_object *object,t_ray p_ray)
 {
-	t_vector scale_direction_to_p = vectorscal(&scene->ray->direction,t);
-	t_vector p = vectorsadd(&scene->ray->origin,&scale_direction_to_p);
-	int dark = 0;
-	double shadaws = 0;
-	t_vector color;
-	color.x = 0;
-	color.y = 0;
-	color.z = 0;
-	t_light *light;
-	light = scene->light;
-	while (light != NULL)
-	{
-		t_vector p_l = vectorsSub(&light->origin,&p);
-		t_ray p_ray;
-		p_ray.origin.y = p.y + 0.00001;
-		p_ray.origin.x = p.x + 0.00001;
-		p_ray.origin.z = p.z + 0.00001;
-		p_ray.direction = normalize(&p_l);
-
-		double closet_object1_t = 0;
-		double closet_object_t = 1000000000000;
-		t_object *temps;
-		temps = scene->objects;
-		while (temps != NULL)
+	double closet_object1_t = 0;
+	double closet_object_t = 1000000000000;
+	//t_object *temps;
+	//temps = object;
+	while (temps != NULL)
 		{
 			if (temps->object_type == 'c')
 			{
@@ -93,13 +81,34 @@ double  ft_shadow(t_scene *scene,t_object *object,double t)
 			{
 				if (closet_object1_t < closet_object_t)
 					{
-						closet_object1_t = closet_object1_t; //  ////// for noises in sceane
+						//closet_object1_t = closet_object1_t + 0.0001; //  ////// for noises in sceane
 						closet_object_t = closet_object1_t; 				
 					}
 			}
 			temps = temps->next;
 		}
-		
+		return closet_object_t;
+}
+double  ft_shadow(t_scene *scene,t_object *object,double t)
+{
+	t_vector scale_direction_to_p = vectorscal(&scene->ray->direction,t);
+	t_vector p = vectorsadd(&scene->ray->origin,&scale_direction_to_p);
+	int dark = 0;
+	t_light *light;
+	light = scene->light;
+	while (light != NULL)
+	{
+		t_vector p_l = vectorsSub(&light->origin,&p);
+		t_ray p_ray;
+		p_ray.origin.y = p.y + 0.00001;
+		p_ray.origin.x = p.x + 0.00001;
+		p_ray.origin.z = p.z + 0.00001;
+		p_ray.direction = normalize(&p_l);
+
+		double closet_object_t;
+		t_object *temps;
+		temps = scene->objects;
+		closet_object_t = ft_get_first_intersection(temps,object,p_ray);
 		t_vector scale_direction_to_C = vectorscal(&p_ray.direction,closet_object_t);
 		t_vector C = vectorsadd(&p_ray.origin,&scale_direction_to_C);
 		t_vector p_C = vectorsSub(&C,&p);
@@ -125,7 +134,7 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 	t_vector p = vectorsadd(&scene->ray->origin,&scale_direction_to_p);
 	t_vector from_camera_to_p = vectorscal(&p,-1);
 	from_camera_to_p = normalize(&from_camera_to_p);
-	int specular = 0; ///// 232
+	int specular = 0;
 	if (object->object_type == 's' || object->object_type == 'c')
 	{
 		if(object->object_type == 's')
@@ -135,9 +144,7 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 		n = ft_calcule_normal(scene,object,p,t);
 	}
 	t_vector color;
-	color.x = 0;
-	color.y = 0;
-	color.z = 0;
+	color = bzero_vector(color);
 
 	t_light *light;
 	light = scene->light;
@@ -168,10 +175,10 @@ t_vector ft_diffuse(t_scene *scene,double t,t_object *object)
 	t_vector n;
 
 	n = ft_calcule_normal(scene,object,p,t);
-	color.x = 0;
-	color.y = 0;
-	color.z = 0;
-
+	color = bzero_vector(color);
+	//color.x = 0;
+	//color.y = 0;
+	//color.z = 0;
 	t_light *light;
 	light = scene->light;
 	while (light != NULL)
