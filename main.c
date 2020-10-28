@@ -73,7 +73,7 @@ void ft_render(t_scene *scene)
 		i++;
 	}
 }
-
+/*
 int key_press(int keycode,t_scene *scene)
 {
 	static double x;
@@ -116,18 +116,7 @@ int key_press(int keycode,t_scene *scene)
 	}
 	if (wish_object == 2)
 	{
-		int i = 0;
-		t_object *temp;
-		temp = scene->objects;
-
-		while (temp != NULL) /// how many objects in scene
-		{
-			i += 1;
-			temp = temp->next;
-		}
-		
-		printf("%d\n",i);
-		
+		if (keycode == 1)
 	}
 	if (wish_object == 1)
 	{
@@ -148,6 +137,66 @@ int key_press(int keycode,t_scene *scene)
 	}
 	return 0;
 }
+*/
+t_vector *ft_wich_to_shift(int keycode, t_scene *scene)
+{
+	static int wich_object;
+	static double x;
+	x = 0.5;
+	static t_vector *v3;
+	if (keycode == 37)
+		v3 = &scene->light->origin;
+	if (keycode == 8)
+		v3 = &scene->camera->lookfrom;
+	if (keycode == 31) // //// objects
+	{
+		t_sphere *sp;
+		sp = scene->objects->object;
+		v3 = &sp->origin;
+	}
+	//{
+	//	wich_object = 2;
+	//if (wich_object == 2)
+	//{
+	//	if (keycode == 1)
+//
+	//}
+	return v3;
+}
+
+int ft_key_press(int keycode,t_scene *scene)
+{
+	t_vector *v3;
+	v3 = NULL;
+	int x;
+	x = 1;
+	if (keycode == 53)
+		exit(0);
+	else
+	{
+	v3 = ft_wich_to_shift(keycode,scene);
+
+	if (v3 != NULL)
+	{
+		write(1,"he\n",3);
+		if (keycode == 124) /// right button
+			v3->x += x;///scene->light->origin.x += x;
+		else if (keycode == 123) /// left button
+			v3->x -= x;
+		else if (keycode == 126) ///up button
+			v3->y += x;
+		else if (keycode == 125) /// down button
+			v3->y -= x;
+		else if (keycode == 13) /// + button
+			v3->z += x;
+		else if (keycode == 1) /// - button
+			v3->z -= x;
+		ft_render(scene);
+		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,	scene->img->img, 0, 0);
+	}
+	}
+	return 0;
+}
 
 int main(int argc, char **argv)
 {
@@ -165,7 +214,7 @@ int main(int argc, char **argv)
 		ft_render(scene);
 		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
 			scene->img->img, 0, 0);
-		mlx_hook(scene->win_ptr, 2,0, key_press,scene);
+		mlx_hook(scene->win_ptr, 2,0, ft_key_press,scene);
 		mlx_loop(scene->mlx_ptr);
 	}
 }
