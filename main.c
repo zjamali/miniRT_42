@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/27 20:53:14 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/28 14:51:18 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,25 +73,79 @@ void ft_render(t_scene *scene)
 		i++;
 	}
 }
+
 int key_press(int keycode,t_scene *scene)
 {
-	printf("%f\n",scene->objects->origin.x);
-	double x = 0.5;
+	static double x;
+	x = 0.5;
+	static int wish_object;
+	static t_vector *v3;
+	//printf("%f\n",scene->objects->origin.x);
 	if (keycode == 7)
 	{
+		v3 = NULL;
+		wish_object = 0;
+	}
+	if (keycode == 53)
+	{
+		free(scene);
 		exit(0);
 	}
-	if (keycode == 124)
+	if (keycode == 37)//)|| keycode == 8 || keycode == 31)
 	{
-		if (scene->objects->object_type == 's')
-		{
-			scene->objects->origin.x += x;
-			printf("%f\n",scene->objects->origin.x);
-		}
+		x = 5;
+		v3 = &scene->light->origin;
+		wish_object = 1;
 	}
-	ft_render(scene);
-	mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
-			scene->img->img, 0, 0);
+	if (keycode == 8)
+	{
+		x = 0.5;
+		v3 = &scene->camera->lookfrom;
+		wish_object = 1;
+	}
+	if (keycode == 31) // //// objects
+	{
+		//if (scene->objects->object_type == 's')
+		//{
+		//	t_sphere *sp;
+		//	sp = scene->objects->object;
+		//	v3 = &sp->origin;
+		//}
+		wish_object = 2;
+		x = 0.5;
+	}
+	if (wish_object == 2)
+	{
+		int i = 0;
+		t_object *temp;
+		temp = scene->objects;
+
+		while (temp != NULL) /// how many objects in scene
+		{
+			i += 1;
+			temp = temp->next;
+		}
+		
+		printf("%d\n",i);
+		
+	}
+	if (wish_object == 1)
+	{
+		if (keycode == 124) /// right button
+			v3->x += x;///scene->light->origin.x += x;
+		else if (keycode == 123) /// left button
+			v3->x -= x;
+		else if (keycode == 126) ///up button
+			v3->y += x;
+		else if (keycode == 125) /// down button
+			v3->y -= x;
+		else if (keycode == 13) /// + button
+			v3->z += x;
+		else if (keycode == 1) /// - button
+			v3->z -= x;
+		ft_render(scene);
+		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,	scene->img->img, 0, 0);
+	}
 	return 0;
 }
 

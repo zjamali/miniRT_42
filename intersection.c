@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:01:20 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/27 19:17:38 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/28 11:56:40 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ double hit_sphere(t_ray ray,t_sphere *sphere)
 {
 	t_sphere_variables sp;
 	// a*t^2 + b*t +c = 0;
+	//printf("%f\n",sphere->origin.x);
 	sp.oc =  vectorsSub(&ray.origin,&sphere->origin);
 	sp.a = vectorsDot(&ray.direction,&ray.direction);
 	sp.b = 2.0 * vectorsDot(&sp.oc,&ray.direction);

@@ -68,7 +68,7 @@ double	ft_atof(const char *str)
 	if (*c == '-')
 		s = -1;
 	res = (double)ft_atoi(c);
-	printf("%f",res);
+	///printf("%f",res);
 	while (*c && *c != '.')
 		c++;
 	if (*c == '.')
