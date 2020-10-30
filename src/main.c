@@ -35,9 +35,10 @@ void            my_mlx_pixel_put(t_imag *img, int x, int y, int color)
     dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
     *(int*)dst = color;
 }
-t_imag *ft_creat_img(t_scene *scene,void *mlx_ptr,void *win_ptr)
+t_imag *ft_creat_img(t_scene *scene,void *mlx_ptr)
 {
 	t_imag *imag;
+
 	imag = malloc(sizeof(t_imag));
 	imag->img = mlx_new_image(mlx_ptr, scene->resolution->width,
 	scene->resolution->height);
@@ -73,6 +74,7 @@ void ft_render(t_scene *scene)
 		i++;
 	}
 }
+/*
 t_camera *ft_wich_camera(t_scene *scene,int keycode)
 {
 	static t_camera *cam;
@@ -96,11 +98,11 @@ int ft_key_press(int keycode,t_scene *scene)
 	}
 	
 }
+*/
 int main(int argc, char **argv)
 {
-	int i;
-	int j;
 	t_scene *scene;
+	
     if(argc > 1)
 	{
 		scene = ft_scene_init(argv[1]);
@@ -108,11 +110,11 @@ int main(int argc, char **argv)
 		scene->mlx_ptr = mlx_init();
 		scene->win_ptr = mlx_new_window(scene->mlx_ptr,
 			scene->resolution->width,scene->resolution->height,argv[1]);
-		scene->img = ft_creat_img(scene,scene->mlx_ptr,scene->win_ptr);
+		scene->img = ft_creat_img(scene,scene->mlx_ptr);
 		ft_render(scene);
 		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
 			scene->img->img, 0, 0);
-		mlx_hook(scene->win_ptr, 2,0, ft_key_press,scene);
+		//mlx_hook(scene->win_ptr, 2,0, ft_key_press,scene);
 		mlx_loop(scene->mlx_ptr);
 	}
 	return 0;

@@ -59,7 +59,7 @@ double ft_get_first_intersection(t_object *temps,t_object *object,t_ray p_ray)
 			if (temps->object_type == 'c')
 			{
 				if (object->object == temps->object)
-					closet_object_t = closet_object_t;
+					closet_object_t = closet_object_t + 0.0000001;
 				else
 					closet_object1_t = 	hit_cylinder(p_ray,temps->object);
 			}
