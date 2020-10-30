@@ -135,10 +135,7 @@ void parsing_camera(char **cam,t_scene *scene)
     camera->prev = NULL; 
 
     camera->fov = ft_atoi(cam[3]);
-
-    //scene->camera = camera;
     ft_lstadd_back_camera(&scene->camera,camera);
-
 }
 
 void parsing_light(char ** lit,t_scene *scene)
@@ -164,10 +161,6 @@ void parsing_light(char ** lit,t_scene *scene)
 
     ft_lstadd_back_light(&scene->light,light);
 }
-
-/******************************** switching plane to a max square **********************/
-
-
 
 void parsing_plan(char **pl,t_scene *scene)
 {
@@ -197,8 +190,6 @@ void parsing_plan(char **pl,t_scene *scene)
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
 }
-
-/************************************* end switching plane to a max square ************************/
 
 void parsing_sphere(char **sph,t_scene *scene)
 {
@@ -323,47 +314,8 @@ void parsing_cylinder(char **cy,t_scene *scene)
     new_object->diameter = cylinder->diameter;
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
-
-                /** disk **/
-    ///t_disk *cap0;   // disk 1
-    ///cap0 = malloc(sizeof(t_disk));
-    ///cap0->orientation = vectorscal(&cylinder->normal,-1);
-	///cap0->orientation = normalize(&cap0->orientation);
-	///cap0->color = cylinder->color;
-	///cap0->radius = cylinder->diameter / 2.0;
-	///cap0->coord = cylinder->coord;
-    ///
-    ///t_object *new_object1;
-    ///new_object1 = malloc(sizeof(t_object));
-    ///new_object1->object = cap0;
-	///new_object1->color = &cap0->color;
-	///new_object1->object_type = 'd';
-    ///new_object1->origin = cap0->coord;
-    ///new_object1->orientation = normalize(&cap0->orientation);
-    ///new_object1->size = cap0->radius;
-    ///new_object1->next = NULL;
-    ///ft_lstadd_back(&scene->objects,new_object1);
-    ///
-    ///t_disk *cap1; /// disk 2
-    ///cap1 = malloc(sizeof(t_disk));
-	///cap1->orientation = normalize(&cylinder->normal);
-	///cap1->color = cylinder->color;
-	///cap1->radius = cylinder->diameter / 2.0;
-	///cap1->coord = normalize(&cylinder->normal);
-	///cap1->coord = vectorscal(&cap1->coord,cylinder->height);
-	///cap1->coord = vectorsadd(&cylinder->coord,&cap1->coord);
-    ///
-    ///t_object *new_object2;
-    ///new_object2 = malloc(sizeof(t_object));
-    ///new_object2->object = cap1;
-	///new_object2->color = &cap1->color;
-	///new_object2->object_type = 'd';
-    ///new_object2->origin = cap1->coord;
-    ///new_object2->orientation = normalize(&cap1->orientation);
-    ///new_object2->size = cap1->radius;
-    ///new_object2->next = NULL;
-    ///ft_lstadd_back(&scene->objects,new_object2);
 }
+
 void parsing_line(char *line,t_scene *scene)
 {
     char **split;
@@ -396,6 +348,7 @@ void initial_scene(t_scene *scene)
     scene->camera = NULL;
     scene->objects = NULL;
 }
+
 t_scene *parsing(int fd)
 {
     t_scene *scene;
@@ -404,10 +357,10 @@ t_scene *parsing(int fd)
     initial_scene(scene);
     char *line;
     while(get_next_line(fd,&line) > 0)
-		{
-            parsing_line(line,scene);
-			free(line);
-		}
+	{
+        parsing_line(line,scene);
+		free(line);
+	}
     parsing_line(line,scene);
     free(line);
     return scene;

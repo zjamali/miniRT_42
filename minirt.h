@@ -142,6 +142,7 @@ typedef struct  s_scene
 	t_ray *ray;
 	t_object *objects;
 	t_camera *camera;
+	t_camera *multi_camera;
 	t_light *light;
 	t_ambient *ambient;
 	t_resolution *resolution;
@@ -321,15 +322,6 @@ typedef struct s_obj_properties
     char **color;
 }t_obj_properties;
 
-/******************* object movement **********/
-
-typedef struct s_mv_vectors
-{
-	t_vector *object_parent_vector;
-	t_vector *object_child_vector;
-}t_mv_vectors;
-
-
 
 /***********************  VECTOR.C  ***********************/
 t_vector  vectorsadd(t_vector *v1,t_vector *v2);
@@ -347,12 +339,12 @@ t_vector vecttorscross(t_vector *v1,t_vector *v2);
 t_vector ft_camera_ray(t_scene *scene,double x,double y);
 
 /***********************  INTERSECTION.C  ***********************/
-double hit_sphere(t_ray ray,t_object *s);
+double hit_sphere(t_ray ray,t_sphere *s);
 double hit_plane(t_ray ray,t_plane *plane);
 double hit_triangle(t_ray ray,t_triangle *triangle);
 double hit_square(t_ray ray,t_square *s_square);
-double hit_cylinder(t_ray ray,t_object *cylinder);
-double hit_disk(t_ray ray,t_disk *disk);
+double hit_cylinder(t_ray ray,t_cylinder *cylinder);
+//double hit_disk(t_ray ray,t_disk *disk);
 /***********************  LIGHT.C  ***********************/
 t_vector ft_specular(t_scene *scene,double t,t_object *object);
 t_vector ft_diffuse(t_scene *scene,double t,t_object *object);

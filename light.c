@@ -47,8 +47,6 @@ t_vector ft_calcule_normal(t_scene *scene,t_object *object,t_vector p,double t)
 		nrml.line_point = vectorscal(&object->orientation,nrml.m);
 		n = vectorsSub(&nrml.normal,&nrml.line_point);
 	}
-	if (object->object_type == 'd')
-		n = object->orientation;
 	n = normalize(&n);
 	return n;
 }
@@ -73,8 +71,6 @@ double ft_get_first_intersection(t_object *temps,t_object *object,t_ray p_ray)
 				closet_object1_t = hit_triangle(p_ray,temps->object);
 			else if(temps->object_type == 'q')
 				closet_object1_t = hit_square(p_ray,temps->object);
-			else if(temps->object_type == 'd')
-				closet_object1_t = hit_disk(p_ray,temps->object);
 			if (closet_object1_t > 0)
 				if (closet_object1_t < closet_object_t)
 						closet_object_t = closet_object1_t;
