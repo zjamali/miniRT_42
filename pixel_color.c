@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:09:11 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/26 14:21:22 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/30 11:42:17 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,7 @@ double calcule_closet_object_is_t(t_ray *ray,t_object *temp)
 {
 	double t;
 	t = 0;
+	/*
 	if (temp->object_type == 's')
 		t = hit_sphere(*ray,temp->object);
 	else if (temp->object_type == 'p')
@@ -208,6 +209,20 @@ double calcule_closet_object_is_t(t_ray *ray,t_object *temp)
 		t = hit_square(*ray,temp->object);
 	else if (temp->object_type == 'c')
 		t = hit_cylinder(*ray,temp->object);
+	else if (temp->object_type == 'd')
+		t = hit_disk(*ray,temp->object);
+	return t;
+	*/
+	if (temp->object_type == 's')
+		t = hit_sphere(*ray,temp);
+	else if (temp->object_type == 'p')
+		t = hit_plane(*ray,temp->object);
+	else if (temp->object_type == 't')
+		t = hit_triangle(*ray,temp->object);
+	else if (temp->object_type == 'q')
+		t = hit_square(*ray,temp->object);
+	else if (temp->object_type == 'c')
+		t = hit_cylinder(*ray,temp);
 	else if (temp->object_type == 'd')
 		t = hit_disk(*ray,temp->object);
 	return t;

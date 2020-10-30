@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/28 14:51:18 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/10/30 12:59:34 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,21 +138,108 @@ int key_press(int keycode,t_scene *scene)
 	return 0;
 }
 */
-t_vector *ft_wich_to_shift(int keycode, t_scene *scene)
+t_object *ft_select_selected_object(t_scene *scene,char ch)
+{
+	t_object *temp;
+	temp = scene->objects;
+	while (temp != NULL)
+	{
+		if (temp->object_type == ch)
+			return temp;
+		temp = temp->next;
+	}
+	return NULL;	
+}
+t_vector *ft_select_square(t_scene *scene)
+{
+	static int next;
+	t_object *object;
+	object = ft_select_selected_object(scene,'q');
+	if (object != NULL)
+	{
+		t_square *sq;
+		sq = object->object;
+		return &sq->center;
+	}
+	return NULL;
+	
+}
+t_vector *ft_select_sphere(t_scene *scene)
+{
+	static int next;
+	t_object *object;
+	object = ft_select_selected_object(scene,'s');
+	if (object != NULL)
+	{
+		//t_sphere *sp;
+		//sp = object->object;
+		return &object->origin;
+	}
+	return NULL;
+}
+
+t_vector *ft_select_plan(t_scene *scene)
+{
+	static int next;
+	t_object *object;
+	object = ft_select_selected_object(scene,'p');
+	if (object != NULL)
+	{
+		t_plane *p;
+		p = object->object;
+		return &p->coord;
+	}
+	return NULL;
+}
+t_vector *ft_select_cylinder(t_scene *scene)
+{
+	static int next;
+	t_object *object;
+	object = ft_select_selected_object(scene,'c');
+	if (object != NULL)
+	{
+		t_cylinder *cy;
+		cy = object->object;
+		return &object->origin;
+	}
+	return NULL;
+}
+t_vector *ft_wich_to_move(int keycode, t_scene *scene)
 {
 	static int wich_object;
 	static double x;
-	x = 0.5;
 	static t_vector *v3;
 	if (keycode == 37)
-		v3 = &scene->light->origin;
-	if (keycode == 8)
-		v3 = &scene->camera->lookfrom;
-	if (keycode == 31) // //// objects
 	{
-		t_sphere *sp;
-		sp = scene->objects->object;
-		v3 = &sp->origin;
+		wich_object = 0;
+		v3 = &scene->light->origin;
+	}
+	if (keycode == 8)
+	{
+		wich_object = 0;
+		v3 = &scene->camera->lookfrom;
+	}
+	if (keycode == 7)
+	{ ////  x button
+		if (wich_object == 1)
+			wich_object = 0;
+		v3 = NULL;
+	}
+	if (keycode == 31)
+	{ // //// objects
+		v3 = NULL;
+		wich_object = 1;
+	}
+	if (wich_object == 1)
+	{
+		if (keycode == 1)
+			v3 = ft_select_sphere(scene);
+		else if (keycode == 12)
+			v3 = ft_select_square(scene);
+		else if (keycode == 35)
+			v3 = ft_select_plan(scene);
+		else if (keycode == 16)
+			v3 = ft_select_cylinder(scene);	
 	}
 	//{
 	//	wich_object = 2;
@@ -163,37 +250,95 @@ t_vector *ft_wich_to_shift(int keycode, t_scene *scene)
 	//}
 	return v3;
 }
+t_triangle *ft_select_triangle(t_scene *scene)
+{
+	t_object *ob;
+	ob = ft_select_selected_object(scene,'t');
+	t_triangle *tr;
+	tr = ob->object; 
+	return tr;
+}
+void ft_move_traingle(t_scene *scene,int keycode)
+{
+	t_triangle *tr;
+	tr = ft_select_triangle(scene);
+	
+	int x =  1;
+	if (tr != NULL)
+	{
+			if (keycode == 124) /// right button
+			{
+				write(1,"hh\n",2);
+				tr->vectors[0].x  += x;
+				tr->vectors[1].x  += x;
+				tr->vectors[2].x  += x;
+			}
+			else if (keycode == 123) /// left button
+			{	
+				tr->vectors[0].x  -= x;
+				tr->vectors[1].x  -= x;
+				tr->vectors[2].x  -= x;
+			}
+			else if (keycode == 126) ///up button
+			{	
+				tr->vectors[0].y  += x;
+				tr->vectors[1].y  += x;
+				tr->vectors[2].y  += x;
+			}
+			else if (keycode == 125) /// down button
+			{	
+				tr->vectors[0].y  -= x;
+				tr->vectors[1].y  -= x;
+				tr->vectors[2].y  -= x;
+			}
+			else if (keycode == 24) /// + button
+			{	
+				tr->vectors[0].z  += x;
+				tr->vectors[1].z  += x;
+				tr->vectors[2].z  += x;
+			}
+			else if (keycode == 27) /// - button
+			{	
+				tr->vectors[0].z  -= x;
+				tr->vectors[1].z  -= x;
+				tr->vectors[2].z  -= x;
+			}
+			ft_render(scene);
+			mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,	scene->img->img, 0, 0);
+	}
+}
 
 int ft_key_press(int keycode,t_scene *scene)
 {
 	t_vector *v3;
 	v3 = NULL;
+	static int if_triangle;
 	int x;
 	x = 1;
 	if (keycode == 53)
 		exit(0);
 	else
 	{
-	v3 = ft_wich_to_shift(keycode,scene);
-
-	if (v3 != NULL)
-	{
-		write(1,"he\n",3);
-		if (keycode == 124) /// right button
-			v3->x += x;///scene->light->origin.x += x;
-		else if (keycode == 123) /// left button
-			v3->x -= x;
-		else if (keycode == 126) ///up button
-			v3->y += x;
-		else if (keycode == 125) /// down button
-			v3->y -= x;
-		else if (keycode == 13) /// + button
-			v3->z += x;
-		else if (keycode == 1) /// - button
-			v3->z -= x;
-		ft_render(scene);
-		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,	scene->img->img, 0, 0);
-	}
+		
+		v3 = ft_wich_to_move(keycode,scene);
+		if (v3 != NULL)
+		{
+			if (keycode == 124) /// right button
+				v3->x += x;///scene->light->origin.x += x;
+			else if (keycode == 123) /// left button
+				v3->x -= x;
+			else if (keycode == 126) ///up button
+				v3->y += x;
+			else if (keycode == 125) /// down button
+				v3->y -= x;
+			else if (keycode == 24) /// + button
+				v3->z += x;
+			else if (keycode == 27) /// - button
+				v3->z -= x;
+			printf("%f|%f|%f\n",v3->x,v3->y,v3->z);
+			ft_render(scene);
+			mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,	scene->img->img, 0, 0);
+		}
 	}
 	return 0;
 }
