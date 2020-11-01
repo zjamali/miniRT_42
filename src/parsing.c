@@ -85,7 +85,8 @@ void ft_lstadd_back_camera(t_camera **alst, t_camera *new)
 		temp = ft_lstlast_camera(*alst);
 		temp->next = new;
 		new->next = NULL;
-        new->prev = *alst;
+        new->prev = temp;
+        //new->prev = *alst;
 	}
 	else
 		*alst = new;

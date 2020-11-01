@@ -79,18 +79,32 @@ void ft_render(t_scene *scene,t_camera *camera)
 		i++;
 	}
 }
+void ft_print_cameras(t_camera *camera)
+{
+	int i = 0;
+	while (camera != NULL)
+	{
+		printf("%d",i);
+		if (camera->prev != NULL)
+			printf("%d\n",i);
+		i++;
+		camera = camera->next;
+	}
+	
+}
 
 t_camera *ft_wich_camera(t_scene *scene,int keycode)
 {
 	static t_camera *cam;
-	cam = scene->camera;
+	if (cam == NULL)
+		cam = scene->camera;
 	//cam = scene->camera;
+	////cam = scene->camera;
+	ft_print_cameras(scene->camera);
 	if (keycode == 124 && cam->next != NULL)
 		cam = cam->next;
 	if (keycode == 123 && cam->prev != NULL)
-	{
 		cam = cam->prev;
-	}
 	return cam;
 }
 int ft_key_press(int keycode,t_scene *scene)
