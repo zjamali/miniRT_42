@@ -23,7 +23,7 @@ COM= gcc
 CFLAGE= -Wall -Wextra -Werror
 HDR_INC= -I ./headers/
 
-MLX= -lmlx -framework OpenGL -framework AppKit #-lX11
+MLX= -lmlx -framework OpenGL -framework AppKit -lX11
 ## MLX_INC= /usr/local/include
 MLX_LIB1= /usr/local/lib
 MLX_LIB2= /usr/X11/lib

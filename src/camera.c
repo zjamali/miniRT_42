@@ -12,7 +12,7 @@
 
 #include "minirt.h"
 
-t_vector ft_camera_ray(t_scene *scene,double x,double y)
+t_vector ft_camera_ray(t_scene *scene,t_camera *camera,double x,double y)
 {
 	t_vector castRay;
 	t_camera_variables vbs;
@@ -22,13 +22,13 @@ t_vector ft_camera_ray(t_scene *scene,double x,double y)
 	vbs.up.x = 0;
 	vbs.up.y = 1;
 	vbs.up.z = 0;
-	vbs.n = normalize(&scene->camera->orientaion);
+	vbs.n = normalize(&camera->orientaion);
 	vbs.n = vectorscal(&vbs.n,-1);
 	vbs.n = normalize(&vbs.n);
 	vbs.u = vecttorscross(&vbs.up,&vbs.n);
 	vbs.u = normalize(&vbs.u);
 	vbs.v = vecttorscross(&vbs.n,&vbs.u);
-	vbs.theta = scene->camera->fov*PI/180;
+	vbs.theta = camera->fov*PI/180;
 	vbs.aspectRatio = vbs.W/vbs.H;
 	vbs.viewPlaneHalfWidth = vbs.aspectRatio * tan(vbs.theta/2);
 	vbs.viewPlaneHalfHeight= -1 * tan(vbs.theta/2);

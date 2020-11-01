@@ -19,12 +19,12 @@ void ft_putchar(char c)
 	write(1,&c,1);
 }
 
-t_ray *ft_ray_creating(t_scene *scene,int i,int j)
+t_ray *ft_ray_creating(t_scene *scene,t_camera *camera,int i,int j)
 {
 	t_ray *ray;
 	ray = malloc(sizeof(t_ray));
-	ray->origin = scene->camera->lookfrom;
-	ray->direction = ft_camera_ray(scene,i,j); 
+	ray->origin = camera->lookfrom;
+	ray->direction = ft_camera_ray(scene,camera,i,j); 
 	ray->direction = normalize(&ray->direction);
 	return ray;
 }
@@ -52,10 +52,15 @@ t_scene *ft_scene_init(char *file_name)
 	t_scene *scene;
 	scene = malloc(sizeof(t_scene));
 	scene->fd = open(file_name,O_RDONLY);
+	scene->resolution = NULL;
+	scene->camera = NULL;
+	scene->light = NULL;
+	scene->objects = NULL;
+	scene->ambient = NULL;
 	return scene;
 }
 
-void ft_render(t_scene *scene)
+void ft_render(t_scene *scene,t_camera *camera)
 {
 	int i;
 	int j;
@@ -66,7 +71,7 @@ void ft_render(t_scene *scene)
 		j = 0;
 		while(j < scene->resolution->height)
 		{
-			scene->ray = ft_ray_creating(scene,i,j);
+			scene->ray = ft_ray_creating(scene,camera,i,j);
 			scene->color_of_pixel = ft_color_of_pixel(scene);
 			my_mlx_pixel_put(scene->img, i, j, scene->color_of_pixel);
 			j++;
@@ -74,17 +79,19 @@ void ft_render(t_scene *scene)
 		i++;
 	}
 }
-/*
+
 t_camera *ft_wich_camera(t_scene *scene,int keycode)
 {
 	static t_camera *cam;
+	cam = scene->camera;
 	//cam = scene->camera;
-	if (keycode == 124)
+	if (keycode == 124 && cam->next != NULL)
+		cam = cam->next;
+	if (keycode == 123 && cam->prev != NULL)
 	{
-		i = 1;
+		cam = cam->prev;
 	}
-
-
+	return cam;
 }
 int ft_key_press(int keycode,t_scene *scene)
 {
@@ -94,11 +101,13 @@ int ft_key_press(int keycode,t_scene *scene)
 	{
 		t_camera *camera;
 		camera = ft_wich_camera(scene,keycode);
-
+		ft_render(scene,camera);
+		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
+			scene->img->img, 0, 0);
 	}
-	
+	return 0;
 }
-*/
+
 int main(int argc, char **argv)
 {
 	t_scene *scene;
@@ -111,10 +120,10 @@ int main(int argc, char **argv)
 		scene->win_ptr = mlx_new_window(scene->mlx_ptr,
 			scene->resolution->width,scene->resolution->height,argv[1]);
 		scene->img = ft_creat_img(scene,scene->mlx_ptr);
-		ft_render(scene);
+		ft_render(scene,scene->camera);
 		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
 			scene->img->img, 0, 0);
-		//mlx_hook(scene->win_ptr, 2,0, ft_key_press,scene);
+		mlx_hook(scene->win_ptr, 2,0, ft_key_press,scene);
 		mlx_loop(scene->mlx_ptr);
 	}
 	return 0;

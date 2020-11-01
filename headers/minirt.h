@@ -82,8 +82,6 @@ typedef struct s_cylinder
 	t_vector color;
 }t_cylinder;
 
-
-
 typedef struct s_ray
 {
 	t_vector origin;
@@ -336,8 +334,7 @@ t_vector vecttorscross(t_vector *v1,t_vector *v2);
 
 
 /***********************  CAMERA.C  ***********************/
-t_vector ft_camera_ray(t_scene *scene,double x,double y);
-
+t_vector ft_camera_ray(t_scene *scene,t_camera *camera,double x,double y);
 /***********************  INTERSECTION.C  ***********************/
 double hit_sphere(t_ray ray,t_sphere *s);
 double hit_plane(t_ray ray,t_plane *plane);
