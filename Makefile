@@ -4,7 +4,7 @@ SRC_PATH= src
 SRC_NAME=	main.c		vector.c	pixel_color.c	intersection.c \
 		camera.c 	light.c		get_next_line.c get_next_line_utils.c \
 		parsing.c	ft_split.c	ft_atoi.c	ft_atof.c \
-		ft_strncmp.c
+		ft_strncmp.c	minirt.c
 
 HDR_PATH= headers
 HDR_NAME= get_next_line.h	minirt.h

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
+#ifndef MINIRT_H
 # define MINIRT_H
 #include "get_next_line.h"
 #include <stdio.h>
@@ -366,4 +366,7 @@ t_scene *parsing(int fd);
 /***********************  strncmp.C  ***********************/
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
-//# endif
+/***********************  minirt.C  ***********************/
+void ft_print_error(char *error);
+
+# endif

@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "minirt.h"
+#include "errno.h"
+#include "string.h"
 
 int check_camera_inside_an_object(t_camera *camera,t_object *object);
 
@@ -49,9 +51,16 @@ t_imag *ft_creat_img(t_scene *scene,void *mlx_ptr)
 
 t_scene *ft_scene_init(char *file_name)
 {
+	extern int errno;
 	t_scene *scene;
+
 	scene = malloc(sizeof(t_scene));
 	scene->fd = open(file_name,O_RDONLY);
+	if (scene->fd < 0)
+	{
+		ft_print_error(strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 	scene->resolution = NULL;
 	scene->camera = NULL;
 	scene->light = NULL;
@@ -79,28 +88,12 @@ void ft_render(t_scene *scene,t_camera *camera)
 		i++;
 	}
 }
-void ft_print_cameras(t_camera *camera)
-{
-	int i = 0;
-	while (camera != NULL)
-	{
-		printf("%d",i);
-		if (camera->prev != NULL)
-			printf("%d\n",i);
-		i++;
-		camera = camera->next;
-	}
-	
-}
 
 t_camera *ft_wich_camera(t_scene *scene,int keycode)
 {
 	static t_camera *cam;
 	if (cam == NULL)
 		cam = scene->camera;
-	//cam = scene->camera;
-	////cam = scene->camera;
-	ft_print_cameras(scene->camera);
 	if (keycode == 124 && cam->next != NULL)
 		cam = cam->next;
 	if (keycode == 123 && cam->prev != NULL)
@@ -130,6 +123,7 @@ int main(int argc, char **argv)
 	{
 		scene = ft_scene_init(argv[1]);
 		scene = parsing(scene->fd);
+
 		scene->mlx_ptr = mlx_init();
 		scene->win_ptr = mlx_new_window(scene->mlx_ptr,
 			scene->resolution->width,scene->resolution->height,argv[1]);
