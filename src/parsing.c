@@ -184,60 +184,57 @@ t_vector ft_parse_coord(char **coord)
     coords.z = ft_atof(coord[2]);
     return coords;
 }
+
 void parsing_camera(char **cam,t_scene *scene)
 {
     char **origin;
     char **normal;
-    int field_view;
+
     t_camera *camera;
-
-    //if (cam[1] == NULL || cam[2] == NULL || cam[3] == NULL)
-    //    ft_print_error("you have to specify the camera look from,orientation and field of view.");
-    origin  = ft_split(cam[1],',');
-    normal  = ft_split(cam[2],',');
-    field_view = ft_atoi(cam[3]);
-    //if (ft_check_coords(origin))
-    //    ft_print_error("camera coordination x,y,z");
-    //if (ft_check_normal(normal))
-    //    ft_print_error("camera orientation x,y,z must be betwenn -1 and 1");
-    //if (field_view > 180 || field_view < 0)
-    //    ft_print_error("camera is field of view must be between 0 and 180");
-
     camera = malloc(sizeof(t_camera));
+
+    if (cam[1] == NULL || cam[2] == NULL || cam[3] == NULL)
+        ft_print_error("you have to specify the camera look from,orientation and field of view.");
+    origin  = ft_split(cam[1],',');
     camera->lookfrom = ft_parse_coord(origin);
+    //camera->lookfrom.x = ft_atof(origin[0]);
+    //camera->lookfrom.y = ft_atof(origin[1]);
+    //camera->lookfrom.z = ft_atof(origin[2]);
+
+    normal  = ft_split(cam[2],',');
     camera->orientaion = ft_parse_normal(normal);
-    camera->fov = field_view;
-    camera->next = NULL;
-    camera->prev = NULL;
+    //camera->orientaion.x = ft_atof(normal[0]);
+    //camera->orientaion.y = ft_atof(normal[1]);
+    //camera->orientaion.z = ft_atof(normal[2]); 
+    camera->next = NULL;  
+    camera->prev = NULL; 
+    camera->fov = ft_atoi(cam[3]);
+    if (camera->fov > 180 || camera->fov < 0)
+        ft_print_error("camera is field of view must be between 0 and 180");
     ft_lstadd_back_camera(&scene->camera,camera);
-    
 }
 
-void parsing_light(char ** li,t_scene *scene)
+void parsing_light(char ** lit,t_scene *scene)
 {
     char **origin;
     char **color;
-    int intensity;
+
     t_light *light;
 
-    //if (light[1] == NULL || light[2] == NULL || light[3] == NULL)
-    //    ft_print_error("you have to specify the light coordinations, intensity and color.");
-    origin  = ft_split(li[1],',');
-    intensity = ft_atof(li[2]);
-    color  = ft_split(li[3],',');
-
-    //if (ft_check_coords(origin))
-    //    ft_print_error("light coordinations.");
-    //if (intensity > 1 || intensity < 0)
-    //    ft_print_error("light intensity must be in range [0,1]");
-    //if (ft_check_color(color))
-    //    ft_print_error("light color red,green,blue must be between 0 and 255");
-    
     light = malloc(sizeof(t_light));
-    light->origin = ft_parse_coord(origin);
-    light->color = ft_parse_color(color);
-    light->intensity = intensity;
+
+    origin  = ft_split(lit[1],',');
+    light->origin.x = ft_atof(origin[0]);
+    light->origin.y = ft_atof(origin[1]);
+    light->origin.z = ft_atof(origin[2]);
+    light->intensity = ft_atof(lit[2]);
+
+    color  = ft_split(lit[3],',');
+    light->color.x = ft_atoi(color[0]);
+    light->color.y = ft_atoi(color[1]);
+    light->color.z = ft_atoi(color[2]);
     light->next = NULL;
+
     ft_lstadd_back_light(&scene->light,light);
 }
 
