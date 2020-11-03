@@ -240,13 +240,13 @@ void parsing_light(char ** light_line,t_scene *scene)
     light->next = NULL;
     ft_lstadd_back_light(&scene->light,light);
 }
-void ft_chaeck_plane(t_obj_properties obj)
+void ft_check_plane(t_obj_properties obj)
 {
-    if (ft_check_coords(obj.origin))
+    if(ft_check_coords(obj.origin))
         ft_print_error("coordinates of the plan  x,y,z");
     if (ft_check_normal(obj.normal))
         ft_print_error(" normalized orientation vector of plan it's axis in range [0,1]");
-    if (ft_check_color(obj.color))
+    if(ft_check_color(obj.color))
         ft_print_error("plan color in range [0,255]");
 }
 void parsing_plan(char **pl,t_scene *scene)
@@ -255,10 +255,14 @@ void parsing_plan(char **pl,t_scene *scene)
     t_plane *plane;
     t_object *new_object;
 
+    if (pl[1] == NULL || pl[2] == NULL || pl[3] == NULL)
+        ft_print_error("you have to specify the plan coordination point,orientation and color.");
     obj.origin  = ft_split(pl[1],',');
     obj.normal  = ft_split(pl[2],',');
     obj.color  = ft_split(pl[3],',');
-    ft_chaeck_plane(obj);
+
+    ft_check_plane(obj);
+
     plane = malloc(sizeof(t_plane));
     plane->coord = ft_parse_coord(obj.origin);
     plane->orientation = ft_parse_normal(obj.normal);
@@ -272,6 +276,15 @@ void parsing_plan(char **pl,t_scene *scene)
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
 }
+void ft_check_sphere(t_obj_properties obj)
+{
+    if (ft_check_coords(obj.origin))
+        ft_print_error("coordinates of the sphere  x,y,z");
+    if (ft_check_color(obj.color))
+        ft_print_error("sphere color in range [0,255]");
+    if (obj.diameter < 0)
+        ft_print_error("shpere diameter must be positive");
+}
 
 void parsing_sphere(char **sph,t_scene *scene)
 {
@@ -279,16 +292,19 @@ void parsing_sphere(char **sph,t_scene *scene)
     t_sphere *sphere;
     t_object *new_object;
 
-    sphere = malloc(sizeof(t_sphere));
+    if (sph[1] == NULL || sph[2] == NULL || sph[3] == NULL)
+        ft_print_error("you have to specify the sphere center coordination point,diameter and color.");
     obj.origin  = ft_split(sph[1],',');
-    sphere->origin.x = ft_atof(obj.origin[0]);
-    sphere->origin.y = ft_atof(obj.origin[1]);
-    sphere->origin.z = ft_atof(obj.origin[2]);
-    sphere->radius  = ft_atof(sph[2]) / 2;
     obj.color  = ft_split(sph[3],',');
-    sphere->color.x = ft_atoi(obj.color[0]);
-    sphere->color.y = ft_atoi(obj.color[1]);
-    sphere->color.z = ft_atoi(obj.color[2]);
+    obj.diameter = ft_atof(sph[2]);
+
+    ft_check_sphere(obj);
+
+    sphere = malloc(sizeof(t_sphere));
+    sphere->radius  = obj.diameter / 2.0;
+    sphere->origin = ft_parse_coord(obj.origin);
+    sphere->color = ft_parse_color(obj.color);
+
     new_object = malloc(sizeof(t_object));
     new_object->object_type = 's';
     new_object->object = sphere;
