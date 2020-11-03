@@ -121,79 +121,123 @@ void parsing_ambiant(char **amb,t_scene *scene)
 
     scene->ambient = ambient;
 }
-t_vector ft_parse_coord(char **coord)
-{
-    t_vector coords;
-    coords.x = ft_atof(coord[0]);
-    coords.y = ft_atof(coord[1]);
-    coords.z = ft_atof(coord[2]);
-    return coords;
-}
-
 t_vector ft_parse_normal(char **norm)
 {
     t_vector normal;
     normal.x = ft_atof(norm[0]);
     normal.y = ft_atof(norm[1]);
     normal.z = ft_atof(norm[2]);
-    if (normal.x > 1 || normal.x < -1 || normal.y > 1 
-    || normal.y < -1 || normal.z > 1 || normal.z < -1)
-    {
-        ft_print_error(" orientation vector must be betwenn -1 and 1");
-    }
     normal = normalize(&normal);
     return normal;
+}
+
+int ft_check_normal(char **norm)
+{
+    t_vector normal;
+    if (norm[0] == NULL || norm[1] == NULL || norm[2] == NULL)
+        return (1);
+    else
+    {
+        normal = ft_parse_normal(norm);
+    if (normal.x < -1 || normal.x > 1 || normal.y < -1 || normal.y > 1 || 
+        normal.z < -1 || normal.z > 1)
+        return (1);
+    }
+    return (0);
+}
+t_vector ft_parse_color(char **colors)
+{
+    t_vector color;
+
+    color.x = ft_atoi(colors[0]);
+    color.y = ft_atoi(colors[1]);
+    color.z = ft_atoi(colors[2]);
+    return color;
+}
+int ft_check_color(char **color)
+{
+    t_vector colors;
+
+    if (color[0] == NULL || color[1] == NULL || color[2] == NULL)
+        return (1);
+    else
+    {
+        colors = ft_parse_color(color);
+        if (colors.x < 0 || colors.x > 255 || colors.y < 0 || colors.y > 255 || 
+        colors.z < 0 || colors.z > 255)
+            return (1);
+    }
+    return (0);
+}
+int ft_check_coords(char **coord)
+{
+    if (coord[0] == NULL || coord[1] == NULL || coord[2] == NULL)
+        return (1);
+    return 0;
+}
+t_vector ft_parse_coord(char **coord)
+{
+    t_vector coords;
+
+    coords.x = ft_atof(coord[0]);
+    coords.y = ft_atof(coord[1]);
+    coords.z = ft_atof(coord[2]);
+    return coords;
 }
 void parsing_camera(char **cam,t_scene *scene)
 {
     char **origin;
     char **normal;
-
+    int field_view;
     t_camera *camera;
-    camera = malloc(sizeof(t_camera));
 
-    if (cam[1] == NULL || cam[2] == NULL || cam[3] == NULL)
-        ft_print_error("you have to specify the camera look from,orientation and field of view.");
+    //if (cam[1] == NULL || cam[2] == NULL || cam[3] == NULL)
+    //    ft_print_error("you have to specify the camera look from,orientation and field of view.");
     origin  = ft_split(cam[1],',');
-    camera->lookfrom = ft_parse_coord(origin);
-    //camera->lookfrom.x = ft_atof(origin[0]);
-    //camera->lookfrom.y = ft_atof(origin[1]);
-    //camera->lookfrom.z = ft_atof(origin[2]);
-
     normal  = ft_split(cam[2],',');
+    field_view = ft_atoi(cam[3]);
+    //if (ft_check_coords(origin))
+    //    ft_print_error("camera coordination x,y,z");
+    //if (ft_check_normal(normal))
+    //    ft_print_error("camera orientation x,y,z must be betwenn -1 and 1");
+    //if (field_view > 180 || field_view < 0)
+    //    ft_print_error("camera is field of view must be between 0 and 180");
+
+    camera = malloc(sizeof(t_camera));
+    camera->lookfrom = ft_parse_coord(origin);
     camera->orientaion = ft_parse_normal(normal);
-    //camera->orientaion.x = ft_atof(normal[0]);
-    //camera->orientaion.y = ft_atof(normal[1]);
-    //camera->orientaion.z = ft_atof(normal[2]); 
-    camera->next = NULL;  
-    camera->prev = NULL; 
-    camera->fov = ft_atoi(cam[3]);
-    if (camera->fov > 180 || camera->fov < 0)
-        ft_print_error("camera is field of view must be between 0 and 180");
+    camera->fov = field_view;
+    camera->next = NULL;
+    camera->prev = NULL;
     ft_lstadd_back_camera(&scene->camera,camera);
+    
 }
 
-void parsing_light(char ** lit,t_scene *scene)
+void parsing_light(char ** li,t_scene *scene)
 {
     char **origin;
     char **color;
-
+    int intensity;
     t_light *light;
 
+    //if (light[1] == NULL || light[2] == NULL || light[3] == NULL)
+    //    ft_print_error("you have to specify the light coordinations, intensity and color.");
+    origin  = ft_split(li[1],',');
+    intensity = ft_atof(li[2]);
+    color  = ft_split(li[3],',');
+
+    //if (ft_check_coords(origin))
+    //    ft_print_error("light coordinations.");
+    //if (intensity > 1 || intensity < 0)
+    //    ft_print_error("light intensity must be in range [0,1]");
+    //if (ft_check_color(color))
+    //    ft_print_error("light color red,green,blue must be between 0 and 255");
+    
     light = malloc(sizeof(t_light));
-
-    origin  = ft_split(lit[1],',');
-    light->origin.x = ft_atof(origin[0]);
-    light->origin.y = ft_atof(origin[1]);
-    light->origin.z = ft_atof(origin[2]);
-    light->intensity = ft_atof(lit[2]);
-
-    color  = ft_split(lit[3],',');
-    light->color.x = ft_atoi(color[0]);
-    light->color.y = ft_atoi(color[1]);
-    light->color.z = ft_atoi(color[2]);
+    light->origin = ft_parse_coord(origin);
+    light->color = ft_parse_color(color);
+    light->intensity = intensity;
     light->next = NULL;
-
     ft_lstadd_back_light(&scene->light,light);
 }
 
@@ -375,8 +419,6 @@ void parsing_line(char *line,t_scene *scene)
         parsing_triangle(split,scene);
     else if (ft_strncmp(split[0],"cy",2) == 0)
         parsing_cylinder(split,scene);
-    else
-        ft_print_error("unkown element in scene file.");
 }
 
 void initial_scene(t_scene *scene)
@@ -412,9 +454,7 @@ void ft_check_line(char *line)
     {
         if (line[i] != ' ' && line[i] != '\t' && line [i] != ',' && 
         line[i] != '.' && (line[i] < '0' && line[i] > '9'))
-        {
             ft_print_error("undifined symbole in the scene file");
-        }
         i++;
     }
 }
@@ -444,8 +484,8 @@ void  ft_check_scene(t_scene *scene)
     int height;
     int width;
 
-    width = 1090;
-    height = 1080;
+    width = 1080;
+    height = 720;
     //mlx_get_screen_size(scene->mlx_ptr,&width,&height);
     if (scene->camera == NULL)
         ft_print_error("No camera in the scene,you need at least one camera in the scene.");
