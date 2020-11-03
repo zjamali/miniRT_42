@@ -143,6 +143,8 @@ int ft_check_normal(char **norm)
         if (normal.x < -1 || normal.x > 1 || normal.y < -1 || normal.y > 1 || 
             normal.z < -1 || normal.z > 1)
             return (1);
+        if (normal.x == 0 && normal.y == 0 && normal.z == 0)
+            return (1);
     }
     return (0);
 }
@@ -238,26 +240,29 @@ void parsing_light(char ** light_line,t_scene *scene)
     light->next = NULL;
     ft_lstadd_back_light(&scene->light,light);
 }
-
+void ft_chaeck_plane(t_obj_properties obj)
+{
+    if (ft_check_coords(obj.origin))
+        ft_print_error("coordinates of the plan  x,y,z");
+    if (ft_check_normal(obj.normal))
+        ft_print_error(" normalized orientation vector of plan it's axis in range [0,1]");
+    if (ft_check_color(obj.color))
+        ft_print_error("plan color in range [0,255]");
+}
 void parsing_plan(char **pl,t_scene *scene)
 {
     t_obj_properties obj;
     t_plane *plane;
     t_object *new_object;
 
-    plane = malloc(sizeof(t_plane));
     obj.origin  = ft_split(pl[1],',');
-    plane->coord.x = ft_atof(obj.origin[0]);
-    plane->coord.y = ft_atof(obj.origin[1]);
-    plane->coord.z = ft_atof(obj.origin[2]);
     obj.normal  = ft_split(pl[2],',');
-    plane->orientation.x = ft_atof(obj.normal[0]);
-    plane->orientation.y = ft_atof(obj.normal[1]);
-    plane->orientation.z = ft_atof(obj.normal[2]); 
     obj.color  = ft_split(pl[3],',');
-    plane->color.x = ft_atoi(obj.color[0]);
-    plane->color.y = ft_atoi(obj.color[1]);
-    plane->color.z = ft_atoi(obj.color[2]);
+    ft_chaeck_plane(obj);
+    plane = malloc(sizeof(t_plane));
+    plane->coord = ft_parse_coord(obj.origin);
+    plane->orientation = ft_parse_normal(obj.normal);
+    plane->color = ft_parse_color(obj.color);
     new_object = malloc(sizeof(t_object));
     new_object->object_type = 'p';
     new_object->object = plane;
