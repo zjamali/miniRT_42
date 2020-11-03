@@ -195,7 +195,7 @@ void parsing_camera(char **cam,t_scene *scene)
     int fiel_view;
     t_camera *camera;
 
-    if (cam[1] == NULL || cam[2] == NULL || cam[3] == NULL)
+    if (cam[3] == NULL)
         ft_print_error("you have to specify the camera look from,orientation and field of view.");
     origin  = ft_split(cam[1],',');
     orient  = ft_split(cam[2],',');
@@ -222,7 +222,7 @@ void parsing_light(char ** light_line,t_scene *scene)
     double intensity;
     t_light *light;
 
-    if (light_line[1] == NULL || light_line[2] == NULL || light_line[3] == NULL)
+    if (light_line[3] == NULL)
         ft_print_error("you have to specify the light coordination point,brightness and color.");
     origin  = ft_split(light_line[1],',');
     color  = ft_split(light_line[3],',');
@@ -255,7 +255,7 @@ void parsing_plan(char **pl,t_scene *scene)
     t_plane *plane;
     t_object *new_object;
 
-    if (pl[1] == NULL || pl[2] == NULL || pl[3] == NULL)
+    if (pl[3] == NULL) /// some of properties missing
         ft_print_error("you have to specify the plan coordination point,orientation and color.");
     obj.origin  = ft_split(pl[1],',');
     obj.normal  = ft_split(pl[2],',');
@@ -292,7 +292,7 @@ void parsing_sphere(char **sph,t_scene *scene)
     t_sphere *sphere;
     t_object *new_object;
 
-    if (sph[1] == NULL || sph[2] == NULL || sph[3] == NULL)
+    if (sph[3] == NULL)
         ft_print_error("you have to specify the sphere center coordination point,diameter and color.");
     obj.origin  = ft_split(sph[1],',');
     obj.color  = ft_split(sph[3],',');
@@ -314,6 +314,17 @@ void parsing_sphere(char **sph,t_scene *scene)
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
 }
+void ft_check_square(t_obj_properties obj)
+{
+    if (ft_check_coords(obj.origin))
+        ft_print_error("coordinates of the squqre  x,y,z");
+    if (ft_check_color(obj.color))
+        ft_print_error("square color in range [0,255]");
+    if (obj.size < 0)
+        ft_print_error("shpere edge size must be positive");
+     if (ft_check_normal(obj.normal))
+        ft_print_error(" normalized orientation vector of square it's axis in range [0,1]");  
+}
 
 void parsing_square(char **sqr,t_scene *scene)
 {
@@ -321,20 +332,20 @@ void parsing_square(char **sqr,t_scene *scene)
     t_square *square;
     t_object *new_object;
 
-    square = malloc(sizeof(t_square));
+    if (sqr[4] == NULL)
+        ft_print_error("you have to specify the square center coordination point,orientation,edge size and color.");
     obj.origin  = ft_split(sqr[1],',');
-    square->center.x = ft_atof(obj.origin[0]);
-    square->center.y = ft_atof(obj.origin[1]);
-    square->center.z = ft_atof(obj.origin[2]);
     obj.normal  = ft_split(sqr[2],',');
-    square->normal.x = ft_atof(obj.normal[0]);
-    square->normal.y = ft_atof(obj.normal[1]);
-    square->normal.z = ft_atof(obj.normal[2]);
-    square->edge_size  = ft_atof(sqr[3]);
     obj.color  = ft_split(sqr[4],',');
-    square->color.x = ft_atoi(obj.color[0]);
-    square->color.y = ft_atoi(obj.color[1]);
-    square->color.z = ft_atoi(obj.color[2]);   
+    obj.size = ft_atof(sqr[3]);
+    ft_check_square(obj);
+
+    square = malloc(sizeof(t_square));
+    square->edge_size  = obj.size;
+    square->center = ft_parse_coord(obj.origin);
+    square->normal = ft_parse_normal(obj.normal);
+    square->color = ft_parse_color(obj.color); 
+
     new_object = malloc(sizeof(t_object));
     new_object->object_type = 'q';
     new_object->object = square;
@@ -345,30 +356,38 @@ void parsing_square(char **sqr,t_scene *scene)
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
 }
-
+void ft_check_triangle(t_obj_properties obj)
+{
+    if (ft_check_coords(obj.cord1))
+            ft_print_error("first coordinates of the traingle  x,y,z");
+    if (ft_check_coords(obj.cord2))
+            ft_print_error("second coordinates of the traingle  x,y,z");
+    if (ft_check_coords(obj.cord2))
+            ft_print_error("third coordinates of the traingle  x,y,z");
+    if (ft_check_color(obj.color))
+            ft_print_error("trangle color in range [0,255]"); 
+}
 void parsing_triangle(char **tr,t_scene *scene)
 {
     t_obj_properties obj;
     t_triangle *triangle;
     t_object *new_object;
 
-    triangle = malloc(sizeof(t_triangle));
+    if (tr[4] == NULL)
+        ft_print_error("you have to specify three trangle points and its color.");
     obj.cord1  = ft_split(tr[1],',');
-    triangle->vectors[0].x = ft_atof(obj.cord1[0]);
-    triangle->vectors[0].y = ft_atof(obj.cord1[1]);
-    triangle->vectors[0].z = ft_atof(obj.cord1[2]);
     obj.cord2  = ft_split(tr[2],',');
-    triangle->vectors[1].x = ft_atof(obj.cord2[0]);
-    triangle->vectors[1].y = ft_atof(obj.cord2[1]);
-    triangle->vectors[1].z = ft_atof(obj.cord2[2]);
     obj.cord3  = ft_split(tr[3],',');
-    triangle->vectors[2].x = ft_atof(obj.cord3[0]);
-    triangle->vectors[2].y = ft_atof(obj.cord3[1]);
-    triangle->vectors[2].z = ft_atof(obj.cord3[2]);
     obj.color  = ft_split(tr[4],',');
-    triangle->color.x = ft_atoi(obj.color[0]);
-    triangle->color.y = ft_atoi(obj.color[1]);
-    triangle->color.z = ft_atoi(obj.color[2]);
+
+    ft_check_triangle(obj);
+
+    triangle = malloc(sizeof(t_triangle));
+    triangle->vectors[0] = ft_parse_coord(obj.cord1);
+    triangle->vectors[1] = ft_parse_coord(obj.cord2);
+    triangle->vectors[2] = ft_parse_coord(obj.cord3);
+    triangle->color = ft_parse_color(obj.color);
+
     new_object = malloc(sizeof(t_object));
     new_object->object = triangle;
 	new_object->color = &triangle->color;
@@ -379,28 +398,43 @@ void parsing_triangle(char **tr,t_scene *scene)
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
 }
+void ft_check_cylinder(t_obj_properties obj)
+{
+    if(ft_check_coords(obj.origin))
+        ft_print_error("coordinates of the cylinder  x,y,z");
+    if (ft_check_normal(obj.normal))
+        ft_print_error(" normalized orientation vector of cylinder it's axis in range [0,1]");
+    if(ft_check_color(obj.color))
+        ft_print_error("cylinder color in range [0,255]");
+    if (obj.size < 0)
+        ft_print_error("cyliner height size must be positive");
+    if (obj.diameter < 0)
+        ft_print_error("cylinder diameter must be positive");
+    
 
+}
 void parsing_cylinder(char **cy,t_scene *scene)
 {
     t_obj_properties obj;
     t_cylinder *cylinder;
     t_object *new_object;
-    
-    cylinder = malloc(sizeof(t_cylinder));
+
+    if (cy[5] == NULL)
+        ft_print_error("you have to specify cylinder coordination points ,orientation,diametre,size and color.");
     obj.origin  = ft_split(cy[1],',');
-    cylinder->coord.x = ft_atof(obj.origin[0]);
-    cylinder->coord.y = ft_atof(obj.origin[1]);
-    cylinder->coord.z = ft_atof(obj.origin[2]);
     obj.normal  = ft_split(cy[2],',');
-    cylinder->normal.x = ft_atof(obj.normal[0]);
-    cylinder->normal.y = ft_atof(obj.normal[1]);
-    cylinder->normal.z = ft_atof(obj.normal[2]);
     obj.color  = ft_split(cy[5],',');
-    cylinder->color.x = ft_atoi(obj.color[0]);
-    cylinder->color.y = ft_atoi(obj.color[1]);
-    cylinder->color.z = ft_atoi(obj.color[2]);
-    cylinder->diameter = ft_atof(cy[3]);
-    cylinder->height = ft_atof(cy[4]);
+    obj.diameter = ft_atof(cy[3]);
+    obj.size = ft_atof(cy[4]);
+
+    ft_check_cylinder(obj);
+    cylinder = malloc(sizeof(t_cylinder));
+
+    cylinder->coord = ft_parse_coord(obj.origin);
+    cylinder->normal = ft_parse_normal(obj.normal);
+    cylinder->color = ft_parse_color(obj.color);
+    cylinder->diameter = obj.diameter;
+    cylinder->height = obj.size;
     
     new_object = malloc(sizeof(t_object));
     new_object->object = cylinder;

@@ -312,6 +312,7 @@ typedef struct s_obj_properties
 	char **origin;
     char **normal;
 	double diameter;
+	double size;
 	char **cord1;
     char **cord2;
     char **cord3;
