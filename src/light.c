@@ -86,6 +86,7 @@ double  ft_shadow(t_scene *scene,t_object *object,double t)
 	sdw.dark = 0;
 	t_light *light;
 	light = scene->light;
+	double shadaw = 1;
 	while (light != NULL)
 	{
 		sdw.p_l = vectorsSub(&light->origin,&sdw.p);
@@ -102,13 +103,24 @@ double  ft_shadow(t_scene *scene,t_object *object,double t)
 		sdw.p_length = lenght(&sdw.p_l);
 		sdw.c_length = lenght(&sdw.p_c);
 		if (sdw.p_length > sdw.c_length && sdw.dark <= 1)
+		{
+			shadaw = 0.2;
 			sdw.dark = 1;
+		}
 		else
+		{
+			shadaw = shadaw + 0.2;
 			sdw.dark = 2;
+		}
 		light = light->next;
 	}
 	if (sdw.dark == 1)
+	{
+		return shadaw;
 		return 0.2;
+	}
+	//if (lights == 1)
+	//	return 0.2;
 	 return 1;
 }
 
@@ -175,10 +187,10 @@ t_vector ft_diffuse(t_scene *scene,double t,t_object *object)
 	}
 	return dfs.color;
 }
-t_vector ft_ambient(t_ambient *ambient,t_vector *color)
+t_vector ft_ambient(t_ambient ambient,t_vector *color)
 {
-	t_vector i_ambient = {ambient->intensity * color->x /255,
-	ambient->intensity * color->y /255 , ambient->intensity * color->z /255};
+	t_vector i_ambient = {ambient.intensity * color->x /255,
+	ambient.intensity * color->y /255 , ambient.intensity * color->z /255};
 	i_ambient.x = min(1, i_ambient.x);
 	i_ambient.y = min(1, i_ambient.y);
 	i_ambient.z = min(1, i_ambient.z);

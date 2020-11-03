@@ -42,8 +42,8 @@ t_imag *ft_creat_img(t_scene *scene,void *mlx_ptr)
 	t_imag *imag;
 
 	imag = malloc(sizeof(t_imag));
-	imag->img = mlx_new_image(mlx_ptr, scene->resolution->width,
-	scene->resolution->height);
+	imag->img = mlx_new_image(mlx_ptr, scene->resolution.width,
+	scene->resolution.height);
 	imag->addr = mlx_get_data_addr(imag->img, &imag->bits_per_pixel,
 	&imag->line_length,&imag->endian);
 	return imag;
@@ -61,11 +61,12 @@ t_scene *ft_scene_init(char *file_name)
 		ft_print_error(strerror(errno));
 		exit(EXIT_FAILURE);
 	}
-	scene->resolution = NULL;
+	scene->resolution.height = 0;
+	scene->resolution.width = 0;
+	scene->ambient.intensity = -1;
 	scene->camera = NULL;
 	scene->light = NULL;
 	scene->objects = NULL;
-	scene->ambient = NULL;
 	return scene;
 }
 
@@ -75,10 +76,10 @@ void ft_render(t_scene *scene,t_camera *camera)
 	int j;
 
 	i = 0;
-	while(i < scene->resolution->width)
+	while(i < scene->resolution.width)
 	{
 		j = 0;
-		while(j < scene->resolution->height)
+		while(j < scene->resolution.height)
 		{
 			scene->ray = ft_ray_creating(scene,camera,i,j);
 			scene->color_of_pixel = ft_color_of_pixel(scene);
@@ -122,11 +123,11 @@ int main(int argc, char **argv)
     if(argc > 1)
 	{
 		scene = ft_scene_init(argv[1]);
-		scene = parsing(scene->fd);
+		scene = parsing(scene->fd,scene);
 
 		scene->mlx_ptr = mlx_init();
 		scene->win_ptr = mlx_new_window(scene->mlx_ptr,
-			scene->resolution->width,scene->resolution->height,argv[1]);
+			scene->resolution.width,scene->resolution.height,argv[1]);
 		scene->img = ft_creat_img(scene,scene->mlx_ptr);
 		ft_render(scene,scene->camera);
 		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,

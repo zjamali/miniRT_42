@@ -135,15 +135,14 @@ typedef struct resolution
 
 typedef struct  s_scene
 {
+	t_ambient ambient;
+	t_resolution resolution;
+	t_camera *camera;
+	t_light *light;
 	int color_of_pixel;
 	int fd;
 	t_ray *ray;
 	t_object *objects;
-	t_camera *camera;
-	t_camera *multi_camera;
-	t_light *light;
-	t_ambient *ambient;
-	t_resolution *resolution;
 	t_imag *img;
 
 	void *mlx_ptr;
@@ -159,7 +158,8 @@ typedef struct s_camera_variables
 	t_vector c;
 	t_vector l;
 	t_vector v;
-	
+
+
 	double theta;
 	double aspectRatio;
 	double viewPlaneHalfWidth;
@@ -345,7 +345,7 @@ double hit_cylinder(t_ray ray,t_cylinder *cylinder);
 /***********************  LIGHT.C  ***********************/
 t_vector ft_specular(t_scene *scene,double t,t_object *object);
 t_vector ft_diffuse(t_scene *scene,double t,t_object *object);
-t_vector ft_ambient(t_ambient *ambient,t_vector *color);
+t_vector ft_ambient(t_ambient ambient,t_vector *color);
 double  ft_shadow(t_scene *scene,t_object *object,double t);
 
 /***********************  PIXEL_COLOR.C  ***********************/
@@ -361,7 +361,7 @@ int				ft_atoi(const char *str);
 double	ft_atof(const char *str);
 
 /***********************  PARCING.C  ***********************/
-t_scene *parsing(int fd);
+t_scene *parsing(int fd,t_scene *scene);
 
 /***********************  strncmp.C  ***********************/
 int		ft_strncmp(const char *s1, const char *s2, size_t n);

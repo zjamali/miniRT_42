@@ -49,9 +49,9 @@ t_vector ft_calculate_pixel_its_color(t_scene *scene,double closet_object_t,t_ob
 	i_ambient = ft_ambient(scene->ambient,closet_object->color);
 	if (shadow < 1)
 		i_specular = vectorscal(&i_specular,0);
-	colors.y =  i_ambient.y * scene->ambient->color.x  +  shadow *	(i_diffuse.y + i_specular.y );
-	colors.x =  i_ambient.x * scene->ambient->color.y  +  shadow *	(i_diffuse.x + i_specular.x );
-	colors.z =  i_ambient.z * scene->ambient->color.z  +  shadow *	(i_diffuse.z + i_specular.z );
+	colors.y =  i_ambient.y * scene->ambient.color.x  +  shadow *	(i_diffuse.y + i_specular.y );
+	colors.x =  i_ambient.x * scene->ambient.color.y  +  shadow *	(i_diffuse.x + i_specular.x );
+	colors.z =  i_ambient.z * scene->ambient.color.z  +  shadow *	(i_diffuse.z + i_specular.z );
 	colors.x = min(255,colors.x);
 	colors.y = min(255,colors.y);
 	colors.z = min(255,colors.z);

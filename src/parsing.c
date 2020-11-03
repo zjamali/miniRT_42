@@ -91,36 +91,35 @@ void ft_lstadd_back_camera(t_camera **alst, t_camera *new)
 	else
 		*alst = new;
 }
+
 void parsing_resolution(char **resol,t_scene *scene)
 {
-    t_resolution *resolution;
-    resolution = malloc(sizeof(t_resolution));
-    if (scene->resolution != NULL)
+    //t_resolution resolution;
+   // resolution = malloc(sizeof(t_resolution));
+    if (scene->resolution.height != 0)
         ft_print_error("You can't specify resolution twice.");
     if (resol[1] == NULL || resol[2] == NULL)
         ft_print_error("you have to specify the width and height.");
-    resolution->width = ft_atoi(resol[1]);
-    resolution->height = ft_atoi(resol[2]);
-    scene->resolution = resolution;
+    scene->resolution.width = ft_atoi(resol[1]);
+    scene->resolution.height = ft_atoi(resol[2]);
 }
 
 void parsing_ambiant(char **amb,t_scene *scene)
 {
-    t_ambient *ambient;
+    //t_ambient ambient;
     char **color;
-    ambient = malloc(sizeof(t_ambient));
-    if (scene->ambient != NULL)
+    //ambient = malloc(sizeof(t_ambient));
+    if (scene->ambient.intensity != -1)
         ft_print_error("You can't specify ambient twice.");
     if (amb[1] == NULL || amb[2] == NULL)
         ft_print_error("you have to specify the intensity and color.");
-    ambient->intensity = ft_atof(amb[1]);
+    scene->ambient.intensity = ft_atof(amb[1]);
     color  = ft_split(amb[2],',');
-    ambient->color.x = ft_atoi(color[0]);
-    ambient->color.y = ft_atoi(color[1]);
-    ambient->color.z = ft_atoi(color[2]);
-
-    scene->ambient = ambient;
+    scene->ambient.color.x = ft_atoi(color[0]);
+    scene->ambient.color.y = ft_atoi(color[1]);
+    scene->ambient.color.z = ft_atoi(color[2]);
 }
+
 t_vector ft_parse_normal(char **norm)
 {
     t_vector normal;
@@ -138,10 +137,12 @@ int ft_check_normal(char **norm)
         return (1);
     else
     {
-        normal = ft_parse_normal(norm);
-    if (normal.x < -1 || normal.x > 1 || normal.y < -1 || normal.y > 1 || 
-        normal.z < -1 || normal.z > 1)
-        return (1);
+        normal.x = ft_atof(norm[0]);
+        normal.y = ft_atof(norm[1]);
+        normal.z = ft_atof(norm[2]);
+        if (normal.x < -1 || normal.x > 1 || normal.y < -1 || normal.y > 1 || 
+            normal.z < -1 || normal.z > 1)
+            return (1);
     }
     return (0);
 }
@@ -188,53 +189,53 @@ t_vector ft_parse_coord(char **coord)
 void parsing_camera(char **cam,t_scene *scene)
 {
     char **origin;
-    char **normal;
-
+    char **orient;
+    int fiel_view;
     t_camera *camera;
-    camera = malloc(sizeof(t_camera));
 
     if (cam[1] == NULL || cam[2] == NULL || cam[3] == NULL)
         ft_print_error("you have to specify the camera look from,orientation and field of view.");
     origin  = ft_split(cam[1],',');
+    orient  = ft_split(cam[2],',');
+    fiel_view = ft_atoi(cam[3]);
+    if (ft_check_coords(origin))
+        ft_print_error("camera lookfrom in coordination x,y,z");
+    if (ft_check_normal(orient))
+        ft_print_error("camera orientation in x,y,z");
+    camera = malloc(sizeof(t_camera));
     camera->lookfrom = ft_parse_coord(origin);
-    //camera->lookfrom.x = ft_atof(origin[0]);
-    //camera->lookfrom.y = ft_atof(origin[1]);
-    //camera->lookfrom.z = ft_atof(origin[2]);
-
-    normal  = ft_split(cam[2],',');
-    camera->orientaion = ft_parse_normal(normal);
-    //camera->orientaion.x = ft_atof(normal[0]);
-    //camera->orientaion.y = ft_atof(normal[1]);
-    //camera->orientaion.z = ft_atof(normal[2]); 
+    camera->orientaion = ft_parse_normal(orient);
     camera->next = NULL;  
-    camera->prev = NULL; 
-    camera->fov = ft_atoi(cam[3]);
+    camera->prev = NULL;
+    camera->fov = fiel_view;
     if (camera->fov > 180 || camera->fov < 0)
         ft_print_error("camera is field of view must be between 0 and 180");
     ft_lstadd_back_camera(&scene->camera,camera);
 }
 
-void parsing_light(char ** lit,t_scene *scene)
+void parsing_light(char ** light_line,t_scene *scene)
 {
     char **origin;
     char **color;
-
+    double intensity;
     t_light *light;
 
+    if (light_line[1] == NULL || light_line[2] == NULL || light_line[3] == NULL)
+        ft_print_error("you have to specify the light coordination point,brightness and color.");
+    origin  = ft_split(light_line[1],',');
+    color  = ft_split(light_line[3],',');
+    intensity = ft_atof(light_line[2]);
+    if (ft_check_coords(origin))
+        ft_print_error("light coordination point x,y,z");
+    if (ft_check_color(color))
+        ft_print_error("light color red,green,blue in range [0,255]");
+    if (intensity < 0 || intensity > 1)
+        ft_print_error("light britness must be in range [0,1]");
     light = malloc(sizeof(t_light));
-
-    origin  = ft_split(lit[1],',');
-    light->origin.x = ft_atof(origin[0]);
-    light->origin.y = ft_atof(origin[1]);
-    light->origin.z = ft_atof(origin[2]);
-    light->intensity = ft_atof(lit[2]);
-
-    color  = ft_split(lit[3],',');
-    light->color.x = ft_atoi(color[0]);
-    light->color.y = ft_atoi(color[1]);
-    light->color.z = ft_atoi(color[2]);
+    light->origin = ft_parse_coord(origin);
+    light->color = ft_parse_color(color);
+    light->intensity = intensity;
     light->next = NULL;
-
     ft_lstadd_back_light(&scene->light,light);
 }
 
@@ -395,6 +396,7 @@ void parsing_cylinder(char **cy,t_scene *scene)
 void parsing_line(char *line,t_scene *scene)
 {
     char **split;
+
     split = ft_split(line, ' ');
     if (!split)
         ft_print_error("empty line"); // need 
@@ -418,33 +420,20 @@ void parsing_line(char *line,t_scene *scene)
         parsing_cylinder(split,scene);
 }
 
-void initial_scene(t_scene *scene)
-{
-    scene->resolution = NULL;
-    scene->ambient = NULL;
-    scene->light = NULL;
-    scene->camera = NULL;
-    scene->objects = NULL;
-}
-
 void ft_check_element(char *line)
 {
     char **split;
     split = ft_split(line, ' ');
     if (split[0][0] != 'R' && split[0][0] != 'A' && split[0][0] != 'l'
-    && ft_strncmp(split[0],"c",2) && ft_strncmp(split[0],"pl",2) && 
-    ft_strncmp(split[0],"sp",2) && ft_strncmp(split[0],"sq",2) &&
-    ft_strncmp(split[0],"tr",2) && ft_strncmp(split[0],"cy",2) )
-    {
-        ft_print_error("unknown element in the scene.");
-    }
+        && ft_strncmp(split[0],"c",2) && ft_strncmp(split[0],"pl",2) && 
+        ft_strncmp(split[0],"sp",2) && ft_strncmp(split[0],"sq",2) &&
+        ft_strncmp(split[0],"tr",2) && ft_strncmp(split[0],"cy",2) )
+            ft_print_error("unknown element in the scene.");
 }
 void ft_check_line(char *line)
 {
     int i;
 
-    if (!line[0])
-        ft_print_error("empty line");
     ft_check_element(line);
     i = 2;
     while (line[i] != '\0')
@@ -454,26 +443,6 @@ void ft_check_line(char *line)
             ft_print_error("undifined symbole in the scene file");
         i++;
     }
-}
-void ft_check_scene(t_scene *scene);
-t_scene *parsing(int fd)
-{
-    t_scene *scene;
-    scene = malloc(sizeof(t_scene));
-
-    initial_scene(scene);
-    char *line;
-    while(get_next_line(fd,&line) > 0)
-	{
-        ft_check_line(line);
-        parsing_line(line,scene);
-		free(line);
-	}
-    parsing_line(line,scene);
-    ft_check_line(line);
-    ft_check_scene(scene);
-    free(line);
-    return scene;
 }
 
 void  ft_check_scene(t_scene *scene)
@@ -486,12 +455,26 @@ void  ft_check_scene(t_scene *scene)
     //mlx_get_screen_size(scene->mlx_ptr,&width,&height);
     if (scene->camera == NULL)
         ft_print_error("No camera in the scene,you need at least one camera in the scene.");
-    else if (scene->resolution == NULL)
+    if (scene->resolution.height == 0 && scene->resolution.width == 0)
         ft_print_error("you have to specify the resolution.");
-    else if (scene->resolution->height <= 0 || scene->resolution->width <= 0)
-        ft_print_error("you have to specify positive width and height");
-    else if (scene->resolution->height > height)
-        scene->resolution->height = height;
-    else if (scene->resolution->width > width)
-        scene->resolution->width = width;
+    if (scene->resolution.height > height)
+        scene->resolution.height = height;
+    if (scene->resolution.width > width)
+        scene->resolution.width = width;
+}
+
+t_scene *parsing(int fd,t_scene *scene)
+{
+    char *line;
+    while(get_next_line(fd,&line) > 0)
+	{
+        if (line[0])  /// skip empty line
+        {
+            ft_check_line(line);
+            parsing_line(line,scene);
+		    free(line);
+        }
+	}
+    ft_check_scene(scene);
+    return scene;
 }

@@ -16,9 +16,9 @@ t_vector ft_camera_ray(t_scene *scene,t_camera *camera,double x,double y)
 {
 	t_vector castRay;
 	t_camera_variables vbs;
-	
-	vbs.W = scene->resolution->width;
-	vbs.H = scene->resolution->height;
+
+	vbs.W = scene->resolution.width;
+	vbs.H = scene->resolution.height;
 	vbs.up.x = 0;
 	vbs.up.y = 1;
 	vbs.up.z = 0;
