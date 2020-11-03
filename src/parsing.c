@@ -12,7 +12,7 @@
 
 #include "minirt.h"
 
-t_object *ft_lstlast(t_object *lst)
+t_object    *ft_lstlast(t_object *lst)
 {	
 	if(lst)
 	{
@@ -25,7 +25,7 @@ t_object *ft_lstlast(t_object *lst)
 	return (NULL);
 }
 
-void ft_lstadd_back(t_object **alst, t_object *new)
+void    ft_lstadd_back(t_object **alst, t_object *new)
 {
 	if(*alst)
 	{
@@ -51,7 +51,7 @@ t_light *ft_lstlast_light(t_light *lst)
 	return (NULL);
 }
 
-void ft_lstadd_back_light(t_light **alst, t_light *new)
+void    ft_lstadd_back_light(t_light **alst, t_light *new)
 {
 	if(*alst)
 	{
@@ -64,7 +64,7 @@ void ft_lstadd_back_light(t_light **alst, t_light *new)
 		*alst = new;
 }
 
-t_camera *ft_lstlast_camera(t_camera *lst)
+t_camera    *ft_lstlast_camera(t_camera *lst)
 {	
 	if(lst)
 	{
@@ -77,7 +77,7 @@ t_camera *ft_lstlast_camera(t_camera *lst)
 	return (NULL);
 }
 
-void ft_lstadd_back_camera(t_camera **alst, t_camera *new)
+void    ft_lstadd_back_camera(t_camera **alst, t_camera *new)
 {
 	if(*alst)
 	{
@@ -92,7 +92,7 @@ void ft_lstadd_back_camera(t_camera **alst, t_camera *new)
 		*alst = new;
 }
 
-void parsing_resolution(char **resol,t_scene *scene)
+void    parsing_resolution(char **resol,t_scene *scene)
 {
     //t_resolution resolution;
    // resolution = malloc(sizeof(t_resolution));
@@ -104,11 +104,10 @@ void parsing_resolution(char **resol,t_scene *scene)
     scene->resolution.height = ft_atoi(resol[2]);
 }
 
-void parsing_ambiant(char **amb,t_scene *scene)
+void    parsing_ambiant(char **amb, t_scene *scene)
 {
-    //t_ambient ambient;
     char **color;
-    //ambient = malloc(sizeof(t_ambient));
+
     if (scene->ambient.intensity != -1)
         ft_print_error("You can't specify ambient twice.");
     if (amb[1] == NULL || amb[2] == NULL)
@@ -120,9 +119,10 @@ void parsing_ambiant(char **amb,t_scene *scene)
     scene->ambient.color.z = ft_atoi(color[2]);
 }
 
-t_vector ft_parse_normal(char **norm)
+t_vector    ft_parse_normal(char **norm)
 {
     t_vector normal;
+
     normal.x = ft_atof(norm[0]);
     normal.y = ft_atof(norm[1]);
     normal.z = ft_atof(norm[2]);
@@ -133,6 +133,7 @@ t_vector ft_parse_normal(char **norm)
 int ft_check_normal(char **norm)
 {
     t_vector normal;
+
     if (norm[0] == NULL || norm[1] == NULL || norm[2] == NULL)
         return (1);
     else
@@ -148,7 +149,7 @@ int ft_check_normal(char **norm)
     }
     return (0);
 }
-t_vector ft_parse_color(char **colors)
+t_vector    ft_parse_color(char **colors)
 {
     t_vector color;
 
@@ -178,7 +179,7 @@ int ft_check_coords(char **coord)
         return (1);
     return 0;
 }
-t_vector ft_parse_coord(char **coord)
+t_vector    ft_parse_coord(char **coord)
 {
     t_vector coords;
 
@@ -188,7 +189,7 @@ t_vector ft_parse_coord(char **coord)
     return coords;
 }
 
-void parsing_camera(char **cam,t_scene *scene)
+void    parsing_camera(char **cam,t_scene *scene)
 {
     char **origin;
     char **orient;
@@ -215,7 +216,7 @@ void parsing_camera(char **cam,t_scene *scene)
     ft_lstadd_back_camera(&scene->camera,camera);
 }
 
-void parsing_light(char ** light_line,t_scene *scene)
+void    parsing_light(char ** light_line,t_scene *scene)
 {
     char **origin;
     char **color;
@@ -240,7 +241,7 @@ void parsing_light(char ** light_line,t_scene *scene)
     light->next = NULL;
     ft_lstadd_back_light(&scene->light,light);
 }
-void ft_check_plane(t_obj_properties obj)
+void    ft_check_plane(t_obj_properties obj)
 {
     if(ft_check_coords(obj.origin))
         ft_print_error("coordinates of the plan  x,y,z");
@@ -249,7 +250,7 @@ void ft_check_plane(t_obj_properties obj)
     if(ft_check_color(obj.color))
         ft_print_error("plan color in range [0,255]");
 }
-void parsing_plan(char **pl,t_scene *scene)
+void    parsing_plan(char **pl,t_scene *scene)
 {
     t_obj_properties obj;
     t_plane *plane;
@@ -276,7 +277,7 @@ void parsing_plan(char **pl,t_scene *scene)
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
 }
-void ft_check_sphere(t_obj_properties obj)
+void    ft_check_sphere(t_obj_properties obj)
 {
     if (ft_check_coords(obj.origin))
         ft_print_error("coordinates of the sphere  x,y,z");
@@ -286,7 +287,7 @@ void ft_check_sphere(t_obj_properties obj)
         ft_print_error("shpere diameter must be positive");
 }
 
-void parsing_sphere(char **sph,t_scene *scene)
+void    parsing_sphere(char **sph,t_scene *scene)
 {
     t_obj_properties obj;
     t_sphere *sphere;
@@ -314,7 +315,7 @@ void parsing_sphere(char **sph,t_scene *scene)
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
 }
-void ft_check_square(t_obj_properties obj)
+void    ft_check_square(t_obj_properties obj)
 {
     if (ft_check_coords(obj.origin))
         ft_print_error("coordinates of the squqre  x,y,z");
@@ -326,7 +327,7 @@ void ft_check_square(t_obj_properties obj)
         ft_print_error(" normalized orientation vector of square it's axis in range [0,1]");  
 }
 
-void parsing_square(char **sqr,t_scene *scene)
+void    parsing_square(char **sqr,t_scene *scene)
 {
     t_obj_properties obj;
     t_square *square;
@@ -356,7 +357,7 @@ void parsing_square(char **sqr,t_scene *scene)
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
 }
-void ft_check_triangle(t_obj_properties obj)
+void    ft_check_triangle(t_obj_properties obj)
 {
     if (ft_check_coords(obj.cord1))
             ft_print_error("first coordinates of the traingle  x,y,z");
@@ -367,7 +368,7 @@ void ft_check_triangle(t_obj_properties obj)
     if (ft_check_color(obj.color))
             ft_print_error("trangle color in range [0,255]"); 
 }
-void parsing_triangle(char **tr,t_scene *scene)
+void    parsing_triangle(char **tr,t_scene *scene)
 {
     t_obj_properties obj;
     t_triangle *triangle;
@@ -398,7 +399,7 @@ void parsing_triangle(char **tr,t_scene *scene)
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
 }
-void ft_check_cylinder(t_obj_properties obj)
+void    ft_check_cylinder(t_obj_properties obj)
 {
     if(ft_check_coords(obj.origin))
         ft_print_error("coordinates of the cylinder  x,y,z");
@@ -410,10 +411,8 @@ void ft_check_cylinder(t_obj_properties obj)
         ft_print_error("cyliner height size must be positive");
     if (obj.diameter < 0)
         ft_print_error("cylinder diameter must be positive");
-    
-
 }
-void parsing_cylinder(char **cy,t_scene *scene)
+void    parsing_cylinder(char **cy,t_scene *scene)
 {
     t_obj_properties obj;
     t_cylinder *cylinder;
@@ -448,7 +447,7 @@ void parsing_cylinder(char **cy,t_scene *scene)
     ft_lstadd_back(&scene->objects,new_object);
 }
 
-void parsing_line(char *line,t_scene *scene)
+void    parsing_line(char *line,t_scene *scene)
 {
     char **split;
 
@@ -475,7 +474,7 @@ void parsing_line(char *line,t_scene *scene)
         parsing_cylinder(split,scene);
 }
 
-void ft_check_element(char *line)
+void    ft_check_element(char *line)
 {
     char **split;
     split = ft_split(line, ' ');
@@ -485,7 +484,7 @@ void ft_check_element(char *line)
         ft_strncmp(split[0],"tr",2) && ft_strncmp(split[0],"cy",2) )
             ft_print_error("unknown element in the scene.");
 }
-void ft_check_line(char *line)
+void    ft_check_line(char *line)
 {
     int i;
 
@@ -500,7 +499,7 @@ void ft_check_line(char *line)
     }
 }
 
-void  ft_check_scene(t_scene *scene)
+void    ft_check_scene(t_scene *scene)
 {
     int height;
     int width;
