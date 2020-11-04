@@ -124,7 +124,6 @@ int main(int argc, char **argv)
 	{
 		scene = ft_scene_init(argv[1]);
 		scene = parsing(scene->fd,scene);
-
 		scene->mlx_ptr = mlx_init();
 		scene->win_ptr = mlx_new_window(scene->mlx_ptr,
 			scene->resolution.width,scene->resolution.height,argv[1]);
