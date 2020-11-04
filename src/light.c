@@ -107,6 +107,10 @@ double  ft_shadow(t_scene *scene,double t,t_object *closet_object)
 	}
 	if (sdw.dark == 1)
 	{
+		if (1 - shadaw < 0)
+		{
+			return 0.0;
+		}
 		return (1 - shadaw);
 		//return 0.2;
 	}
@@ -121,17 +125,15 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 	spr.scale_direction_to_p = vectorscal(&scene->ray->direction,t);
 	spr.p = vectorsadd(&scene->ray->origin,&spr.scale_direction_to_p);
 	//spr.p = normalize(&spr.p);
-	spr.from_camera_to_p = vectorscal(&spr.p,-1);
+	spr.from_camera_to_p = vectorscal(&scene->ray->direction,-1);
 	spr.from_camera_to_p = normalize(&spr.from_camera_to_p);
-	spr.specular_shiness = 0;
-	if (object->object_type == 's' || object->object_type == 'c')
-	{
-		if(object->object_type == 's')
-			spr.specular_shiness = 256;
-		else if (object->object_type == 'c')
-			spr.specular_shiness = 10;
-		spr.n = ft_calcule_normal(scene,object,spr.p,t);
-	}
+	spr.specular_shiness = 256;
+	if(object->object_type == 's')
+		spr.specular_shiness = 256;
+	else if (object->object_type == 'c')
+		spr.specular_shiness = 10;
+	spr.n = ft_calcule_normal(scene,object,spr.p,t);
+
 	spr.color = bzero_vector(spr.color);
 	light = scene->light;
 	while (light != NULL)
@@ -144,22 +146,20 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 		spr.reflection = normalize(&spr.reflection);
 		spr.dot = vectorsDot(&spr.from_camera_to_p,&spr.reflection);
 		spr.dot =  min (spr.dot,0.0);
-		spr.i_specular =  1 * pow(spr.dot,spr.specular_shiness);
+		spr.i_specular =  0.5 * pow(spr.dot,spr.specular_shiness);
 		spr.color1 = vectorscal(&light->color,spr.i_specular);
 		spr.color = vectorsadd(&spr.color,&spr.color1);
 		light = light->next;
 	}
-	//t_vector color = {255,255,255};
-	//spr.color = color;
 	return spr.color;
 }
 
 t_vector ft_diffuse(t_scene *scene,double t,t_object *object)
 {
 	t_phong_variables dfs;
+
 	dfs.scale_direction_to_p = vectorscal(&scene->ray->direction,t);
 	dfs.p = vectorsadd(&scene->ray->origin,&dfs.scale_direction_to_p);
-
 	dfs.n = ft_calcule_normal(scene,object,dfs.p,t);
 	dfs.color = bzero_vector(dfs.color);
 	t_light *light;
