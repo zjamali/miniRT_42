@@ -311,13 +311,13 @@ typedef struct s_obj_properties
 {
 	char **origin;
     char **normal;
+
 	double diameter;
 	double size;
+
 	char **cord1;
     char **cord2;
     char **cord3;
-
-	
     char **color;
 }t_obj_properties;
 
@@ -347,7 +347,7 @@ double hit_cylinder(t_ray ray,t_cylinder *cylinder);
 t_vector ft_specular(t_scene *scene,double t,t_object *object);
 t_vector ft_diffuse(t_scene *scene,double t,t_object *object);
 t_vector ft_ambient(t_ambient ambient,t_vector *color);
-double  ft_shadow(t_scene *scene,t_object *object,double t);
+double  ft_shadow(t_scene *scene,double t);
 
 /***********************  PIXEL_COLOR.C  ***********************/
 

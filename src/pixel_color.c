@@ -45,7 +45,7 @@ t_vector ft_calculate_pixel_its_color(t_scene *scene,double closet_object_t,t_ob
 			i_specular = ft_specular(scene,closet_object_t,closet_object);
 	i_diffuse = ft_diffuse(scene,closet_object_t,closet_object);
 	if (closet_object->object_type != 'c' || closet_object->object_type != 'd')
-		shadow = ft_shadow(scene, closet_object,closet_object_t);
+		shadow = ft_shadow(scene,closet_object_t);
 	i_ambient = ft_ambient(scene->ambient,closet_object->color);
 	if (shadow < 1)
 		i_specular = vectorscal(&i_specular,0);

@@ -529,6 +529,12 @@ t_scene *parsing(int fd,t_scene *scene)
 		    free(line);
         }
 	}
+    if (line[0])  /// skip empty line
+        {
+            ft_check_line(line);
+            parsing_line(line,scene);
+		    free(line);
+        }
     ft_check_scene(scene);
     return scene;
 }

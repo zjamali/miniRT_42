@@ -50,19 +50,14 @@ t_vector ft_calcule_normal(t_scene *scene,t_object *object,t_vector p,double t)
 	n = normalize(&n);
 	return n;
 }
-double ft_get_first_intersection(t_object *temps,t_object *object,t_ray p_ray)
+double ft_get_first_intersection(t_object *temps,t_ray p_ray)
 {
 	double closet_object1_t = 0;
 	double closet_object_t = 1000000000000;
 	while (temps != NULL)
 		{
 			if (temps->object_type == 'c')
-			{
-				if (object->object == temps->object)
-					closet_object_t = closet_object_t + 0.0000001;
-				else
 					closet_object1_t = 	hit_cylinder(p_ray,temps->object);
-			}
 			if (temps->object_type == 's')
 				closet_object1_t = hit_sphere(p_ray,temps->object);
 			else if (temps->object_type == 'p')
@@ -78,7 +73,7 @@ double ft_get_first_intersection(t_object *temps,t_object *object,t_ray p_ray)
 		}
 		return closet_object_t;
 }
-double  ft_shadow(t_scene *scene,t_object *object,double t)
+double  ft_shadow(t_scene *scene,double t)
 {
 	t_shadow_variables sdw;
 	sdw.scale_direction_to_p = vectorscal(&scene->ray->direction,t);
@@ -86,16 +81,16 @@ double  ft_shadow(t_scene *scene,t_object *object,double t)
 	sdw.dark = 0;
 	t_light *light;
 	light = scene->light;
-	double shadaw = 1;
+	double shadaw = 0;
 	while (light != NULL)
 	{
 		sdw.p_l = vectorsSub(&light->origin,&sdw.p);
-		sdw.p_ray.origin.y = sdw.p.y + 0.00001;
-		sdw.p_ray.origin.x = sdw.p.x + 0.00001;
-		sdw.p_ray.origin.z = sdw.p.z + 0.00001;
+		sdw.p_ray.origin.y = sdw.p.y + 0.1;
+		sdw.p_ray.origin.x = sdw.p.x + 0.1;
+		sdw.p_ray.origin.z = sdw.p.z + 0.1;
 		sdw.p_ray.direction = normalize(&sdw.p_l);
 		sdw.temps = scene->objects;
-		sdw.closet_object_t = ft_get_first_intersection(sdw.temps,object,sdw.p_ray);
+		sdw.closet_object_t = ft_get_first_intersection(sdw.temps,sdw.p_ray);
 		sdw.scale_direction_to_c = vectorscal(&sdw.p_ray.direction,sdw.closet_object_t);
 		sdw.c = vectorsadd(&sdw.p_ray.origin,&sdw.scale_direction_to_c);
 		sdw.p_c = vectorsSub(&sdw.c,&sdw.p);
@@ -104,23 +99,16 @@ double  ft_shadow(t_scene *scene,t_object *object,double t)
 		sdw.c_length = lenght(&sdw.p_c);
 		if (sdw.p_length > sdw.c_length && sdw.dark <= 1)
 		{
-			shadaw = 0.2;
-			sdw.dark = 1;
-		}
-		else
-		{
 			shadaw = shadaw + 0.2;
-			sdw.dark = 2;
+			sdw.dark = 1;
 		}
 		light = light->next;
 	}
 	if (sdw.dark == 1)
 	{
-		return shadaw;
-		return 0.2;
+		return (1 - shadaw);
+		//return 0.2;
 	}
-	//if (lights == 1)
-	//	return 0.2;
 	 return 1;
 }
 
