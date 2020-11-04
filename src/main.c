@@ -27,7 +27,7 @@ t_ray *ft_ray_creating(t_scene *scene,t_camera *camera,int i,int j)
 	ray = malloc(sizeof(t_ray));
 	ray->origin = camera->lookfrom;
 	ray->direction = ft_camera_ray(scene,camera,i,j); 
-	ray->direction = normalize(&ray->direction);
+	ray->direction = normalize(ray->direction);
 	return ray;
 }
 void            my_mlx_pixel_put(t_imag *img, int x, int y, int color)

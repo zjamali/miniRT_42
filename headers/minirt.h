@@ -323,15 +323,15 @@ typedef struct s_obj_properties
 
 
 /***********************  VECTOR.C  ***********************/
-t_vector  vectorsadd(t_vector *v1,t_vector *v2);
-t_vector vectorscal(t_vector *v ,double s);
-t_vector vectordiv(t_vector *v, double d);
-t_vector vectorsSub(t_vector *v1, t_vector *v2);
-double vectorsDot(t_vector *v1, t_vector *v2);
-double lenght(t_vector *v);
-t_vector normalize(t_vector *v);
-t_vector vectorsproduit(t_vector *v1,t_vector *v2);
-t_vector vecttorscross(t_vector *v1,t_vector *v2);
+t_vector  vectorsadd(t_vector v1,t_vector v2);
+t_vector vectorscal(t_vector v ,double s);
+t_vector vectordiv(t_vector v, double d);
+t_vector vectorsSub(t_vector v1, t_vector v2);
+double vectorsDot(t_vector v1, t_vector v2);
+double lenght(t_vector v);
+t_vector normalize(t_vector v);
+t_vector vectorsproduit(t_vector v1,t_vector v2);
+t_vector vecttorscross(t_vector v1,t_vector v2);
 
 
 /***********************  CAMERA.C  ***********************/

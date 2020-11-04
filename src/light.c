@@ -26,28 +26,28 @@ t_vector ft_calcule_normal(t_scene *scene,t_object *object,t_vector p,double t)
 	t_noraml_variables nrml;
 
 	if (object->object_type == 's')
-		n  = vectorsSub(&p,&object->origin);
+		n  = vectorsSub(p,object->origin);
 	if (object->object_type == 'p' || object->object_type == 'q')
 		n = object->orientation;
 	if (object->object_type == 't')
 	{
-		nrml.edge1 = vectorsSub(&object->v3[1],&object->v3[0]); // 1 0 
-		nrml.edge2 = vectorsSub(&object->v3[2],&object->v3[0]); // 2 0
-		nrml.h = vecttorscross(&nrml.edge1,&nrml.edge2);
-		n = normalize(&nrml.h);
+		nrml.edge1 = vectorsSub(object->v3[1],object->v3[0]); // 1 0 
+		nrml.edge2 = vectorsSub(object->v3[2],object->v3[0]); // 2 0
+		nrml.h = vecttorscross(nrml.edge1,nrml.edge2);
+		n = normalize(nrml.h);
 	}
 	if (object->object_type == 'c')
 	{
-		object->orientation = normalize(&object->orientation);
-		nrml.oc =  vectorsSub(&scene->ray->origin,&object->origin);
-		nrml.m = vectorsDot(&scene->ray->direction,&object->orientation) * t 
-					+ vectorsDot(&nrml.oc,&object->orientation);
+		object->orientation = normalize(object->orientation);
+		nrml.oc =  vectorsSub(scene->ray->origin,object->origin);
+		nrml.m = vectorsDot(scene->ray->direction,object->orientation) * t 
+					+ vectorsDot(nrml.oc,object->orientation);
 		//    N = nrm( P-C-V*m )
-		nrml.normal = vectorsSub(&p,&object->origin);
-		nrml.line_point = vectorscal(&object->orientation,nrml.m);
-		n = vectorsSub(&nrml.normal,&nrml.line_point);
+		nrml.normal = vectorsSub(p,object->origin);
+		nrml.line_point = vectorscal(object->orientation,nrml.m);
+		n = vectorsSub(nrml.normal,nrml.line_point);
 	}
-	n = normalize(&n);
+	n = normalize(n);
 	return n;
 }
 double ft_get_first_intersection(t_object *temps,t_ray p_ray,t_object *closet_object)
@@ -77,27 +77,27 @@ double ft_get_first_intersection(t_object *temps,t_ray p_ray,t_object *closet_ob
 double  ft_shadow(t_scene *scene,double t,t_object *closet_object)
 {
 	t_shadow_variables sdw;
-	sdw.scale_direction_to_p = vectorscal(&scene->ray->direction,t);
-	sdw.p = vectorsadd(&scene->ray->origin,&sdw.scale_direction_to_p);
+	sdw.scale_direction_to_p = vectorscal(scene->ray->direction,t);
+	sdw.p = vectorsadd(scene->ray->origin,sdw.scale_direction_to_p);
 	sdw.dark = 0;
 	t_light *light;
 	light = scene->light;
 	double shadaw = 0;
 	while (light != NULL)
 	{
-		sdw.p_l = vectorsSub(&light->origin,&sdw.p);
+		sdw.p_l = vectorsSub(light->origin,sdw.p);
 		sdw.p_ray.origin.y = sdw.p.y + 0.00001;
 		sdw.p_ray.origin.x = sdw.p.x + 0.00001;
 		sdw.p_ray.origin.z = sdw.p.z + 0.00001;
-		sdw.p_ray.direction = normalize(&sdw.p_l);
+		sdw.p_ray.direction = normalize(sdw.p_l);
 		sdw.temps = scene->objects;
 		sdw.closet_object_t = ft_get_first_intersection(sdw.temps,sdw.p_ray,closet_object);
-		sdw.scale_direction_to_c = vectorscal(&sdw.p_ray.direction,sdw.closet_object_t);
-		sdw.c = vectorsadd(&sdw.p_ray.origin,&sdw.scale_direction_to_c);
-		sdw.p_c = vectorsSub(&sdw.c,&sdw.p);
+		sdw.scale_direction_to_c = vectorscal(sdw.p_ray.direction,sdw.closet_object_t);
+		sdw.c = vectorsadd(sdw.p_ray.origin,sdw.scale_direction_to_c);
+		sdw.p_c = vectorsSub(sdw.c,sdw.p);
 		
-		sdw.p_length = lenght(&sdw.p_l);
-		sdw.c_length = lenght(&sdw.p_c);
+		sdw.p_length = lenght(sdw.p_l);
+		sdw.c_length = lenght(sdw.p_c);
 		if (sdw.p_length > sdw.c_length && sdw.dark <= 1)
 		{
 			shadaw = shadaw + 0.4;
@@ -122,11 +122,11 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 	t_phong_variables spr;
 	t_light *light;
 
-	spr.scale_direction_to_p = vectorscal(&scene->ray->direction,t);
-	spr.p = vectorsadd(&scene->ray->origin,&spr.scale_direction_to_p);
-	//spr.p = normalize(&spr.p);
-	spr.from_camera_to_p = vectorscal(&scene->ray->direction,-1);
-	spr.from_camera_to_p = normalize(&spr.from_camera_to_p);
+	spr.scale_direction_to_p = vectorscal(scene->ray->direction,t);
+	spr.p = vectorsadd(scene->ray->origin,spr.scale_direction_to_p);
+	//spr.p = normalize(spr.p);
+	spr.from_camera_to_p = vectorscal(scene->ray->direction,-1);
+	spr.from_camera_to_p = normalize(spr.from_camera_to_p);
 	spr.specular_shiness = 256;
 	if(object->object_type == 's')
 		spr.specular_shiness = 256;
@@ -138,17 +138,17 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 	light = scene->light;
 	while (light != NULL)
 	{
-		spr.l_p = vectorsSub(&spr.p,&light->origin);
-		spr.l_p = normalize(&spr.l_p);
-		spr.dot = vectorsDot(&spr.l_p,&spr.n);
-		spr.r = vectorscal(&spr.n,spr.dot * 2);
-		spr.reflection = vectorsSub(&spr.r,&spr.l_p);
-		spr.reflection = normalize(&spr.reflection);
-		spr.dot = vectorsDot(&spr.from_camera_to_p,&spr.reflection);
+		spr.l_p = vectorsSub(spr.p,light->origin);
+		spr.l_p = normalize(spr.l_p);
+		spr.dot = vectorsDot(spr.l_p,spr.n);
+		spr.r = vectorscal(spr.n,spr.dot * 2);
+		spr.reflection = vectorsSub(spr.r,spr.l_p);
+		spr.reflection = normalize(spr.reflection);
+		spr.dot = vectorsDot(spr.from_camera_to_p,spr.reflection);
 		spr.dot =  min (spr.dot,0.0);
 		spr.i_specular =  0.5 * pow(spr.dot,spr.specular_shiness);
-		spr.color1 = vectorscal(&light->color,spr.i_specular);
-		spr.color = vectorsadd(&spr.color,&spr.color1);
+		spr.color1 = vectorscal(light->color,spr.i_specular);
+		spr.color = vectorsadd(spr.color,spr.color1);
 		light = light->next;
 	}
 	return spr.color;
@@ -158,25 +158,28 @@ t_vector ft_diffuse(t_scene *scene,double t,t_object *object)
 {
 	t_phong_variables dfs;
 
-	dfs.scale_direction_to_p = vectorscal(&scene->ray->direction,t);
-	dfs.p = vectorsadd(&scene->ray->origin,&dfs.scale_direction_to_p);
+	dfs.scale_direction_to_p = vectorscal(scene->ray->direction,t);
+	dfs.p = vectorsadd(scene->ray->origin,dfs.scale_direction_to_p);
 	dfs.n = ft_calcule_normal(scene,object,dfs.p,t);
 	dfs.color = bzero_vector(dfs.color);
 	t_light *light;
 	light = scene->light;
 	while (light != NULL)
 	{
-		dfs.l_p = vectorsSub(&light->origin,&dfs.p);
-		dfs.l_p = normalize(&dfs.l_p);
-		dfs.i_diffuse = vectorsDot(&dfs.l_p,&dfs.n);
+		dfs.l_p = vectorsSub(light->origin,dfs.p);
+		dfs.l_p = normalize(dfs.l_p);
+		dfs.i_diffuse = vectorsDot(dfs.l_p,dfs.n);
 		dfs.i_diffuse = dfs.i_diffuse;
 		dfs.i_diffuse = max(0,dfs.i_diffuse);
 		dfs.color1.x  = object->color->x /255  * light->color.x  * light->intensity * dfs.i_diffuse;
 		dfs.color1.y  = object->color->y /255  * light->color.y  * light->intensity * dfs.i_diffuse;
 		dfs.color1.z  = object->color->z /255  * light->color.z  * light->intensity * dfs.i_diffuse;
 		light = light->next;
-		dfs.color = vectorsadd(&dfs.color,&dfs.color1);
+		dfs.color = vectorsadd(dfs.color,dfs.color1);
 	}
+	//double dot = vectorsDot(dfs.n,scene->ray->direction);
+	//if (dot > 0)
+	//	dfs.color = bzero_vector(dfs.color);
 	return dfs.color;
 }
 t_vector ft_ambient(t_ambient ambient,t_vector *color)

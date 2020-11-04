@@ -126,7 +126,7 @@ t_vector    ft_parse_normal(char **norm)
     normal.x = ft_atof(norm[0]);
     normal.y = ft_atof(norm[1]);
     normal.z = ft_atof(norm[2]);
-    normal = normalize(&normal);
+    normal = normalize(normal);
     return normal;
 }
 
