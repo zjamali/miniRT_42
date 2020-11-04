@@ -50,7 +50,7 @@ t_vector ft_calcule_normal(t_scene *scene,t_object *object,t_vector p,double t)
 	n = normalize(&n);
 	return n;
 }
-double ft_get_first_intersection(t_object *temps,t_ray p_ray)
+double ft_get_first_intersection(t_object *temps,t_ray p_ray,t_object *closet_object)
 {
 	double closet_object1_t = 0;
 	double closet_object_t = 1000000000000;
@@ -66,14 +66,15 @@ double ft_get_first_intersection(t_object *temps,t_ray p_ray)
 				closet_object1_t = hit_triangle(p_ray,temps->object);
 			else if(temps->object_type == 'q')
 				closet_object1_t = hit_square(p_ray,temps->object);
-			if (closet_object1_t > 0)
+			if (closet_object1_t > 0 && closet_object != temps)
 				if (closet_object1_t < closet_object_t)
 						closet_object_t = closet_object1_t;
 			temps = temps->next;
 		}
+		closet_object = NULL;
 		return closet_object_t;
 }
-double  ft_shadow(t_scene *scene,double t)
+double  ft_shadow(t_scene *scene,double t,t_object *closet_object)
 {
 	t_shadow_variables sdw;
 	sdw.scale_direction_to_p = vectorscal(&scene->ray->direction,t);
@@ -85,12 +86,12 @@ double  ft_shadow(t_scene *scene,double t)
 	while (light != NULL)
 	{
 		sdw.p_l = vectorsSub(&light->origin,&sdw.p);
-		sdw.p_ray.origin.y = sdw.p.y + 0.1;
-		sdw.p_ray.origin.x = sdw.p.x + 0.1;
-		sdw.p_ray.origin.z = sdw.p.z + 0.1;
+		sdw.p_ray.origin.y = sdw.p.y + 0.00001;
+		sdw.p_ray.origin.x = sdw.p.x + 0.00001;
+		sdw.p_ray.origin.z = sdw.p.z + 0.00001;
 		sdw.p_ray.direction = normalize(&sdw.p_l);
 		sdw.temps = scene->objects;
-		sdw.closet_object_t = ft_get_first_intersection(sdw.temps,sdw.p_ray);
+		sdw.closet_object_t = ft_get_first_intersection(sdw.temps,sdw.p_ray,closet_object);
 		sdw.scale_direction_to_c = vectorscal(&sdw.p_ray.direction,sdw.closet_object_t);
 		sdw.c = vectorsadd(&sdw.p_ray.origin,&sdw.scale_direction_to_c);
 		sdw.p_c = vectorsSub(&sdw.c,&sdw.p);
@@ -99,7 +100,7 @@ double  ft_shadow(t_scene *scene,double t)
 		sdw.c_length = lenght(&sdw.p_c);
 		if (sdw.p_length > sdw.c_length && sdw.dark <= 1)
 		{
-			shadaw = shadaw + 0.2;
+			shadaw = shadaw + 0.4;
 			sdw.dark = 1;
 		}
 		light = light->next;
@@ -119,6 +120,7 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 
 	spr.scale_direction_to_p = vectorscal(&scene->ray->direction,t);
 	spr.p = vectorsadd(&scene->ray->origin,&spr.scale_direction_to_p);
+	//spr.p = normalize(&spr.p);
 	spr.from_camera_to_p = vectorscal(&spr.p,-1);
 	spr.from_camera_to_p = normalize(&spr.from_camera_to_p);
 	spr.specular_shiness = 0;
@@ -147,6 +149,8 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 		spr.color = vectorsadd(&spr.color,&spr.color1);
 		light = light->next;
 	}
+	//t_vector color = {255,255,255};
+	//spr.color = color;
 	return spr.color;
 }
 

@@ -40,12 +40,12 @@ t_vector ft_calculate_pixel_its_color(t_scene *scene,double closet_object_t,t_ob
 	t_vector i_diffuse =  {0,0,0};
 	t_vector i_ambient =  {0,0,0};
 	double shadow = 1;
-	
+
 	if(closet_object->object_type == 's' || closet_object->object_type == 'c')
 			i_specular = ft_specular(scene,closet_object_t,closet_object);
 	i_diffuse = ft_diffuse(scene,closet_object_t,closet_object);
 	if (closet_object->object_type != 'c' || closet_object->object_type != 'd')
-		shadow = ft_shadow(scene,closet_object_t);
+		shadow = ft_shadow(scene,closet_object_t,closet_object);
 	i_ambient = ft_ambient(scene->ambient,closet_object->color);
 	if (shadow < 1)
 		i_specular = vectorscal(&i_specular,0);
@@ -75,7 +75,7 @@ int ft_color_of_pixel(t_scene *scene)
 		{
 			if (closet_object1_t < closet_object_t)
 			{
-				closet_object_t = closet_object1_t + 0.000001;
+				closet_object_t = closet_object1_t;
 				closet_object = temp;
 			}
 		}

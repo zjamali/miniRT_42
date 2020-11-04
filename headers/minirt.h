@@ -347,7 +347,7 @@ double hit_cylinder(t_ray ray,t_cylinder *cylinder);
 t_vector ft_specular(t_scene *scene,double t,t_object *object);
 t_vector ft_diffuse(t_scene *scene,double t,t_object *object);
 t_vector ft_ambient(t_ambient ambient,t_vector *color);
-double  ft_shadow(t_scene *scene,double t);
+double  ft_shadow(t_scene *scene,double t,t_object *closet_object);
 
 /***********************  PIXEL_COLOR.C  ***********************/
 
