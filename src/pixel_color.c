@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:09:11 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/06 12:48:14 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/06 18:57:17 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ double rgbconvert(int ir, int ig, int ib)
 {
 	    return (ir * 65536 + ig * 256+ ib);
 }
-double calcule_closet_object_is_t(t_ray *ray,t_object *temp)
+double ft_calcule_objects__t(t_ray *ray,t_object *temp)
 {
 	double t;
 	t = 0;
@@ -30,6 +30,7 @@ double calcule_closet_object_is_t(t_ray *ray,t_object *temp)
 		t = hit_square(*ray,temp->object);
 	else if (temp->object_type == 'c')
 		t = hit_cylinder(*ray,temp->object);
+	
 	return t;
 }
 
@@ -44,7 +45,7 @@ t_vector ft_calculate_pixel_its_color(t_scene *scene,double closet_object_t,t_ob
 	if(closet_object->object_type == 's' || closet_object->object_type == 'c')
 			i_specular = ft_specular(scene,closet_object_t,closet_object);
 	i_diffuse = ft_diffuse(scene,closet_object_t,closet_object);
-	if (closet_object->object_type != 'c' || closet_object->object_type != 'd')
+	//if (closet_object->object_type != 'c' || closet_object->object_type != 'd')
 		shadow = ft_shadow(scene,closet_object_t,closet_object);
 	i_ambient = ft_ambient(scene->ambient,closet_object->color);
 	if (shadow < 1)
@@ -70,7 +71,7 @@ int ft_color_of_pixel(t_scene *scene)
 	temp = scene->objects;
 	while (temp != NULL)
 	{
-		closet_object1_t = calcule_closet_object_is_t(scene->ray,temp);
+		closet_object1_t = ft_calcule_objects__t(scene->ray,temp);
 		if (closet_object1_t > 0)
 		{
 			if (closet_object1_t < closet_object_t)

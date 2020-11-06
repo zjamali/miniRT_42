@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/06 18:12:24 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/06 18:49:37 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,11 +104,6 @@ double  ft_shadow(t_scene *scene,double t,t_object *closet_object)
 			shadaw = shadaw + 0.4;
 			sdw.dark = 1;
 		}
-		else
-		{
-			sdw.dark = 2;
-		}
-		
 		light = light->next;
 	}
 	if (sdw.dark == 1)
@@ -118,7 +113,6 @@ double  ft_shadow(t_scene *scene,double t,t_object *closet_object)
 			return 0.0;
 		}
 		return (1 - shadaw);
-		//return 0.6;
 	}
 	return 1;
 }

@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 18:59:10 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/27 13:42:55 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/06 20:47:56 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,19 @@ t_vector ft_camera_ray(t_scene *scene,t_camera *camera,double x,double y)
 	vbs.up.x = 0;
 	vbs.up.y = 1;
 	vbs.up.z = 0;
+	if (camera->orientaion.y > 0 || camera->orientaion.y < 0 )
+	{//// up vector must be propendiculare  to camera orintation
+		vbs.up.x = 1;
+		vbs.up.y = 0;
+		vbs.up.z = 0;
+	}
 	vbs.n = normalize(camera->orientaion);
 	vbs.n = vectorscal(vbs.n,-1);
 	vbs.n = normalize(vbs.n);
 	vbs.u = vecttorscross(vbs.up,vbs.n);
 	vbs.u = normalize(vbs.u);
 	vbs.v = vecttorscross(vbs.n,vbs.u);
+	vbs.v = normalize(vbs.v);
 	vbs.theta = camera->fov*PI/180;
 	vbs.aspectRatio = vbs.W/vbs.H;
 	vbs.viewPlaneHalfWidth = vbs.aspectRatio * tan(vbs.theta/2);
