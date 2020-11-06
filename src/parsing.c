@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/30 11:44:07 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/06 14:41:46 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -481,20 +481,22 @@ void    ft_check_element(char *line)
     if (split[0][0] != 'R' && split[0][0] != 'A' && split[0][0] != 'l'
         && ft_strncmp(split[0],"c",2) && ft_strncmp(split[0],"pl",2) && 
         ft_strncmp(split[0],"sp",2) && ft_strncmp(split[0],"sq",2) &&
-        ft_strncmp(split[0],"tr",2) && ft_strncmp(split[0],"cy",2) )
+        ft_strncmp(split[0],"tr",2) && ft_strncmp(split[0],"cy",2))
             ft_print_error("unknown element in the scene.");
 }
+
 void    ft_check_line(char *line)
 {
     int i;
-
+    i =  0;
     ft_check_element(line);
-    i = 2;
     while (line[i] != '\0')
     {
         if (line[i] != ' ' && line[i] != '\t' && line [i] != ',' && 
         line[i] != '.' && (line[i] < '0' && line[i] > '9'))
             ft_print_error("undifined symbole in the scene file");
+        if (line[i] == ' ' && line[i + 1] == '\0')
+            ft_print_error("line with spaces.");
         i++;
     }
 }

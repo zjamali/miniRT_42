@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/30 11:50:19 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/06 18:12:24 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ t_vector ft_calcule_normal(t_scene *scene,t_object *object,t_vector p,double t)
 		nrml.edge2 = vectorsSub(object->v3[2],object->v3[0]); // 2 0
 		nrml.h = vecttorscross(nrml.edge1,nrml.edge2);
 		n = normalize(nrml.h);
+		if (vectorsDot(n,scene->ray->direction) > __DBL_EPSILON__) ///
+			n = vectorscal(n,-1);
 	}
 	if (object->object_type == 'c')
 	{
@@ -71,7 +73,6 @@ double ft_get_first_intersection(t_object *temps,t_ray p_ray,t_object *closet_ob
 						closet_object_t = closet_object1_t;
 			temps = temps->next;
 		}
-		closet_object = NULL;
 		return closet_object_t;
 }
 double  ft_shadow(t_scene *scene,double t,t_object *closet_object)
@@ -86,9 +87,9 @@ double  ft_shadow(t_scene *scene,double t,t_object *closet_object)
 	while (light != NULL)
 	{
 		sdw.p_l = vectorsSub(light->origin,sdw.p);
-		sdw.p_ray.origin.y = sdw.p.y + 0.00001;
-		sdw.p_ray.origin.x = sdw.p.x + 0.00001;
-		sdw.p_ray.origin.z = sdw.p.z + 0.00001;
+		sdw.p_ray.origin.y = sdw.p.y ;//+ 0.00001;
+		sdw.p_ray.origin.x = sdw.p.x ;//+ 0.00001;
+		sdw.p_ray.origin.z = sdw.p.z ;//+ 0.00001;
 		sdw.p_ray.direction = normalize(sdw.p_l);
 		sdw.temps = scene->objects;
 		sdw.closet_object_t = ft_get_first_intersection(sdw.temps,sdw.p_ray,closet_object);
@@ -98,11 +99,16 @@ double  ft_shadow(t_scene *scene,double t,t_object *closet_object)
 		
 		sdw.p_length = lenght(sdw.p_l);
 		sdw.c_length = lenght(sdw.p_c);
-		if (sdw.p_length > sdw.c_length && sdw.dark <= 1)
+		if (sdw.p_length > sdw.c_length)
 		{
 			shadaw = shadaw + 0.4;
 			sdw.dark = 1;
 		}
+		else
+		{
+			sdw.dark = 2;
+		}
+		
 		light = light->next;
 	}
 	if (sdw.dark == 1)
@@ -112,9 +118,9 @@ double  ft_shadow(t_scene *scene,double t,t_object *closet_object)
 			return 0.0;
 		}
 		return (1 - shadaw);
-		//return 0.2;
+		//return 0.6;
 	}
-	 return 1;
+	return 1;
 }
 
 t_vector ft_specular(t_scene *scene,double t,t_object *object)
@@ -131,7 +137,7 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 	if(object->object_type == 's')
 		spr.specular_shiness = 256;
 	else if (object->object_type == 'c')
-		spr.specular_shiness = 10;
+		spr.specular_shiness = 50;
 	spr.n = ft_calcule_normal(scene,object,spr.p,t);
 
 	spr.color = bzero_vector(spr.color);
@@ -146,7 +152,7 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 		spr.reflection = normalize(spr.reflection);
 		spr.dot = vectorsDot(spr.from_camera_to_p,spr.reflection);
 		spr.dot =  min (spr.dot,0.0);
-		spr.i_specular =  0.5 * pow(spr.dot,spr.specular_shiness);
+		spr.i_specular =  1 * pow(spr.dot,spr.specular_shiness);
 		spr.color1 = vectorscal(light->color,spr.i_specular);
 		spr.color = vectorsadd(spr.color,spr.color1);
 		light = light->next;
@@ -179,7 +185,7 @@ t_vector ft_diffuse(t_scene *scene,double t,t_object *object)
 	}
 	//double dot = vectorsDot(dfs.n,scene->ray->direction);
 	//if (dot > 0)
-	//	dfs.color = bzero_vector(dfs.color);
+	//dfs.color = bzero_vector(dfs.color);
 	return dfs.color;
 }
 t_vector ft_ambient(t_ambient ambient,t_vector *color)
