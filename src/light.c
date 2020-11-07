@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/06 18:49:37 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/07 13:59:14 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,9 +177,6 @@ t_vector ft_diffuse(t_scene *scene,double t,t_object *object)
 		light = light->next;
 		dfs.color = vectorsadd(dfs.color,dfs.color1);
 	}
-	//double dot = vectorsDot(dfs.n,scene->ray->direction);
-	//if (dot > 0)
-	//dfs.color = bzero_vector(dfs.color);
 	return dfs.color;
 }
 t_vector ft_ambient(t_ambient ambient,t_vector *color)
