@@ -139,8 +139,8 @@ int main(int argc, char **argv)
 			scene->resolution.width,scene->resolution.height,argv[1]);
 		scene->img = ft_creat_img(scene,scene->mlx_ptr);
 		ft_render(scene,scene->camera);
-		//mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
-		//	scene->img->img, 0, 0);
+		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
+			scene->img->img, 0, 0);
 		mlx_hook(scene->win_ptr, 2,0, ft_key_press,scene);
 		make_image(scene);
 		mlx_loop(scene->mlx_ptr);
@@ -214,7 +214,7 @@ void make_image(t_scene *scene)
 		{
 			dst = image_add + ( j * line_lenght + i );
 			color = *(int*)dst;
-			mlx_pixel_put(scene->mlx_ptr,scene->win_ptr,i,j * line_lenght,color);
+			//mlx_pixel_put(scene->mlx_ptr,scene->win_ptr,i,j * line_lenght,color);
 			i++;
 		}
 		j++;

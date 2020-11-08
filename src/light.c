@@ -28,7 +28,11 @@ t_vector ft_calcule_normal(t_scene *scene,t_object *object,t_vector p,double t)
 	if (object->object_type == 's')
 		n  = vectorsSub(p,object->origin);
 	if (object->object_type == 'p' || object->object_type == 'q')
+	{
 		n = object->orientation;
+		if (vectorsDot(n,scene->ray->direction) > __DBL_EPSILON__) ///
+			n = vectorscal(n,-1);
+	}
 	if (object->object_type == 't')
 	{
 		nrml.edge1 = vectorsSub(object->v3[1],object->v3[0]); // 1 0 
