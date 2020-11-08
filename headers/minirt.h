@@ -132,6 +132,11 @@ typedef struct resolution
 	int width;
 }t_resolution;
 
+typedef struct s_pixel {
+    unsigned char b;
+    unsigned char g;
+    unsigned char r;
+}t_pixel;
 
 typedef struct  s_scene
 {
@@ -147,6 +152,8 @@ typedef struct  s_scene
 
 	void *mlx_ptr;
 	void *win_ptr;
+
+	t_pixel **pixels;
 }t_scene;
 /**********          variables        ********************/
 typedef struct s_camera_variables
@@ -322,6 +329,8 @@ typedef struct s_obj_properties
     char **cord3;
     char **color;
 }t_obj_properties;
+
+/************************** bmp *************************/
 
 
 /***********************  VECTOR.C  ***********************/

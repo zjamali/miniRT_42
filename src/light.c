@@ -97,26 +97,6 @@ double  ft_shadow(t_scene *scene,double t,t_object *closet_object)
 	double shadaw = 0;
 	while (light != NULL)
 	{
-		//shadow.p_l = vectorsSub(light->origin,shadow.p);
-		//shadow.p_ray.origin.y = shadow.p.y ;//+ 0.00001;
-		//shadow.p_ray.origin.x = shadow.p.x ;//+ 0.00001;
-		//shadow.p_ray.origin.z = shadow.p.z ;//+ 0.00001;
-		//shadow.p_ray.direction = normalize(shadow.p_l);
-
-		//shadow.temps = scene->objects;
-		//shadow.closet_object_t = ft_get_first_intersection(shadow.temps,shadow.p_ray,closet_object);
-		//shadow.scale_direction_to_c = vectorscal(shadow.p_ray.direction,shadow.closet_object_t);
-		//shadow.c = vectorsadd(shadow.p_ray.origin,shadow.scale_direction_to_c);
-		//shadow.p_c = vectorsSub(shadow.c,shadow.p);
-		//
-		//shadow.p_length = lenght(shadow.p_l);
-		//shadow.c_length = lenght(shadow.p_c);
-		//if (shadow.p_length > shadow.c_length)
-		//{
-		//	shadaw = shadaw + 0.4;
-		//	shadow.dark = 1;
-		//}
-		
 		shadow.light_to_p = vectorsSub(shadow.p,light->origin);
 		shadow.light_ray.origin = light->origin;
 		shadow.light_ray.direction = normalize(shadow.light_to_p);
@@ -137,9 +117,7 @@ double  ft_shadow(t_scene *scene,double t,t_object *closet_object)
 	if (shadow.dark == 1)
 	{
 		if (1 - shadaw < 0)
-		{
-			return 0.0;
-		}
+			return 0;
 		return (1 - shadaw);
 	}
 	return 1;
