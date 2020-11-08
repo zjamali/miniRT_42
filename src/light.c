@@ -60,6 +60,7 @@ double ft_get_first_intersection(t_object *temps,t_ray p_ray,t_object *closet_ob
 {
 	double closet_object1_t = 0;
 	double closet_object_t = 1000000000000;
+	t_object *first_intersection_object;
 	while (temps != NULL)
 		{
 			if (temps->object_type == 'c')
@@ -72,45 +73,68 @@ double ft_get_first_intersection(t_object *temps,t_ray p_ray,t_object *closet_ob
 				closet_object1_t = hit_triangle(p_ray,temps->object);
 			else if(temps->object_type == 'q')
 				closet_object1_t = hit_square(p_ray,temps->object);
-			if (closet_object1_t > 0 && closet_object != temps)
+			if (closet_object1_t > 0)
 				if (closet_object1_t < closet_object_t)
-						closet_object_t = closet_object1_t;
+				{
+					first_intersection_object = temps;
+					closet_object_t = closet_object1_t;
+				}
 			temps = temps->next;
 		}
+		// for doesnt intersect with same object with calcule it shadaw
+		if (closet_object == first_intersection_object)
+			return (1000000000000);
 		return closet_object_t;
 }
 double  ft_shadow(t_scene *scene,double t,t_object *closet_object)
 {
-	t_shadow_variables sdw;
-	sdw.scale_direction_to_p = vectorscal(scene->ray->direction,t);
-	sdw.p = vectorsadd(scene->ray->origin,sdw.scale_direction_to_p);
-	sdw.dark = 0;
+	t_shadow_variables shadow;
+	shadow.scale_direction_to_p = vectorscal(scene->ray->direction,t);
+	shadow.p = vectorsadd(scene->ray->origin,shadow.scale_direction_to_p);
+	shadow.dark = 0;
 	t_light *light;
 	light = scene->light;
 	double shadaw = 0;
 	while (light != NULL)
 	{
-		sdw.p_l = vectorsSub(light->origin,sdw.p);
-		sdw.p_ray.origin.y = sdw.p.y ;//+ 0.00001;
-		sdw.p_ray.origin.x = sdw.p.x ;//+ 0.00001;
-		sdw.p_ray.origin.z = sdw.p.z ;//+ 0.00001;
-		sdw.p_ray.direction = normalize(sdw.p_l);
-		sdw.temps = scene->objects;
-		sdw.closet_object_t = ft_get_first_intersection(sdw.temps,sdw.p_ray,closet_object);
-		sdw.scale_direction_to_c = vectorscal(sdw.p_ray.direction,sdw.closet_object_t);
-		sdw.c = vectorsadd(sdw.p_ray.origin,sdw.scale_direction_to_c);
-		sdw.p_c = vectorsSub(sdw.c,sdw.p);
+		//shadow.p_l = vectorsSub(light->origin,shadow.p);
+		//shadow.p_ray.origin.y = shadow.p.y ;//+ 0.00001;
+		//shadow.p_ray.origin.x = shadow.p.x ;//+ 0.00001;
+		//shadow.p_ray.origin.z = shadow.p.z ;//+ 0.00001;
+		//shadow.p_ray.direction = normalize(shadow.p_l);
+
+		//shadow.temps = scene->objects;
+		//shadow.closet_object_t = ft_get_first_intersection(shadow.temps,shadow.p_ray,closet_object);
+		//shadow.scale_direction_to_c = vectorscal(shadow.p_ray.direction,shadow.closet_object_t);
+		//shadow.c = vectorsadd(shadow.p_ray.origin,shadow.scale_direction_to_c);
+		//shadow.p_c = vectorsSub(shadow.c,shadow.p);
+		//
+		//shadow.p_length = lenght(shadow.p_l);
+		//shadow.c_length = lenght(shadow.p_c);
+		//if (shadow.p_length > shadow.c_length)
+		//{
+		//	shadaw = shadaw + 0.4;
+		//	shadow.dark = 1;
+		//}
 		
-		sdw.p_length = lenght(sdw.p_l);
-		sdw.c_length = lenght(sdw.p_c);
-		if (sdw.p_length > sdw.c_length)
+		shadow.light_to_p = vectorsSub(shadow.p,light->origin);
+		shadow.light_ray.origin = light->origin;
+		shadow.light_ray.direction = normalize(shadow.light_to_p);
+		shadow.temps = scene->objects;
+		shadow.closet_object_t = ft_get_first_intersection(shadow.temps,shadow.light_ray,closet_object);
+		shadow.light_to_c = vectorscal(shadow.light_ray.direction,shadow.closet_object_t);
+		shadow.light_to_c = vectorsadd(shadow.light_to_c,shadow.light_ray.origin);
+		shadow.light_to_c = vectorsSub(shadow.light_to_c,shadow.light_ray.origin);
+		shadow.light_to_c_lenght = lenght(shadow.light_to_c);
+		shadow.light_to_p_lenght = lenght(shadow.light_to_p);
+		if (shadow.light_to_p_lenght > shadow.light_to_c_lenght)
 		{
 			shadaw = shadaw + 0.4;
-			sdw.dark = 1;
+			shadow.dark = 1;
 		}
 		light = light->next;
 	}
-	if (sdw.dark == 1)
+	if (shadow.dark == 1)
 	{
 		if (1 - shadaw < 0)
 		{
@@ -131,7 +155,7 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 	//spr.p = normalize(spr.p);
 	spr.from_camera_to_p = vectorscal(scene->ray->direction,-1);
 	spr.from_camera_to_p = normalize(spr.from_camera_to_p);
-	spr.specular_shiness = 256;
+	spr.specular_shiness = 300;
 	if(object->object_type == 's')
 		spr.specular_shiness = 256;
 	else if (object->object_type == 'c')

@@ -199,15 +199,17 @@ typedef struct s_shadow_variables
 	t_vector scale_direction_to_p;
 	t_vector p;
 	int dark;
-	t_vector p_l;
-	t_ray p_ray;
+
+	t_vector light_to_p;
+
+	t_ray light_ray;
 	double closet_object_t;
+
+	t_vector light_to_c;
 	t_object *temps;
-	t_vector scale_direction_to_c;
-	t_vector c;
-	t_vector p_c;
-	double p_length;
-	double c_length;
+
+	double light_to_c_lenght;
+	double light_to_p_lenght;
 	
 }t_shadow_variables;
 
