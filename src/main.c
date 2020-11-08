@@ -152,14 +152,6 @@ int main(int argc, char **argv)
 	
     if(argc > 1)
 	{
-		if (argc > 2 && !ft_strncmp(argv[2] , "--save",6))
-		{
-			scene = ft_scene_init(argv[1]);
-			scene = parsing(scene->fd,scene);
-			ft_render(scene,scene->camera,1);
-			make_image(scene);
-			return (0);
-		}
 		scene = ft_scene_init(argv[1]);
 		scene = parsing(scene->fd,scene);
 		scene->mlx_ptr = mlx_init();
@@ -170,6 +162,8 @@ int main(int argc, char **argv)
 		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
 			scene->img->img, 0, 0);
 		mlx_hook(scene->win_ptr, 2,0, ft_key_press,scene);
+		if (argc > 2 && !ft_strncmp(argv[2] , "--save",6))
+			make_image(scene);
 		mlx_loop(scene->mlx_ptr);
 	}
 	return 0;
@@ -209,4 +203,3 @@ void make_image(t_scene *scene)
 {
 	writeBMP("image.bmp" ,scene->resolution.width ,scene->resolution.height,scene->pixels);
 }
-

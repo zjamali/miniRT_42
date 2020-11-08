@@ -333,6 +333,7 @@ typedef struct s_obj_properties
 /************************** bmp *************************/
 
 
+
 /***********************  VECTOR.C  ***********************/
 t_vector  vectorsadd(t_vector v1,t_vector v2);
 t_vector vectorscal(t_vector v ,double s);
