@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/07 20:51:08 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/09 14:37:46 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,20 +171,30 @@ int main(int argc, char **argv)
 
 
 /**************** BMP image ******************/
-
+void ft_write_file_header(unsigned char *header)
+{
+	header[0] = 66; /// 'B'
+	header[1] = 77; /// 'M'
+	header[10] = 54;
+	header[14] = 40;  /// iamge header size must at least 40 
+	header[26] = 1;
+	header[28] = 24;
+}
 
 //supply an array of pixels[height][width] <- notice that height comes first
-int writeBMP(char* filename,  int width,  int height,t_pixel **pixel)
+void writeBMP(char* filename,  int width,  int height,t_pixel **pixel)
 {
-    int fd = open(filename, O_WRONLY|O_CREAT|O_TRUNC,S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);  
-    static unsigned char header[54] = {66,77,0,0,0,0,0,0,0,0,54,0,0,0,40,0,0,0,0,0,0,0,0,0,0,0,1,0,24}; //rest is zeroes
-    unsigned int pixelBytesPerRow = width*sizeof(t_pixel);
-    unsigned int paddingBytesPerRow = (4-(pixelBytesPerRow%4))%4;
+    int fd;
+	fd = open(filename, O_WRONLY|O_CREAT|O_TRUNC,S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
+	unsigned char header[54];
+	ft_write_file_header(header);
+    unsigned int pixelBytesPerRow = width*sizeof(t_pixel); //// size of row of pixels image 
+    unsigned int paddingBytesPerRow = (4-(pixelBytesPerRow%4))%4; //// padding between 
     unsigned int* sizeOfFileEntry = (unsigned int*) &header[2];
     *sizeOfFileEntry = 54 + (pixelBytesPerRow+paddingBytesPerRow)*height;  
-    unsigned int* widthEntry = (unsigned int*) &header[18];    
+    unsigned int* widthEntry = (unsigned int*) &header[18]; /// image width
     *widthEntry = width;
-    unsigned int* heightEntry = (unsigned int*) &header[22];    
+    unsigned int* heightEntry = (unsigned int*) &header[22];    //// image height
     *heightEntry = height;    
     write(fd, header, 54);
     static unsigned char zeroes[3] = {0,0,0}; //for padding
@@ -196,7 +206,6 @@ int writeBMP(char* filename,  int width,  int height,t_pixel **pixel)
 		row++;
     }
     close(fd);
-    return 0;
 }
 
 void make_image(t_scene *scene)
