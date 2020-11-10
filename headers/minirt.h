@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/10/30 11:40:39 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/10 20:09:49 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,6 +331,17 @@ typedef struct s_obj_properties
 }t_obj_properties;
 
 /************************** bmp *************************/
+
+typedef struct s_bmp
+{
+	int fd;
+	unsigned int pixelBytesPerRow;
+	unsigned int paddingBytesPerRow;
+	unsigned int* sizeOfFileEntry;
+	unsigned int* widthEntry;
+	unsigned int* heightEntry;
+	
+}t_bmp;
 
 
 
