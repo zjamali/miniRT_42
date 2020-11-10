@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/10 19:17:50 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/10 19:33:39 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,18 +178,14 @@ int main(int argc, char **argv)
 
 /**************** BMP image ******************/
 
-void ft_write_file_header(unsigned char *header,t_scene *scene)
+void ft_write_file_header(unsigned char *header)
 {
 	header[0] = 66; /// 'B'
 	header[1] = 77; /// 'M'
-	header[4] = 54 + (scene->resolution.width * scene->resolution.height) * 4;
 	header[10] = 54;
 	header[14] = 40;  /// iamge header size must at least 40 
-	header[18] = scene->resolution.width;
-	header[22] = scene->resolution.height;
 	header[26] = 1;
-	header[28] = scene->img->bits_per_pixel;
-	header[32] = (scene->resolution.width * scene->resolution.height) * 4;
+	header[28] = 24;
 }
 
 /*
@@ -238,14 +234,15 @@ void ft_make_image(t_scene *scene)
 int writeBMP(char* filename,  int width,  int height,t_pixel **pixel)
 {
     int fd = open(filename, O_WRONLY|O_CREAT|O_TRUNC,S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);  
-    static unsigned char header[54] = {66,77,0,0,0,0,0,0,0,0,54,0,0,0,40,0,0,0,0,0,0,0,0,0,0,0,1,0,24}; //rest is zeroes
+    static unsigned char header[54];
+	ft_write_file_header(header);
 	unsigned int pixelBytesPerRow = width*sizeof(t_pixel);
     unsigned int paddingBytesPerRow = (4-(pixelBytesPerRow%4))%4;
     unsigned int* sizeOfFileEntry = (unsigned int*) &header[2];
-    *sizeOfFileEntry = 54 + (pixelBytesPerRow+paddingBytesPerRow)*height;  
     unsigned int* widthEntry = (unsigned int*) &header[18];    
-    *widthEntry = width;
     unsigned int* heightEntry = (unsigned int*) &header[22];    
+    *sizeOfFileEntry = 54 + (pixelBytesPerRow+paddingBytesPerRow)*height;  
+    *widthEntry = width;
     *heightEntry = height;  
     write(fd, header, 54);
     static unsigned char zeroes[3] = {0,0,0}; //for padding
