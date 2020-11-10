@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/10 18:29:57 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/10 19:17:50 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,19 @@ void ft_render(t_scene *scene,t_camera *camera,int n)
 {
 	int i;
 	int j;
+	int k;
+	k = scene->resolution.height - 1;
 	n = 0;
 	j = 0;
+
+	i = 0;
+	scene->pixels = malloc(sizeof(t_pixel*) * scene->resolution.height);
+	while (i < scene->resolution.height)
+	{
+		scene->pixels[i] = malloc(sizeof(t_pixel) * scene->resolution.width);
+		i++;
+	}
+	
 	while(j < scene->resolution.height)
 	{
 		i = 0;
@@ -95,10 +106,12 @@ void ft_render(t_scene *scene,t_camera *camera,int n)
 		{
 			scene->ray = ft_ray_creating(scene,camera,i,j);
 			scene->color_of_pixel = ft_color_of_pixel(scene);
+			scene->pixels[k][i] = int_color_to_pixel(scene->color_of_pixel);
 			my_mlx_pixel_put(scene->img, i, j, scene->color_of_pixel);
 			i++;
 		}
 		j++;
+		k--;
 	}
 }
 
@@ -156,7 +169,7 @@ int main(int argc, char **argv)
 		{
 			printf("%d",scene->img->bits_per_pixel);
 			ft_render(scene,scene->camera,1);
-			ft_make_image(scene);
+			make_image(scene);
 		}
 	}
 	return 0;
@@ -165,7 +178,7 @@ int main(int argc, char **argv)
 
 /**************** BMP image ******************/
 
-void ft_write_file_header(char *header,t_scene *scene)
+void ft_write_file_header(unsigned char *header,t_scene *scene)
 {
 	header[0] = 66; /// 'B'
 	header[1] = 77; /// 'M'
@@ -179,7 +192,7 @@ void ft_write_file_header(char *header,t_scene *scene)
 	header[32] = (scene->resolution.width * scene->resolution.height) * 4;
 }
 
-
+/*
 void ft_make_image(t_scene *scene)
 {
 	int fd;
@@ -217,4 +230,38 @@ void ft_make_image(t_scene *scene)
 	write(fd,pixels,size);
 	free(pixels);
 	close(fd);
+}
+
+*/
+
+//supply an array of pixels[height][width] <- notice that height comes first
+int writeBMP(char* filename,  int width,  int height,t_pixel **pixel)
+{
+    int fd = open(filename, O_WRONLY|O_CREAT|O_TRUNC,S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);  
+    static unsigned char header[54] = {66,77,0,0,0,0,0,0,0,0,54,0,0,0,40,0,0,0,0,0,0,0,0,0,0,0,1,0,24}; //rest is zeroes
+	unsigned int pixelBytesPerRow = width*sizeof(t_pixel);
+    unsigned int paddingBytesPerRow = (4-(pixelBytesPerRow%4))%4;
+    unsigned int* sizeOfFileEntry = (unsigned int*) &header[2];
+    *sizeOfFileEntry = 54 + (pixelBytesPerRow+paddingBytesPerRow)*height;  
+    unsigned int* widthEntry = (unsigned int*) &header[18];    
+    *widthEntry = width;
+    unsigned int* heightEntry = (unsigned int*) &header[22];    
+    *heightEntry = height;  
+    write(fd, header, 54);
+    static unsigned char zeroes[3] = {0,0,0}; //for padding
+	int row;
+	row = 0;
+    while (row < height) {
+		write(fd,pixel[row],pixelBytesPerRow);
+        write(fd,zeroes,paddingBytesPerRow);
+		row++;
+    }
+    close(fd);
+    return 0;
+}
+
+void make_image(t_scene *scene)
+{
+	writeBMP("image.bmp" ,scene->resolution.width ,scene->resolution.height,scene->pixels);
+	
 }
