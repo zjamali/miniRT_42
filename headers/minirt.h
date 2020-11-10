@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/10 20:09:49 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/10 20:20:40 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -340,6 +340,8 @@ typedef struct s_bmp
 	unsigned int* sizeOfFileEntry;
 	unsigned int* widthEntry;
 	unsigned int* heightEntry;
+	unsigned char zeroes[3];
+	int row;
 	
 }t_bmp;
 
