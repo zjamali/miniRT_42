@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/09 14:37:46 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/10 18:29:57 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,17 +86,8 @@ void ft_render(t_scene *scene,t_camera *camera,int n)
 {
 	int i;
 	int j;
-
-	scene->pixels = malloc(sizeof(t_pixel*) * scene->resolution.height);
-	i = 0;
-	while (i < scene->resolution.height)
-	{
-		scene->pixels[i] = malloc(sizeof(t_pixel) * scene->resolution.width);
-		i++;
-	}
-
+	n = 0;
 	j = 0;
-	int k = scene->resolution.height - 1;
 	while(j < scene->resolution.height)
 	{
 		i = 0;
@@ -104,14 +95,10 @@ void ft_render(t_scene *scene,t_camera *camera,int n)
 		{
 			scene->ray = ft_ray_creating(scene,camera,i,j);
 			scene->color_of_pixel = ft_color_of_pixel(scene);
-			
-			scene->pixels[k][i] = int_color_to_pixel(scene->color_of_pixel);
-			if (n == 0)
-				my_mlx_pixel_put(scene->img, i, j, scene->color_of_pixel);
+			my_mlx_pixel_put(scene->img, i, j, scene->color_of_pixel);
 			i++;
 		}
 		j++;
-		k--;
 	}
 }
 
@@ -145,7 +132,7 @@ int ft_key_press(int keycode,t_scene *scene)
 
 
 void  make_image(t_scene *scene);
-
+void ft_make_image(t_scene *scene);
 int main(int argc, char **argv)
 {
 	t_scene *scene;
@@ -155,60 +142,79 @@ int main(int argc, char **argv)
 		scene = ft_scene_init(argv[1]);
 		scene = parsing(scene->fd,scene);
 		scene->mlx_ptr = mlx_init();
-		scene->win_ptr = mlx_new_window(scene->mlx_ptr,
-			scene->resolution.width,scene->resolution.height,argv[1]);
 		scene->img = ft_creat_img(scene,scene->mlx_ptr);
-		ft_render(scene,scene->camera,0);
-		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
-			scene->img->img, 0, 0);
-		mlx_hook(scene->win_ptr, 2,0, ft_key_press,scene);
+		if (argc == 2)
+		{
+			scene->win_ptr = mlx_new_window(scene->mlx_ptr,
+			scene->resolution.width,scene->resolution.height,argv[1]);
+			ft_render(scene,scene->camera,0);
+			mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,scene->img->img, 0, 0);
+			mlx_hook(scene->win_ptr, 2,0, ft_key_press,scene);
+			mlx_loop(scene->mlx_ptr);
+		}
 		if (argc > 2 && !ft_strncmp(argv[2] , "--save",6))
-			make_image(scene);
-		mlx_loop(scene->mlx_ptr);
+		{
+			printf("%d",scene->img->bits_per_pixel);
+			ft_render(scene,scene->camera,1);
+			ft_make_image(scene);
+		}
 	}
 	return 0;
 }
 
 
 /**************** BMP image ******************/
-void ft_write_file_header(unsigned char *header)
+
+void ft_write_file_header(char *header,t_scene *scene)
 {
 	header[0] = 66; /// 'B'
 	header[1] = 77; /// 'M'
+	header[4] = 54 + (scene->resolution.width * scene->resolution.height) * 4;
 	header[10] = 54;
 	header[14] = 40;  /// iamge header size must at least 40 
+	header[18] = scene->resolution.width;
+	header[22] = scene->resolution.height;
 	header[26] = 1;
-	header[28] = 24;
+	header[28] = scene->img->bits_per_pixel;
+	header[32] = (scene->resolution.width * scene->resolution.height) * 4;
 }
 
-//supply an array of pixels[height][width] <- notice that height comes first
-void writeBMP(char* filename,  int width,  int height,t_pixel **pixel)
-{
-    int fd;
-	fd = open(filename, O_WRONLY|O_CREAT|O_TRUNC,S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
-	unsigned char header[54];
-	ft_write_file_header(header);
-    unsigned int pixelBytesPerRow = width*sizeof(t_pixel); //// size of row of pixels image 
-    unsigned int paddingBytesPerRow = (4-(pixelBytesPerRow%4))%4; //// padding between 
-    unsigned int* sizeOfFileEntry = (unsigned int*) &header[2];
-    *sizeOfFileEntry = 54 + (pixelBytesPerRow+paddingBytesPerRow)*height;  
-    unsigned int* widthEntry = (unsigned int*) &header[18]; /// image width
-    *widthEntry = width;
-    unsigned int* heightEntry = (unsigned int*) &header[22];    //// image height
-    *heightEntry = height;    
-    write(fd, header, 54);
-    static unsigned char zeroes[3] = {0,0,0}; //for padding
-	int row;
-	row = 0;
-    while (row < height) {
-		write(fd,pixel[row],pixelBytesPerRow);
-        write(fd,zeroes,paddingBytesPerRow);
-		row++;
-    }
-    close(fd);
-}
 
-void make_image(t_scene *scene)
+void ft_make_image(t_scene *scene)
 {
-	writeBMP("image.bmp" ,scene->resolution.width ,scene->resolution.height,scene->pixels);
+	int fd;
+	int size = scene->resolution.width * scene->resolution.height * 4;
+	
+	fd = open("image.bmp",O_RDWR|O_CREAT);
+	char header[54] = { 0 };
+    strcpy(header, "BM");
+    memset(&header[2],  (int)(54 + size), 1);
+    memset(&header[10], (int)54, 1);//always 54
+    memset(&header[14], (int)40, 1);//always 40
+    memset(&header[18], (int)scene->resolution.width, 1);
+    memset(&header[22], (int)scene->resolution.height, 1);
+    memset(&header[26], (short)1, 1);
+    memset(&header[28], (short)32, 1);//32bit
+    memset(&header[34], (int)size, 1);//pixel size
+
+	//ft_write_file_header(header,scene);
+	char *pixels = malloc(sizeof(t_pixel) * size);
+    write(fd,header,54);
+	int i;
+	int j;
+	j =  0;
+	while (j < scene->resolution.height)
+	{
+		i = 0;
+		while(i < scene->resolution.width)
+		{
+			pixels[ scene->resolution.height * j + i ] = 
+				*scene->img->addr + (j * scene->resolution.height + i); 
+			i++;
+		}
+		j++;	
+	}
+	write(fd,pixels,size);
+	free(pixels);
+	close(fd);
 }
