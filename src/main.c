@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/10 19:33:39 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/10 19:38:57 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,25 +231,25 @@ void ft_make_image(t_scene *scene)
 */
 
 //supply an array of pixels[height][width] <- notice that height comes first
-int writeBMP(char* filename,  int width,  int height,t_pixel **pixel)
+int writeBMP(t_scene *scene  /*char* filename,  int width,  int height,t_pixel **pixel*/)
 {
-    int fd = open(filename, O_WRONLY|O_CREAT|O_TRUNC,S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);  
+    int fd = open("image.bmp", O_WRONLY|O_CREAT|O_TRUNC,S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);  
     static unsigned char header[54];
 	ft_write_file_header(header);
-	unsigned int pixelBytesPerRow = width*sizeof(t_pixel);
+	unsigned int pixelBytesPerRow = scene->resolution.width*sizeof(t_pixel);
     unsigned int paddingBytesPerRow = (4-(pixelBytesPerRow%4))%4;
     unsigned int* sizeOfFileEntry = (unsigned int*) &header[2];
     unsigned int* widthEntry = (unsigned int*) &header[18];    
     unsigned int* heightEntry = (unsigned int*) &header[22];    
-    *sizeOfFileEntry = 54 + (pixelBytesPerRow+paddingBytesPerRow)*height;  
-    *widthEntry = width;
-    *heightEntry = height;  
+    *sizeOfFileEntry = 54 + (pixelBytesPerRow+paddingBytesPerRow)*scene->resolution.height;  
+    *widthEntry = scene->resolution.width;
+    *heightEntry = scene->resolution.height;
     write(fd, header, 54);
     static unsigned char zeroes[3] = {0,0,0}; //for padding
 	int row;
 	row = 0;
-    while (row < height) {
-		write(fd,pixel[row],pixelBytesPerRow);
+    while (row < scene->resolution.height) {
+		write(fd,scene->pixels[row],pixelBytesPerRow);
         write(fd,zeroes,paddingBytesPerRow);
 		row++;
     }
@@ -259,6 +259,7 @@ int writeBMP(char* filename,  int width,  int height,t_pixel **pixel)
 
 void make_image(t_scene *scene)
 {
-	writeBMP("image.bmp" ,scene->resolution.width ,scene->resolution.height,scene->pixels);
+	writeBMP(scene);
+	//writeBMP("image.bmp" ,scene->resolution.width ,scene->resolution.height,scene->pixels);
 	
 }
