@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/10 20:20:40 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/11 09:18:47 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,6 +334,7 @@ typedef struct s_obj_properties
 
 typedef struct s_bmp
 {
+	unsigned char header[54];
 	int fd;
 	unsigned int pixelBytesPerRow;
 	unsigned int paddingBytesPerRow;

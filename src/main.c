@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/11 09:14:53 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/11 09:24:35 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,19 +176,19 @@ int main(int argc, char **argv)
 
 /**************** BMP image ******************/
 
-void ft_write_file_header(unsigned char *header,t_bmp *image,t_scene *scene)
+void ft_write_header(/*unsigned char *header,*/t_bmp *image,t_scene *scene)
 {
-	header[0] = 66; /// 'B'
-	header[1] = 77; /// 'M'
-	header[10] = 54;
-	header[14] = 40;  /// iamge header size must at least 40 
-	header[26] = 1;
-	header[28] = 24;
+	image->header[0] = 66; /// 'B'
+	image->header[1] = 77; /// 'M'
+	image->header[10] = 54;
+	image->header[14] = 40;  /// iamge header size must at least 40 
+	image->header[26] = 1; /// number of planes
+	image->header[28] = 24; /// bpp
 	image->pixelBytesPerRow = scene->resolution.width*sizeof(t_pixel);
 	image->paddingBytesPerRow = (4-(image->pixelBytesPerRow%4))%4;
-    image->sizeOfFileEntry = (unsigned int*) &header[2];
-    image->widthEntry = (unsigned int*) &header[18];    
-    image->heightEntry = (unsigned int*) &header[22];      
+    image->sizeOfFileEntry = (unsigned int*) &image->header[2];
+    image->widthEntry = (unsigned int*) &image->header[18];    
+    image->heightEntry = (unsigned int*) &image->header[22];      
     *image->sizeOfFileEntry = 54 + (image->pixelBytesPerRow+image->paddingBytesPerRow)*scene->resolution.height;  
     *image->widthEntry = scene->resolution.width;
     *image->heightEntry = scene->resolution.height;
@@ -196,40 +196,17 @@ void ft_write_file_header(unsigned char *header,t_bmp *image,t_scene *scene)
 	image->zeroes[1] = 0;
 	image->zeroes[2] = 0; //{0,0,0}; //for padding
 }
+
 //supply an array of pixels[height][width] <- notice that height comes first
 void ft_write_bmp(t_scene *scene)
 {
 	t_bmp *image;
+	
 	image = malloc(sizeof(t_bmp));
-    static unsigned char header[54];
-	
-	ft_write_file_header(header,image,scene);
-	//image.pixelBytesPerRow = scene->resolution.width*sizeof(t_pixel);
-	//image.paddingBytesPerRow = (4-(image.pixelBytesPerRow%4))%4;
-    //image.sizeOfFileEntry = (unsigned int*) &header[2];
-    //image.widthEntry = (unsigned int*) &header[18];    
-    //image.heightEntry = (unsigned int*) &header[22];      
-    //*image.sizeOfFileEntry = 54 + (image.pixelBytesPerRow+image.paddingBytesPerRow)*scene->resolution.height;  
-    //*image.widthEntry = scene->resolution.width;
-    //*image.heightEntry = scene->resolution.height;
-	
-	//image.fd = open("image.bmp", O_WRONLY|O_CREAT|O_TRUNC,
-	//	S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
-    //write(image.fd, header, 54);
-    //image.zeroes[0] = 0;
-	//image.zeroes[1] = 0;
-	//image.zeroes[2] = 0; //{0,0,0}; //for padding
-	//image.row = 0;
-    //while (image.row < scene->resolution.height) {
-	//	write(image.fd,scene->pixels[image.row],image.pixelBytesPerRow);
-    //    write(image.fd,image.zeroes,image.paddingBytesPerRow);
-	//	image.row++;
-    //}
-    //close(image.fd);
-
+	ft_write_header(image,scene);  /// writing header 
 	image->fd = open("image.bmp", O_WRONLY|O_CREAT|O_TRUNC,
 		S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
-	write(image->fd,header,54);
+	write(image->fd,image->header,54);
 	image->row = 0;
     while (image->row < scene->resolution.height) {
 		write(image->fd,scene->pixels[image->row],image->pixelBytesPerRow);
