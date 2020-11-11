@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/06 14:41:46 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/11 11:17:09 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -505,9 +505,9 @@ void    ft_check_scene(t_scene *scene)
 {
     int height;
     int width;
-
-    width = 1080;
-    height = 720;
+    /// imac size 5120 x 2880
+    width = 5120;
+    height = 2880;
     //mlx_get_screen_size(scene->mlx_ptr,&width,&height);
     if (scene->camera == NULL)
         ft_print_error("No camera in the scene,you need at least one camera in the scene.");

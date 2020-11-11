@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/11 09:24:35 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/11 12:51:24 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ t_scene *ft_scene_init(char *file_name)
 	scene->camera = NULL;
 	scene->light = NULL;
 	scene->objects = NULL;
+	scene->img = NULL;
 	return scene;
 }
 
@@ -87,18 +88,16 @@ void ft_render(t_scene *scene,t_camera *camera,int n)
 	int i;
 	int j;
 	int k;
-	k = scene->resolution.height - 1;
-	n = 0;
-	j = 0;
 
-	i = 0;
-	scene->pixels = malloc(sizeof(t_pixel*) * scene->resolution.height);
-	while (i < scene->resolution.height)
+	k = scene->resolution.height - 1;
+	j = 0;
+	if (n == 1)
 	{
-		scene->pixels[i] = malloc(sizeof(t_pixel) * scene->resolution.width);
-		i++;
+		i = 0;
+		scene->pixels = malloc(sizeof(t_pixel*) * scene->resolution.height);
+		while (i < scene->resolution.height)
+			scene->pixels[i++] = malloc(sizeof(t_pixel) * scene->resolution.width);
 	}
-	
 	while(j < scene->resolution.height)
 	{
 		i = 0;
@@ -106,8 +105,10 @@ void ft_render(t_scene *scene,t_camera *camera,int n)
 		{
 			scene->ray = ft_ray_creating(scene,camera,i,j);
 			scene->color_of_pixel = ft_color_of_pixel(scene);
-			scene->pixels[k][i] = int_color_to_pixel(scene->color_of_pixel);
-			my_mlx_pixel_put(scene->img, i, j, scene->color_of_pixel);
+			if (n == 1)
+				scene->pixels[k][i] = int_color_to_pixel(scene->color_of_pixel);
+			if (n == 0)
+				my_mlx_pixel_put(scene->img, i, j, scene->color_of_pixel);
 			i++;
 		}
 		j++;
@@ -145,6 +146,13 @@ int ft_key_press(int keycode,t_scene *scene)
 
 
 void ft_write_bmp(t_scene *scene);
+
+int ft_close(t_scene *scene)
+{
+	(void)scene;
+	exit(0);
+}
+
 int main(int argc, char **argv)
 {
 	t_scene *scene;
@@ -153,18 +161,19 @@ int main(int argc, char **argv)
 	{
 		scene = ft_scene_init(argv[1]);
 		scene = parsing(scene->fd,scene);
-		scene->mlx_ptr = mlx_init();
-		scene->img = ft_creat_img(scene,scene->mlx_ptr);
 		if (argc == 2)
 		{
+			scene->mlx_ptr = mlx_init();
 			scene->win_ptr = mlx_new_window(scene->mlx_ptr,
 			scene->resolution.width,scene->resolution.height,argv[1]);
+			scene->img = ft_creat_img(scene,scene->mlx_ptr);
 			ft_render(scene,scene->camera,0);
 			mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,scene->img->img, 0, 0);
 			mlx_hook(scene->win_ptr, 2,0, ft_key_press,scene);
+			mlx_hook(scene->win_ptr,17,0,ft_close,scene); /// red button
 			mlx_loop(scene->mlx_ptr);
 		}
-		if (argc > 2 && !ft_strncmp(argv[2] , "--save",6))
+		if (argc > 2 && !ft_strncmp(argv[2] , "--save",7)) /// save 
 		{
 			ft_render(scene,scene->camera,1);
 			ft_write_bmp(scene);
@@ -187,8 +196,8 @@ void ft_write_header(/*unsigned char *header,*/t_bmp *image,t_scene *scene)
 	image->pixelBytesPerRow = scene->resolution.width*sizeof(t_pixel);
 	image->paddingBytesPerRow = (4-(image->pixelBytesPerRow%4))%4;
     image->sizeOfFileEntry = (unsigned int*) &image->header[2];
-    image->widthEntry = (unsigned int*) &image->header[18];    
-    image->heightEntry = (unsigned int*) &image->header[22];      
+    image->widthEntry = (unsigned int*) &image->header[18];
+    image->heightEntry = (unsigned int*) &image->header[22];
     *image->sizeOfFileEntry = 54 + (image->pixelBytesPerRow+image->paddingBytesPerRow)*scene->resolution.height;  
     *image->widthEntry = scene->resolution.width;
     *image->heightEntry = scene->resolution.height;
@@ -201,7 +210,7 @@ void ft_write_header(/*unsigned char *header,*/t_bmp *image,t_scene *scene)
 void ft_write_bmp(t_scene *scene)
 {
 	t_bmp *image;
-	
+
 	image = malloc(sizeof(t_bmp));
 	ft_write_header(image,scene);  /// writing header 
 	image->fd = open("image.bmp", O_WRONLY|O_CREAT|O_TRUNC,
