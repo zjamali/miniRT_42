@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/11 12:51:24 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/11 13:36:35 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ void ft_write_bmp(t_scene *scene);
 int ft_close(t_scene *scene)
 {
 	(void)scene;
-	exit(0);
+	exit(EXIT_SUCCESS);
 }
 
 int main(int argc, char **argv)
@@ -201,21 +201,21 @@ void ft_write_header(/*unsigned char *header,*/t_bmp *image,t_scene *scene)
     *image->sizeOfFileEntry = 54 + (image->pixelBytesPerRow+image->paddingBytesPerRow)*scene->resolution.height;  
     *image->widthEntry = scene->resolution.width;
     *image->heightEntry = scene->resolution.height;
-	image->zeroes[0] = 0;
-	image->zeroes[1] = 0;
-	image->zeroes[2] = 0; //{0,0,0}; //for padding
 }
 
 //supply an array of pixels[height][width] <- notice that height comes first
 void ft_write_bmp(t_scene *scene)
 {
 	t_bmp *image;
-
+	
 	image = malloc(sizeof(t_bmp));
 	ft_write_header(image,scene);  /// writing header 
 	image->fd = open("image.bmp", O_WRONLY|O_CREAT|O_TRUNC,
 		S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
 	write(image->fd,image->header,54);
+	image->zeroes[0] = 0;
+	image->zeroes[1] = 0;
+	image->zeroes[2] = 0; //{0,0,0}; //for padding
 	image->row = 0;
     while (image->row < scene->resolution.height) {
 		write(image->fd,scene->pixels[image->row],image->pixelBytesPerRow);
