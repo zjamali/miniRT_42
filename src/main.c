@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/10 20:28:29 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/11 09:14:53 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ int main(int argc, char **argv)
 
 /**************** BMP image ******************/
 
-void ft_write_file_header(unsigned char *header)
+void ft_write_file_header(unsigned char *header,t_bmp *image,t_scene *scene)
 {
 	header[0] = 66; /// 'B'
 	header[1] = 77; /// 'M'
@@ -184,34 +184,57 @@ void ft_write_file_header(unsigned char *header)
 	header[14] = 40;  /// iamge header size must at least 40 
 	header[26] = 1;
 	header[28] = 24;
+	image->pixelBytesPerRow = scene->resolution.width*sizeof(t_pixel);
+	image->paddingBytesPerRow = (4-(image->pixelBytesPerRow%4))%4;
+    image->sizeOfFileEntry = (unsigned int*) &header[2];
+    image->widthEntry = (unsigned int*) &header[18];    
+    image->heightEntry = (unsigned int*) &header[22];      
+    *image->sizeOfFileEntry = 54 + (image->pixelBytesPerRow+image->paddingBytesPerRow)*scene->resolution.height;  
+    *image->widthEntry = scene->resolution.width;
+    *image->heightEntry = scene->resolution.height;
+	image->zeroes[0] = 0;
+	image->zeroes[1] = 0;
+	image->zeroes[2] = 0; //{0,0,0}; //for padding
 }
 //supply an array of pixels[height][width] <- notice that height comes first
 void ft_write_bmp(t_scene *scene)
 {
-	t_bmp image;
+	t_bmp *image;
+	image = malloc(sizeof(t_bmp));
     static unsigned char header[54];
 	
-	ft_write_file_header(header);
-	image.pixelBytesPerRow = scene->resolution.width*sizeof(t_pixel);
-	image.paddingBytesPerRow = (4-(image.pixelBytesPerRow%4))%4;
-    image.sizeOfFileEntry = (unsigned int*) &header[2];
-    image.widthEntry = (unsigned int*) &header[18];    
-    image.heightEntry = (unsigned int*) &header[22];      
-    *image.sizeOfFileEntry = 54 + (image.pixelBytesPerRow+image.paddingBytesPerRow)*scene->resolution.height;  
-    *image.widthEntry = scene->resolution.width;
-    *image.heightEntry = scene->resolution.height;
-	image.fd = open("image.bmp", O_WRONLY|O_CREAT|O_TRUNC,
-		S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
-    write(image.fd, header, 54);
-    image.zeroes[0] = 0;
-	image.zeroes[1] = 0;
-	image.zeroes[2] = 0; //{0,0,0}; //for padding
+	ft_write_file_header(header,image,scene);
+	//image.pixelBytesPerRow = scene->resolution.width*sizeof(t_pixel);
+	//image.paddingBytesPerRow = (4-(image.pixelBytesPerRow%4))%4;
+    //image.sizeOfFileEntry = (unsigned int*) &header[2];
+    //image.widthEntry = (unsigned int*) &header[18];    
+    //image.heightEntry = (unsigned int*) &header[22];      
+    //*image.sizeOfFileEntry = 54 + (image.pixelBytesPerRow+image.paddingBytesPerRow)*scene->resolution.height;  
+    //*image.widthEntry = scene->resolution.width;
+    //*image.heightEntry = scene->resolution.height;
 	
-	image.row = 0;
-    while (image.row < scene->resolution.height) {
-		write(image.fd,scene->pixels[image.row],image.pixelBytesPerRow);
-        write(image.fd,image.zeroes,image.paddingBytesPerRow);
-		image.row++;
+	//image.fd = open("image.bmp", O_WRONLY|O_CREAT|O_TRUNC,
+	//	S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
+    //write(image.fd, header, 54);
+    //image.zeroes[0] = 0;
+	//image.zeroes[1] = 0;
+	//image.zeroes[2] = 0; //{0,0,0}; //for padding
+	//image.row = 0;
+    //while (image.row < scene->resolution.height) {
+	//	write(image.fd,scene->pixels[image.row],image.pixelBytesPerRow);
+    //    write(image.fd,image.zeroes,image.paddingBytesPerRow);
+	//	image.row++;
+    //}
+    //close(image.fd);
+
+	image->fd = open("image.bmp", O_WRONLY|O_CREAT|O_TRUNC,
+		S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
+	write(image->fd,header,54);
+	image->row = 0;
+    while (image->row < scene->resolution.height) {
+		write(image->fd,scene->pixels[image->row],image->pixelBytesPerRow);
+        write(image->fd,image->zeroes,image->paddingBytesPerRow);
+		image->row++;
     }
-    close(image.fd);
+    close(image->fd);
 }
