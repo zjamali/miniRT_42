@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/12 18:16:39 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/12 19:09:49 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -556,7 +556,7 @@ void parse_translation(char **line,t_scene *scene)
 {
     char **tran;
     if (line[1] == NULL)
-        ft_print_error("you ave to specify the transation coordination");
+        ft_print_error("you have to specify the transation coordination");
     else
     {
         tran = ft_split(line[1],',');
@@ -567,9 +567,41 @@ void parse_translation(char **line,t_scene *scene)
         }
     }
 }
+t_vector ft_calcule_rotaion_x_axis(double angle,t_vector orientation)
+{
+    angle = angle * PI /180;
+    t_vector new_orientaion;
+    new_orientaion.y = orientation.y * cos(angle) - orientation.z * sin(angle);
+    new_orientaion.z = orientation.y * sin(angle) +  orientation.z * cos(angle);
+    new_orientaion.x = orientation.x;
+    return new_orientaion;
+}
+t_vector ft_calcule_rotaion(t_vector orientation,t_vector rotaion)
+{
+    t_vector new_orientation;
+    if (rotaion.x != 0)
+    {
+        new_orientation =  ft_calcule_rotaion_x_axis(rotaion.x,orientation);
+        return new_orientation;
+    }
+    return orientation;
+}
 void ft_make_rotation(t_scene *scene)
 {
-    (void)scene;
+     write(1,"rotation\n",ft_strlen("rotation\n"));
+    if (scene->element_to_transform->wich_element == 'c')
+    {
+        t_camera *cam;
+        cam = scene->element_to_transform->element;
+        cam->orientaion = ft_calcule_rotaion(cam->orientaion,scene->element_to_transform->transform.rot);
+    }
+    //else if (scene->element_to_transform->wich_element == 'p')
+    //    ft_rotate_plane(scene);
+    //else if (scene->element_to_transform->wich_element == 'q')
+    //    ft_rotate_square(scene);
+    //else if (scene->element_to_transform->wich_element == 'y')
+    //    ft_rotate_cylinder(scene);
+    scene->element_to_transform->transform.rot = bzero_vector(scene->element_to_transform->transform.rot);
 }
 
 void parse_rotation(char **line,t_scene *scene)
@@ -577,15 +609,16 @@ void parse_rotation(char **line,t_scene *scene)
     
     char **rot;
     if (line[1] == NULL)
-        return ;
+        ft_print_error("you have to specify the rotation angles");
     else
     {
         rot = ft_split(line[1],',');
-        scene->element_to_transform->transform.rot = ft_parse_coord(rot);
-        if (scene->element_to_transform->element != NULL)
+        if (scene->element_to_transform != NULL)
+        {
+            scene->element_to_transform->transform.rot = ft_parse_coord(rot);
             ft_make_rotation(scene);
-        else
-            scene->element_to_transform->transform.rot = bzero_vector(scene->element_to_transform->transform.rot);
+        }
+        
     }
 }
 
@@ -610,14 +643,14 @@ void    parsing_line(char *line,t_scene *scene)
         parsing_sphere(split,scene);
     else if (ft_strncmp(split[0],"sq",2) == 0)
         parsing_square(split,scene);
-    else if (ft_strncmp(split[0],"tr ",3) == 0)
+    else if (ft_strncmp(split[0],"tr",3) == 0)
         parsing_triangle(split,scene);
     else if (ft_strncmp(split[0],"cy",2) == 0)
         parsing_cylinder(split,scene);
     else if (ft_strncmp(split[0],"tra",3) == 0)
         parse_translation(split,scene);
-    //else if (ft_strncmp(split[0],"rot",3) == 0)
-    //    parse_rotation(split,scene);
+    else if (ft_strncmp(split[0],"rot",3) == 0)
+        parse_rotation(split,scene);
     
 }
 
