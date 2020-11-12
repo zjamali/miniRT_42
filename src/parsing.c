@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/11 11:17:09 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/12 18:16:39 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,15 @@ t_vector    ft_parse_coord(char **coord)
     return coords;
 }
 
+void  ft_element_can_transforme(t_scene *scene,char wich_element,void *the_element)
+{
+    if (scene->element_to_transform == NULL)
+        scene->element_to_transform = malloc(sizeof(t_element_to_transform));
+    
+    scene->element_to_transform->wich_element = wich_element;
+    scene->element_to_transform->element = the_element;
+}
+
 void    parsing_camera(char **cam,t_scene *scene)
 {
     char **origin;
@@ -214,6 +223,7 @@ void    parsing_camera(char **cam,t_scene *scene)
     if (camera->fov > 180 || camera->fov < 0)
         ft_print_error("camera is field of view must be between 0 and 180");
     ft_lstadd_back_camera(&scene->camera,camera);
+    ft_element_can_transforme(scene,'c',camera);
 }
 
 void    parsing_light(char ** light_line,t_scene *scene)
@@ -240,6 +250,7 @@ void    parsing_light(char ** light_line,t_scene *scene)
     light->intensity = intensity;
     light->next = NULL;
     ft_lstadd_back_light(&scene->light,light);
+    ft_element_can_transforme(scene,'l',light);
 }
 void    ft_check_plane(t_obj_properties obj)
 {
@@ -276,6 +287,7 @@ void    parsing_plan(char **pl,t_scene *scene)
     new_object->color = &plane->color;
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
+    ft_element_can_transforme(scene,'p',new_object);
 }
 void    ft_check_sphere(t_obj_properties obj)
 {
@@ -314,6 +326,7 @@ void    parsing_sphere(char **sph,t_scene *scene)
     new_object->radius = sphere->radius;
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
+    ft_element_can_transforme(scene,'s',new_object);
 }
 void    ft_check_square(t_obj_properties obj)
 {
@@ -356,6 +369,7 @@ void    parsing_square(char **sqr,t_scene *scene)
     new_object->color = &square->color;
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
+    ft_element_can_transforme(scene,'q',new_object);
 }
 void    ft_check_triangle(t_obj_properties obj)
 {
@@ -398,6 +412,7 @@ void    parsing_triangle(char **tr,t_scene *scene)
 	new_object->v3[2] = triangle->vectors[2];
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
+    ft_element_can_transforme(scene,'t',new_object);
 }
 void    ft_check_cylinder(t_obj_properties obj)
 {
@@ -445,6 +460,133 @@ void    parsing_cylinder(char **cy,t_scene *scene)
     new_object->diameter = cylinder->diameter;
     new_object->next = NULL;
     ft_lstadd_back(&scene->objects,new_object);
+    ft_element_can_transforme(scene,'y',new_object);
+}
+void ft_translate_sphere(t_scene *scene)
+{
+    t_object *obj;
+    t_sphere *sp;
+    
+    obj = scene->element_to_transform->element;
+    sp = obj->object;
+    sp->origin = vectorsadd(sp->origin,scene->element_to_transform->transform.trans);
+    obj->origin = vectorsadd(obj->origin,scene->element_to_transform->transform.trans);
+
+}
+void ft_translate_plane(t_scene *scene)
+{
+    t_object *obj;
+    t_plane *plan;
+    
+    obj = scene->element_to_transform->element;
+    plan = obj->object;
+    plan->coord = vectorsadd(plan->coord,scene->element_to_transform->transform.trans);
+    obj->origin = vectorsadd(obj->origin,scene->element_to_transform->transform.trans);
+    
+    
+}
+
+void ft_translate_square(t_scene *scene)
+{
+    t_object *obj;
+    t_square *square;
+    
+    obj = scene->element_to_transform->element;
+    square = obj->object;
+    square->center = vectorsadd(square->center,scene->element_to_transform->transform.trans);
+    obj->origin = vectorsadd(obj->origin,scene->element_to_transform->transform.trans);
+
+}
+void ft_translate_traiangle(t_scene *scene)
+{
+    t_object *obj;
+    t_triangle *trn;
+    obj = scene->element_to_transform->element;
+    trn = obj->object;
+    
+    obj->v3[0] = vectorsadd(obj->v3[0],scene->element_to_transform->transform.trans);
+    obj->v3[1] = vectorsadd(obj->v3[1],scene->element_to_transform->transform.trans);
+    obj->v3[2] = vectorsadd(obj->v3[2],scene->element_to_transform->transform.trans);
+    
+    trn->vectors[0] = vectorsadd(trn->vectors[0],scene->element_to_transform->transform.trans);
+    trn->vectors[1] = vectorsadd(trn->vectors[1],scene->element_to_transform->transform.trans);
+    trn->vectors[2] = vectorsadd(trn->vectors[2],scene->element_to_transform->transform.trans);
+    
+}
+void ft_translate_cylinder(t_scene *scene)
+{
+    t_object *obj;
+    t_cylinder *cy;
+
+    obj = scene->element_to_transform->element;
+    cy = obj->object;
+    obj->origin = vectorsadd(obj->origin,scene->element_to_transform->transform.trans);
+    cy->coord = vectorsadd(cy->coord,scene->element_to_transform->transform.trans);
+    
+}
+void ft_make_translation(t_scene *scene)
+{
+    write(1,"translation\n",ft_strlen("translation\n"));
+    if (scene->element_to_transform->wich_element == 'l')
+    {
+        t_light *light;
+        light = scene->element_to_transform->element;
+        light->origin = vectorsadd(light->origin,scene->element_to_transform->transform.trans);
+    }
+    else if (scene->element_to_transform->wich_element == 'c')
+    {
+        t_camera *cam;
+        cam = scene->element_to_transform->element;
+        cam->lookfrom = vectorsadd(cam->lookfrom,scene->element_to_transform->transform.trans);
+    }
+    else if (scene->element_to_transform->wich_element == 's')
+        ft_translate_sphere(scene);
+    else if (scene->element_to_transform->wich_element == 'p')
+        ft_translate_plane(scene);
+    else if (scene->element_to_transform->wich_element == 'q')
+        ft_translate_square(scene);
+    else if (scene->element_to_transform->wich_element == 't')
+        ft_translate_traiangle(scene);
+    else if (scene->element_to_transform->wich_element == 'y')
+        ft_translate_cylinder(scene);
+    scene->element_to_transform->transform.trans = bzero_vector(scene->element_to_transform->transform.trans);
+}
+
+void parse_translation(char **line,t_scene *scene)
+{
+    char **tran;
+    if (line[1] == NULL)
+        ft_print_error("you ave to specify the transation coordination");
+    else
+    {
+        tran = ft_split(line[1],',');
+        if (scene->element_to_transform != NULL)
+        {
+            scene->element_to_transform->transform.trans = ft_parse_coord(tran);
+            ft_make_translation(scene);
+        }
+    }
+}
+void ft_make_rotation(t_scene *scene)
+{
+    (void)scene;
+}
+
+void parse_rotation(char **line,t_scene *scene)
+{
+    
+    char **rot;
+    if (line[1] == NULL)
+        return ;
+    else
+    {
+        rot = ft_split(line[1],',');
+        scene->element_to_transform->transform.rot = ft_parse_coord(rot);
+        if (scene->element_to_transform->element != NULL)
+            ft_make_rotation(scene);
+        else
+            scene->element_to_transform->transform.rot = bzero_vector(scene->element_to_transform->transform.rot);
+    }
 }
 
 void    parsing_line(char *line,t_scene *scene)
@@ -468,10 +610,15 @@ void    parsing_line(char *line,t_scene *scene)
         parsing_sphere(split,scene);
     else if (ft_strncmp(split[0],"sq",2) == 0)
         parsing_square(split,scene);
-    else if (ft_strncmp(split[0],"tr",2) == 0)
+    else if (ft_strncmp(split[0],"tr ",3) == 0)
         parsing_triangle(split,scene);
     else if (ft_strncmp(split[0],"cy",2) == 0)
         parsing_cylinder(split,scene);
+    else if (ft_strncmp(split[0],"tra",3) == 0)
+        parse_translation(split,scene);
+    //else if (ft_strncmp(split[0],"rot",3) == 0)
+    //    parse_rotation(split,scene);
+    
 }
 
 void    ft_check_element(char *line)
@@ -481,24 +628,29 @@ void    ft_check_element(char *line)
     if (split[0][0] != 'R' && split[0][0] != 'A' && split[0][0] != 'l'
         && ft_strncmp(split[0],"c",2) && ft_strncmp(split[0],"pl",2) && 
         ft_strncmp(split[0],"sp",2) && ft_strncmp(split[0],"sq",2) &&
-        ft_strncmp(split[0],"tr",2) && ft_strncmp(split[0],"cy",2))
+        ft_strncmp(split[0],"tr",2) && ft_strncmp(split[0],"cy",2) &&
+        ft_strncmp(split[0],"rot",3) && ft_strncmp(split[0],"tra",3))
             ft_print_error("unknown element in the scene.");
 }
 
-void    ft_check_line(char *line)
+int    ft_check_line(char *line)
 {
     int i;
     i =  0;
+    while (line[i] == ' ' || line[i] == '\t')
+        i++;
+    if (line[i] == '\0')
+        return 0;
     ft_check_element(line);
+
     while (line[i] != '\0')
     {
         if (line[i] != ' ' && line[i] != '\t' && line [i] != ',' && 
         line[i] != '.' && (line[i] < '0' && line[i] > '9'))
             ft_print_error("undifined symbole in the scene file");
-        if (line[i] == ' ' && line[i + 1] == '\0')
-            ft_print_error("line with spaces.");
         i++;
     }
+    return (1);
 }
 
 void    ft_check_scene(t_scene *scene)
@@ -526,15 +678,15 @@ t_scene *parsing(int fd,t_scene *scene)
 	{
         if (line[0])  /// skip empty line
         {
-            ft_check_line(line);
-            parsing_line(line,scene);
+            if(ft_check_line(line))
+                parsing_line(line,scene);
 		    free(line);
         }
 	}
     if (line[0])  /// skip empty line
         {
-            ft_check_line(line);
-            parsing_line(line,scene);
+            if (ft_check_line(line))
+                parsing_line(line,scene);
 		    free(line);
         }
     ft_check_scene(scene);

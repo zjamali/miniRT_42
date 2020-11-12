@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/11 09:18:47 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/12 18:01:53 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,6 @@ typedef struct s_triangle
 	t_vector vectors[3];
 	t_vector color;
 }t_triangle;
-
-typedef struct s_disk
-{
-	t_vector coord;
-	t_vector orientation;		
-	double radius;
-	t_vector color;
-}t_disk;
 
 typedef struct s_square
 {
@@ -138,6 +130,20 @@ typedef struct s_pixel {
     unsigned char r;
 }t_pixel;
 
+typedef struct s_transformation
+{
+	t_vector trans;
+	t_vector rot;
+}t_transformation;
+
+typedef  struct s_elemet_to_transform
+{
+	char wich_element;
+	void *element;
+	t_transformation transform;
+}t_element_to_transform;
+
+
 typedef struct  s_scene
 {
 	t_ambient ambient;
@@ -152,6 +158,8 @@ typedef struct  s_scene
 
 	void *mlx_ptr;
 	void *win_ptr;
+
+	t_element_to_transform *element_to_transform;
 
 	t_pixel **pixels;
 }t_scene;
@@ -374,6 +382,7 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object);
 t_vector ft_diffuse(t_scene *scene,double t,t_object *object);
 t_vector ft_ambient(t_ambient ambient,t_vector *color);
 double  ft_shadow(t_scene *scene,double t,t_object *closet_object);
+t_vector bzero_vector(t_vector v3);
 
 /***********************  PIXEL_COLOR.C  ***********************/
 

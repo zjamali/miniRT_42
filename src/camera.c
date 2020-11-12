@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 18:59:10 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/06 20:47:56 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/12 12:36:31 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ t_vector ft_camera_ray(t_scene *scene,t_camera *camera,double x,double y)
 	vbs.up.z = 0;
 	if (camera->orientaion.y > 0 || camera->orientaion.y < 0 )
 	{//// up vector must be propendiculare  to camera orintation
-		vbs.up.x = 1;
+		vbs.up.x = 0;
 		vbs.up.y = 0;
-		vbs.up.z = 0;
+		vbs.up.z = 1;
 	}
 	vbs.n = normalize(camera->orientaion);
 	vbs.n = vectorscal(vbs.n,-1);

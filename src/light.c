@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/07 13:59:14 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/12 14:42:25 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_vector bzero_vector(t_vector v3)
 	v3.x = 0;
 	v3.y = 0;
 	v3.z = 0;
-	return v3;	
+	return v3;
 }
 
 t_vector ft_calcule_normal(t_scene *scene,t_object *object,t_vector p,double t)

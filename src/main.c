@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/11 13:36:35 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/12 17:14:32 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ t_scene *ft_scene_init(char *file_name)
 	scene->light = NULL;
 	scene->objects = NULL;
 	scene->img = NULL;
+	scene->element_to_transform = NULL;
 	return scene;
 }
 
@@ -150,7 +151,7 @@ void ft_write_bmp(t_scene *scene);
 int ft_close(t_scene *scene)
 {
 	(void)scene;
-	exit(EXIT_SUCCESS);
+	exit(0);
 }
 
 int main(int argc, char **argv)
