@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/12 19:09:49 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/12 20:25:27 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -567,24 +567,75 @@ void parse_translation(char **line,t_scene *scene)
         }
     }
 }
-t_vector ft_calcule_rotaion_x_axis(double angle,t_vector orientation)
+t_vector *ft_calcule_rotaion_x_axis(double angle,t_vector *orientation)
 {
+    t_vector *new_orientaion;
+    
+    new_orientaion = malloc(sizeof(t_vector));
+    
     angle = angle * PI /180;
-    t_vector new_orientaion;
-    new_orientaion.y = orientation.y * cos(angle) - orientation.z * sin(angle);
-    new_orientaion.z = orientation.y * sin(angle) +  orientation.z * cos(angle);
-    new_orientaion.x = orientation.x;
+    new_orientaion->y = orientation->y * cos(angle) - orientation->z * sin(angle);
+    new_orientaion->z = orientation->y * sin(angle) +  orientation->z * cos(angle);
+    new_orientaion->x = orientation->x;
+    return new_orientaion;
+}
+t_vector *ft_calcule_rotaion_y_axis(double angle,t_vector *orientation)
+{
+    t_vector *new_orientaion;
+    
+    new_orientaion = malloc(sizeof(t_vector));
+    
+    angle = angle * PI /180;
+
+    new_orientaion->z = orientation->z * cos(angle) - orientation->x * sin(angle);
+    new_orientaion->x = orientation->z * sin(angle) +  orientation->x * cos(angle);
+    new_orientaion->y = orientation->y;
+    return new_orientaion;
+}
+t_vector *ft_calcule_rotaion_z_axis(double angle,t_vector *orientation)
+{
+    t_vector *new_orientaion;
+
+    new_orientaion = malloc(sizeof(t_vector));
+    
+    angle = angle * PI /180;
+    new_orientaion->x = orientation->x * cos(angle) - orientation->y * sin(angle);
+    new_orientaion->y = orientation->x * sin(angle) +  orientation->y * cos(angle);
+    new_orientaion->z = orientation->z;
     return new_orientaion;
 }
 t_vector ft_calcule_rotaion(t_vector orientation,t_vector rotaion)
 {
-    t_vector new_orientation;
+    t_vector *new_orientation;
+    new_orientation = malloc(sizeof(t_vector));
+    
+    new_orientation->x = orientation.x;
+    new_orientation->y = orientation.y;
+    new_orientation->z = orientation.z;
+    printf("normal   %f|%f|%f\n",new_orientation->x,new_orientation->y,new_orientation->z);
     if (rotaion.x != 0)
     {
-        new_orientation =  ft_calcule_rotaion_x_axis(rotaion.x,orientation);
-        return new_orientation;
+        write(1,"here x ",ft_strlen("here x "));
+        new_orientation =  ft_calcule_rotaion_x_axis(rotaion.x,new_orientation);
+        printf("%f|%f|%f\n",new_orientation->x,new_orientation->y,new_orientation->z);
     }
-    return orientation;
+    printf("%f|%f|%f\n",new_orientation->x,new_orientation->y,new_orientation->z);
+    if (rotaion.y != 0)
+    {
+        write(1,"here y ",ft_strlen("here y "));
+        new_orientation =  ft_calcule_rotaion_y_axis(rotaion.y,new_orientation);
+        printf("%f|%f|%f\n",new_orientation->x,new_orientation->y,new_orientation->z);
+    }
+    printf("%f|%f|%f\n",new_orientation->x,new_orientation->y,new_orientation->z);
+    if (rotaion.z != 0)
+    {
+        write(1,"here z ",ft_strlen("here z "));
+        new_orientation =  ft_calcule_rotaion_z_axis(rotaion.z,new_orientation);
+        printf("%f|%f|%f\n",new_orientation->x,new_orientation->y,new_orientation->z);
+    }
+    *new_orientation = normalize(*new_orientation);
+    printf("%f|%f|%f\n",new_orientation->x,new_orientation->y,new_orientation->z);
+    return *new_orientation;
 }
 void ft_make_rotation(t_scene *scene)
 {
