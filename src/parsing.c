@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/13 13:29:43 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/13 14:14:36 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -626,7 +626,6 @@ t_vector ft_calcule_rotaion(t_vector orientation,t_vector rotaion)
 }
 void ft_make_rotation(t_scene *scene)
 {
-     write(1,"rotation\n",ft_strlen("rotation\n"));
     if (scene->element_to_transform->wich_element == 'c')
     {
         t_camera *cam;
