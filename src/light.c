@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/12 14:42:25 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/13 14:10:18 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,11 +133,11 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 	//spr.p = normalize(spr.p);
 	spr.from_camera_to_p = vectorscal(scene->ray->direction,-1);
 	spr.from_camera_to_p = normalize(spr.from_camera_to_p);
-	spr.specular_shiness = 300;
+	spr.specular_shiness = 0;
 	if(object->object_type == 's')
 		spr.specular_shiness = 256;
 	else if (object->object_type == 'c')
-		spr.specular_shiness = 50;
+		spr.specular_shiness = 300;
 	spr.n = ft_calcule_normal(scene,object,spr.p,t);
 
 	spr.color = bzero_vector(spr.color);
