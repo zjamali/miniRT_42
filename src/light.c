@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/13 14:10:18 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/13 14:13:09 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 	if(object->object_type == 's')
 		spr.specular_shiness = 256;
 	else if (object->object_type == 'c')
-		spr.specular_shiness = 300;
+		spr.specular_shiness = 50;
 	spr.n = ft_calcule_normal(scene,object,spr.p,t);
 
 	spr.color = bzero_vector(spr.color);
