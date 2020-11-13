@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/12 17:14:32 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/13 12:06:23 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ void ft_render(t_scene *scene,t_camera *camera,int n)
 	int i;
 	int j;
 	int k;
-
 	k = scene->resolution.height - 1;
 	j = 0;
 	if (n == 1)

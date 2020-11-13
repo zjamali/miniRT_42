@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/12 20:25:27 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/13 13:26:00 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -574,8 +574,8 @@ t_vector *ft_calcule_rotaion_x_axis(double angle,t_vector *orientation)
     new_orientaion = malloc(sizeof(t_vector));
     
     angle = angle * PI /180;
-    new_orientaion->y = orientation->y * cos(angle) - orientation->z * sin(angle);
-    new_orientaion->z = orientation->y * sin(angle) +  orientation->z * cos(angle);
+    new_orientaion->y = orientation->y *cos(angle) - orientation->z * sin(angle);
+    new_orientaion->z = orientation->y *sin(angle) +  orientation->z * cos(angle);
     new_orientaion->x = orientation->x;
     return new_orientaion;
 }
@@ -588,7 +588,7 @@ t_vector *ft_calcule_rotaion_y_axis(double angle,t_vector *orientation)
     angle = angle * PI /180;
 
     new_orientaion->z = orientation->z * cos(angle) - orientation->x * sin(angle);
-    new_orientaion->x = orientation->z * sin(angle) +  orientation->x * cos(angle);
+    new_orientaion->x = orientation->z * sin(angle) + orientation->x * cos(angle);
     new_orientaion->y = orientation->y;
     return new_orientaion;
 }
@@ -599,11 +599,16 @@ t_vector *ft_calcule_rotaion_z_axis(double angle,t_vector *orientation)
     new_orientaion = malloc(sizeof(t_vector));
     
     angle = angle * PI /180;
-    new_orientaion->x = orientation->x * cos(angle) - orientation->y * sin(angle);
-    new_orientaion->y = orientation->x * sin(angle) +  orientation->y * cos(angle);
+    printf(" angle : %f\n",angle);
+    new_orientaion->x =  orientation->x * cos(angle) -  orientation->y *  sin(angle);
+    new_orientaion->y =  orientation->x * sin(angle) +   orientation->y * cos(angle);
     new_orientaion->z = orientation->z;
     return new_orientaion;
 }
+//void ft_rotate_cylinder(t_scene *scene)
+//{
+//    
+//}
 t_vector ft_calcule_rotaion(t_vector orientation,t_vector rotaion)
 {
     t_vector *new_orientation;
@@ -612,29 +617,12 @@ t_vector ft_calcule_rotaion(t_vector orientation,t_vector rotaion)
     new_orientation->x = orientation.x;
     new_orientation->y = orientation.y;
     new_orientation->z = orientation.z;
-    printf("normal   %f|%f|%f\n",new_orientation->x,new_orientation->y,new_orientation->z);
-    if (rotaion.x != 0)
-    {
-        write(1,"here x ",ft_strlen("here x "));
-        new_orientation =  ft_calcule_rotaion_x_axis(rotaion.x,new_orientation);
-        printf("%f|%f|%f\n",new_orientation->x,new_orientation->y,new_orientation->z);
-    }
-    printf("%f|%f|%f\n",new_orientation->x,new_orientation->y,new_orientation->z);
-    if (rotaion.y != 0)
-    {
-        write(1,"here y ",ft_strlen("here y "));
-        new_orientation =  ft_calcule_rotaion_y_axis(rotaion.y,new_orientation);
-        printf("%f|%f|%f\n",new_orientation->x,new_orientation->y,new_orientation->z);
-    }
-    printf("%f|%f|%f\n",new_orientation->x,new_orientation->y,new_orientation->z);
-    if (rotaion.z != 0)
-    {
-        write(1,"here z ",ft_strlen("here z "));
-        new_orientation =  ft_calcule_rotaion_z_axis(rotaion.z,new_orientation);
-        printf("%f|%f|%f\n",new_orientation->x,new_orientation->y,new_orientation->z);
-    }
+    
+    new_orientation =  ft_calcule_rotaion_x_axis(rotaion.x,new_orientation);
+    new_orientation =  ft_calcule_rotaion_y_axis(rotaion.y,new_orientation);
+    new_orientation =  ft_calcule_rotaion_z_axis(rotaion.z,new_orientation);
+    
     *new_orientation = normalize(*new_orientation);
-    printf("%f|%f|%f\n",new_orientation->x,new_orientation->y,new_orientation->z);
     return *new_orientation;
 }
 void ft_make_rotation(t_scene *scene)
@@ -646,12 +634,34 @@ void ft_make_rotation(t_scene *scene)
         cam = scene->element_to_transform->element;
         cam->orientaion = ft_calcule_rotaion(cam->orientaion,scene->element_to_transform->transform.rot);
     }
-    //else if (scene->element_to_transform->wich_element == 'p')
-    //    ft_rotate_plane(scene);
-    //else if (scene->element_to_transform->wich_element == 'q')
-    //    ft_rotate_square(scene);
-    //else if (scene->element_to_transform->wich_element == 'y')
-    //    ft_rotate_cylinder(scene);
+    else if (scene->element_to_transform->wich_element == 'y')
+    {
+        t_cylinder *cy;
+        t_object *obj;
+        obj = scene->element_to_transform->element;
+        cy = obj->object;
+        obj->orientation = ft_calcule_rotaion(obj->orientation,scene->element_to_transform->transform.rot);
+        cy->normal = ft_calcule_rotaion(cy->normal,scene->element_to_transform->transform.rot);
+        printf("cy  %f,%f,%f \n",cy->normal.x,cy->normal.y,cy->normal.z);
+    }
+    else if (scene->element_to_transform->wich_element == 'p')
+    {
+        t_plane *pl;
+        t_object *obj;
+        obj = scene->element_to_transform->element;
+        pl = obj->object;
+        obj->orientation = ft_calcule_rotaion(obj->orientation,scene->element_to_transform->transform.rot);
+        pl->orientation = ft_calcule_rotaion(pl->orientation,scene->element_to_transform->transform.rot);
+    }
+    else if (scene->element_to_transform->wich_element == 'q')
+    {
+        t_square *sq;
+        t_object *obj;
+        obj = scene->element_to_transform->element;
+        sq = obj->object;
+        obj->orientation = ft_calcule_rotaion(obj->orientation,scene->element_to_transform->transform.rot);
+        sq->normal = ft_calcule_rotaion(sq->normal,scene->element_to_transform->transform.rot);
+    }
     scene->element_to_transform->transform.rot = bzero_vector(scene->element_to_transform->transform.rot);
 }
 
@@ -669,7 +679,6 @@ void parse_rotation(char **line,t_scene *scene)
             scene->element_to_transform->transform.rot = ft_parse_coord(rot);
             ft_make_rotation(scene);
         }
-        
     }
 }
 
@@ -702,7 +711,6 @@ void    parsing_line(char *line,t_scene *scene)
         parse_translation(split,scene);
     else if (ft_strncmp(split[0],"rot",3) == 0)
         parse_rotation(split,scene);
-    
 }
 
 void    ft_check_element(char *line)

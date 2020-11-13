@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:09:11 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/07 18:30:34 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/13 12:31:55 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ double ft_calcule_objects__t(t_ray *ray,t_object *temp)
 		t = hit_square(*ray,temp->object);
 	else if (temp->object_type == 'c')
 		t = hit_cylinder(*ray,temp->object);
-	
 	return t;
 }
 
