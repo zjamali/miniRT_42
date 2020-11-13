@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/13 13:26:00 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/13 13:29:43 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -599,7 +599,6 @@ t_vector *ft_calcule_rotaion_z_axis(double angle,t_vector *orientation)
     new_orientaion = malloc(sizeof(t_vector));
     
     angle = angle * PI /180;
-    printf(" angle : %f\n",angle);
     new_orientaion->x =  orientation->x * cos(angle) -  orientation->y *  sin(angle);
     new_orientaion->y =  orientation->x * sin(angle) +   orientation->y * cos(angle);
     new_orientaion->z = orientation->z;
@@ -642,7 +641,6 @@ void ft_make_rotation(t_scene *scene)
         cy = obj->object;
         obj->orientation = ft_calcule_rotaion(obj->orientation,scene->element_to_transform->transform.rot);
         cy->normal = ft_calcule_rotaion(cy->normal,scene->element_to_transform->transform.rot);
-        printf("cy  %f,%f,%f \n",cy->normal.x,cy->normal.y,cy->normal.z);
     }
     else if (scene->element_to_transform->wich_element == 'p')
     {
