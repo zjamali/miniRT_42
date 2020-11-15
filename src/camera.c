@@ -47,5 +47,5 @@ t_vector ft_camera_ray(t_scene *scene,t_camera *camera,double x,double y)
 	castRay.x = vbs.l.x + vbs.u.x * x * vbs.viewPlaneHalfWidth/vbs.W + vbs.v.x * y * vbs.viewPlaneHalfHeight/vbs.H;
 	castRay.y = vbs.l.y + vbs.u.y * x * vbs.viewPlaneHalfWidth/vbs.W + vbs.v.y * y * vbs.viewPlaneHalfHeight/vbs.H;
 	castRay.z = vbs.l.z + vbs.u.z * x * vbs.viewPlaneHalfWidth/vbs.W + vbs.v.z * y * vbs.viewPlaneHalfHeight/vbs.H;
-	return castRay;
+	return (castRay);
 }

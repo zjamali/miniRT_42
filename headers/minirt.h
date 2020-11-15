@@ -376,13 +376,13 @@ double hit_plane(t_ray ray,t_plane *plane);
 double hit_triangle(t_ray ray,t_triangle *triangle);
 double hit_square(t_ray ray,t_square *s_square);
 double hit_cylinder(t_ray ray,t_cylinder *cylinder);
-//double hit_disk(t_ray ray,t_disk *disk);
+
 /***********************  LIGHT.C  ***********************/
 t_vector ft_specular(t_scene *scene,double t,t_object *object);
 t_vector ft_diffuse(t_scene *scene,double t,t_object *object);
 t_vector ft_ambient(t_ambient ambient,t_vector *color);
 double  ft_shadow(t_scene *scene,double t,t_object *closet_object);
-t_vector bzero_vector(t_vector v3);
+t_vector bzero_vector();
 
 /***********************  PIXEL_COLOR.C  ***********************/
 
@@ -394,7 +394,7 @@ char			**ft_split(char const *s, char c);
 /***********************  ft_atoi.C  ***********************/
 int				ft_atoi(const char *str);
 /***********************  ft_atof.C  ***********************/
-double	ft_atof(const char *str);
+double			ft_atof(const char *str);
 
 /***********************  PARCING.C  ***********************/
 t_scene *parsing(int fd,t_scene *scene);
@@ -402,7 +402,44 @@ t_scene *parsing(int fd,t_scene *scene);
 /***********************  strncmp.C  ***********************/
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
-/***********************  minirt.C  ***********************/
+/***********************   ***********************/
 void ft_print_error(char *error);
+t_pixel int_color_to_pixel(int color);
+t_camera *ft_wich_camera(t_scene *scene,int keycode);
+int ft_key_press(int keycode,t_scene *scene);
+int ft_close(t_scene *scene);
+
+
+/**********************  *****************************/
+void ft_render(t_scene *scene,t_camera *camera,int n);
+t_ray *ft_ray_creating(t_scene *scene,t_camera *camera,int i,int j);
+void            my_mlx_pixel_put(t_imag *img, int x, int y, int color);
+t_imag  *ft_creat_img(t_scene *scene,void *mlx_ptr);
+t_vector	ft_calcule_normal(t_scene *scene, t_object *object, t_vector p, double t);
+double	ft_get_first_intersection(t_object *temps,t_ray p_ray,t_object *closet_object);
+
+void    ft_check_element(char *line);
+int    ft_check_line(char *line);
+void    ft_check_scene(t_scene *scene);
+
+/***********************  bmp.C  ***********************/
+void ft_write_header(/*unsigned char *header,*/t_bmp *image,t_scene *scene);
+void ft_write_bmp(t_scene *scene);
+void    ft_creat_image_pixels_array(t_scene *scene);
+
+
+void ft_make_rotation(t_scene *scene);
+t_vector ft_calcule_rotaion(t_vector orientation,t_vector rotaion);
+t_vector *ft_calcule_rotaion_x_axis(double angle,t_vector *orientation);
+t_vector *ft_calcule_rotaion_y_axis(double angle,t_vector *orientation);
+t_vector *ft_calcule_rotaion_z_axis(double angle,t_vector *orientation);
+
+
+void ft_make_translation(t_scene *scene);
+void ft_translate_cylinder(t_scene *scene);
+void ft_translate_traiangle(t_scene *scene);
+void ft_translate_square(t_scene *scene);
+void ft_translate_plane(t_scene *scene);
+void ft_translate_sphere(t_scene *scene);
 
 # endif

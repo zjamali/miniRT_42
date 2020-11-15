@@ -24,8 +24,8 @@ double	ft_atof(const char *str)
 		res2 /= 10;
 
     if (res >= 0 && s > 0)
-        return res + res2;
+        return (res + res2);
     else
-        return res - res2;
+        return (res - res2);
 
 }

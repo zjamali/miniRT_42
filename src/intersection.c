@@ -25,21 +25,20 @@ double hit_sphere(t_ray ray,t_sphere *sphere)
 	sp.delta =  sp.b * sp.b - 4 * sp.a * sp.c;
 	
 	if (sp.delta < 0)
-		return 0;
+		return (0);
 	sp.t1 = (-sp.b + sqrt(sp.delta)) / (2 * sp.a);
 	sp.t2 = (-sp.b - sqrt(sp.delta)) / (2 * sp.a);
-
 	if (sp.t1 > 0 && sp.t2 > 0)
 	{
 		if (sp.t2 < 0)
-			return 0;
+			return (0);
 		if (sp.t2 > sp.t1)
 			sp.t = sp.t1;
 		else
 			sp.t = sp.t2;
-		return sp.t;
+		return (sp.t);
 	}
-	return 0;
+	return (0);
 }
 
 double hit_plane(t_ray ray,t_plane *plane)
@@ -56,10 +55,10 @@ double hit_plane(t_ray ray,t_plane *plane)
 		pl.dot1 = vectorsDot(pl.x,pl.v);
 		pl.t = -pl.dot1 / pl.dot2;
 		if (pl.t < 0)
-		 	return 0;
-		return pl.t;
+		 	return (0);
+		return (pl.t);
 	}
-	return 0;
+	return (0);
 }
 
 double hit_triangle(t_ray ray,t_triangle *triangle)
@@ -73,25 +72,25 @@ double hit_triangle(t_ray ray,t_triangle *triangle)
 	tr.a = vectorsDot(tr.edge1,tr.h);
 	//printf("a");
 	if (tr.a > -tr.epsilon && tr.a < tr.epsilon)
-        return 0;    // This ray is parallel to this triangle.
+        return (0);    // This ray is parallel to this triangle.
     tr.f = 1.0/tr.a;
 	tr.s = vectorsSub(ray.origin,triangle->vectors[0]);
 	tr.u = vectorsDot(tr.s,tr.h);
 	tr.u = tr.f * tr.u;
 	if (tr.u < 0.0 || tr.u > 1.0)
-        return 0;
+        return (0);
 	tr.q = vecttorscross(tr.s,tr.edge1);
 	tr.v = vectorsDot(ray.direction,tr.q);
 	tr.v = tr.f * tr.v;
 	if (tr.v < 0.0 || tr.u + tr.v > 1.0)
-        return 0;
+        return (0);
     // At this stage we can compute t to find out where the intersection point is on the line.
 	tr.t = vectorsDot(tr.q,tr.edge2);
 	tr.t = tr.f * tr.t;
 	if (tr.t > tr.epsilon) // ray intersection
-        return tr.t;
+        return (tr.t);
     else // This means that there is a line intersection but not a ray intersection.
-        return 0;
+        return (0);
 }
 
 double hit_square(t_ray ray,t_square *square)
@@ -111,14 +110,14 @@ double hit_square(t_ray ray,t_square *square)
 		sq.r = square->edge_size/2;
 
 		if (fabs(sq.u.x) > sq.r || fabs(sq.u.y) > sq.r || fabs(sq.u.z) > sq.r)
-			return 0;
-		return t;
+			return (0);
+		return (t);
 	}
-	return 0;
+	return (0);
 	
 }
 
-double hit_cylinder(t_ray ray,t_cylinder *cylinder)
+double	hit_cylinder(t_ray ray, t_cylinder *cylinder)
 {
 	t_cylinder_variables cy;
 
@@ -134,7 +133,7 @@ double hit_cylinder(t_ray ray,t_cylinder *cylinder)
 	cy.delta =  cy.b * cy.b - 4 * cy.a * cy.c;
 	
 	if (cy.delta < 0)
-		return 0;
+		return (0);
 	cy.t1 = (-cy.b + sqrt(cy.delta)) / (2 * cy.a);
 	cy.t2 = (-cy.b - sqrt(cy.delta)) / (2 * cy.a);
 
@@ -148,8 +147,8 @@ double hit_cylinder(t_ray ray,t_cylinder *cylinder)
 	double min = vectorsDot(ray.direction,cylinder->normal) * cy.t2 + vectorsDot(cy.oc,cylinder->normal);
 	double max = vectorsDot(ray.direction,cylinder->normal) * cy.t1 + vectorsDot(cy.oc,cylinder->normal);
 	if (min >= 0 && min <= cylinder->height)
-		return cy.t2;
+		return (cy.t2);
 	if (max >= 0 && max <= cylinder->height)
-		return cy.t1;
-	return 0;
+		return (cy.t1);
+	return (0);
 }

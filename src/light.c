@@ -12,80 +12,6 @@
 
 #include "minirt.h"
 
-t_vector bzero_vector(t_vector v3)
-{
-	v3.x = 0;
-	v3.y = 0;
-	v3.z = 0;
-	return v3;
-}
-
-t_vector ft_calcule_normal(t_scene *scene,t_object *object,t_vector p,double t)
-{
-	t_vector n;
-	t_noraml_variables nrml;
-
-	if (object->object_type == 's')
-		n  = vectorsSub(p,object->origin);
-	if (object->object_type == 'p' || object->object_type == 'q')
-	{
-		n = object->orientation;
-		if (vectorsDot(n,scene->ray->direction) > __DBL_EPSILON__) ///
-			n = vectorscal(n,-1);
-	}
-	if (object->object_type == 't')
-	{
-		nrml.edge1 = vectorsSub(object->v3[1],object->v3[0]); // 1 0 
-		nrml.edge2 = vectorsSub(object->v3[2],object->v3[0]); // 2 0
-		nrml.h = vecttorscross(nrml.edge1,nrml.edge2);
-		n = normalize(nrml.h);
-		if (vectorsDot(n,scene->ray->direction) > __DBL_EPSILON__) ///
-			n = vectorscal(n,-1);
-	}
-	if (object->object_type == 'c')
-	{
-		object->orientation = normalize(object->orientation);
-		nrml.oc =  vectorsSub(scene->ray->origin,object->origin);
-		nrml.m = vectorsDot(scene->ray->direction,object->orientation) * t 
-					+ vectorsDot(nrml.oc,object->orientation);
-		//    N = nrm( P-C-V*m )
-		nrml.normal = vectorsSub(p,object->origin);
-		nrml.line_point = vectorscal(object->orientation,nrml.m);
-		n = vectorsSub(nrml.normal,nrml.line_point);
-	}
-	n = normalize(n);
-	return n;
-}
-double ft_get_first_intersection(t_object *temps,t_ray p_ray,t_object *closet_object)
-{
-	double closet_object1_t = 0;
-	double closet_object_t = 1000000000000;
-	t_object *first_intersection_object;
-	while (temps != NULL)
-		{
-			if (temps->object_type == 'c')
-					closet_object1_t = 	hit_cylinder(p_ray,temps->object);
-			if (temps->object_type == 's')
-				closet_object1_t = hit_sphere(p_ray,temps->object);
-			else if (temps->object_type == 'p')
-				closet_object1_t = hit_plane(p_ray,temps->object);
-			else if(temps->object_type == 't')
-				closet_object1_t = hit_triangle(p_ray,temps->object);
-			else if(temps->object_type == 'q')
-				closet_object1_t = hit_square(p_ray,temps->object);
-			if (closet_object1_t > 0)
-				if (closet_object1_t < closet_object_t)
-				{
-					first_intersection_object = temps;
-					closet_object_t = closet_object1_t;
-				}
-			temps = temps->next;
-		}
-		// for doesnt intersect with same object with calcule it shadaw
-		if (closet_object == first_intersection_object)
-			return (1000000000000);
-		return closet_object_t;
-}
 double  ft_shadow(t_scene *scene,double t,t_object *closet_object)
 {
 	t_shadow_variables shadow;
@@ -117,10 +43,10 @@ double  ft_shadow(t_scene *scene,double t,t_object *closet_object)
 	if (shadow.dark == 1)
 	{
 		if (1 - shadaw < 0)
-			return 0;
+			return (0);
 		return (1 - shadaw);
 	}
-	return 1;
+	return (1);
 }
 
 t_vector ft_specular(t_scene *scene,double t,t_object *object)
@@ -139,8 +65,7 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 	else if (object->object_type == 'c')
 		spr.specular_shiness = 50;
 	spr.n = ft_calcule_normal(scene,object,spr.p,t);
-
-	spr.color = bzero_vector(spr.color);
+	spr.color = bzero_vector();
 	light = scene->light;
 	while (light != NULL)
 	{
@@ -157,7 +82,7 @@ t_vector ft_specular(t_scene *scene,double t,t_object *object)
 		spr.color = vectorsadd(spr.color,spr.color1);
 		light = light->next;
 	}
-	return spr.color;
+	return (spr.color);
 }
 
 t_vector ft_diffuse(t_scene *scene,double t,t_object *object)
@@ -167,7 +92,7 @@ t_vector ft_diffuse(t_scene *scene,double t,t_object *object)
 	dfs.scale_direction_to_p = vectorscal(scene->ray->direction,t);
 	dfs.p = vectorsadd(scene->ray->origin,dfs.scale_direction_to_p);
 	dfs.n = ft_calcule_normal(scene,object,dfs.p,t);
-	dfs.color = bzero_vector(dfs.color);
+	dfs.color = bzero_vector();
 	t_light *light;
 	light = scene->light;
 	while (light != NULL)
@@ -183,7 +108,7 @@ t_vector ft_diffuse(t_scene *scene,double t,t_object *object)
 		light = light->next;
 		dfs.color = vectorsadd(dfs.color,dfs.color1);
 	}
-	return dfs.color;
+	return (dfs.color);
 }
 t_vector ft_ambient(t_ambient ambient,t_vector *color)
 {
@@ -192,5 +117,5 @@ t_vector ft_ambient(t_ambient ambient,t_vector *color)
 	i_ambient.x = min(1, i_ambient.x);
 	i_ambient.y = min(1, i_ambient.y);
 	i_ambient.z = min(1, i_ambient.z);
-	return i_ambient;
+	return (i_ambient);
 }

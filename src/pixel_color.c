@@ -12,13 +12,11 @@
 
 #include "minirt.h"
 
-double rgbconvert(int ir, int ig, int ib)
-{
-	    return (ir * 65536 + ig * 256+ ib);
-}
-double ft_calcule_objects__t(t_ray *ray,t_object *temp)
+
+double	ft_calcule_objects__t(t_ray *ray, t_object *temp)
 {
 	double t;
+
 	t = 0;
 	if (temp->object_type == 's')
 		t = hit_sphere(*ray,temp->object);
@@ -30,23 +28,27 @@ double ft_calcule_objects__t(t_ray *ray,t_object *temp)
 		t = hit_square(*ray,temp->object);
 	else if (temp->object_type == 'c')
 		t = hit_cylinder(*ray,temp->object);
-	return t;
+	return (t);
 }
 
 t_vector ft_calculate_pixel_its_color(t_scene *scene,double closet_object_t,t_object *closet_object)
 {
-	t_vector colors = {0,0,0};
-	t_vector i_specular = {0,0,0};
-	t_vector i_diffuse =  {0,0,0};
-	t_vector i_ambient =  {0,0,0};
-	double shadow = 1;
+	t_vector colors;
+	t_vector i_specular;
+	t_vector i_diffuse ;
+	t_vector i_ambient ;
+	double shadow;
 
+	shadow = 0;
+	colors = bzero_vector();
+	i_specular = bzero_vector();
+	i_diffuse = bzero_vector();
+	i_ambient = bzero_vector();
+	i_diffuse = ft_diffuse(scene,closet_object_t,closet_object);
+	shadow = ft_shadow(scene,closet_object_t,closet_object);
+	i_ambient = ft_ambient(scene->ambient,closet_object->color);
 	if(closet_object->object_type == 's' || closet_object->object_type == 'c')
 			i_specular = ft_specular(scene,closet_object_t,closet_object);
-	i_diffuse = ft_diffuse(scene,closet_object_t,closet_object);
-	//if (closet_object->object_type != 'c')
-		shadow = ft_shadow(scene,closet_object_t,closet_object);
-	i_ambient = ft_ambient(scene->ambient,closet_object->color);
 	if (shadow < 1)
 		i_specular = vectorscal(i_specular,0);
 	colors.y =  i_ambient.y * scene->ambient.color.x  +  shadow *	(i_diffuse.y + i_specular.y );
@@ -55,18 +57,22 @@ t_vector ft_calculate_pixel_its_color(t_scene *scene,double closet_object_t,t_ob
 	colors.x = min(255,colors.x);
 	colors.y = min(255,colors.y);
 	colors.z = min(255,colors.z);
-	return colors;
+	return (colors);
 }
 
 int ft_color_of_pixel(t_scene *scene)
 {
 	t_object *closet_object;
-	closet_object = NULL;
-	t_vector colors;
-	double amcolor = 0;
-	double closet_object_t = MAXFLOAT;
-	double closet_object1_t = 0;
 	t_object *temp ;
+	t_vector colors;
+	double amcolor;
+	double closet_object_t;
+	double closet_object1_t;
+
+	amcolor = 0;
+	closet_object_t = MAXFLOAT;
+	closet_object1_t = 0;
+	closet_object = NULL;
 	temp = scene->objects;
 	while (temp != NULL)
 	{
@@ -86,5 +92,5 @@ int ft_color_of_pixel(t_scene *scene)
 		colors = ft_calculate_pixel_its_color(scene,closet_object_t,closet_object);
 		amcolor = rgbconvert(colors.x,colors.y,colors.z);
 	}
-	return amcolor;
+	return (amcolor);
 }
