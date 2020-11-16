@@ -1,40 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atof.c                                          :+:      :+:    :+:   */
+/*   list2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/16 14:35:17 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/16 14:36:11 by zjamali          ###   ########.fr       */
+/*   Created: 2020/11/16 18:05:14 by zjamali           #+#    #+#             */
+/*   Updated: 2020/11/16 18:05:39 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-double	ft_atof(const char *str)
+t_camera	*ft_lstlast_camera(t_camera *lst)
 {
-	double	res;
-	double	res2;
-	char	*c;
-	int		len;
-	int		s;
+	if (lst)
+	{
+		while (lst->next)
+		{
+			lst = lst->next;
+		}
+		return (lst);
+	}
+	return (NULL);
+}
 
-	s = 1;
-	c = (char *)str;
-	if (*c == '-')
-		s = -1;
-	res = (double)ft_atoi(c);
-	while (*c && *c != '.')
-		c++;
-	if (*c == '.')
-		c++;
-	res2 = (double)ft_atoi(c);
-	len = ft_strlen(c);
-	while (len--)
-		res2 /= 10;
-	if (res >= 0 && s > 0)
-		return (res + res2);
+void		ft_lstadd_back_camera(t_camera **alst, t_camera *new)
+{
+	t_camera *temp;
+
+	if (*alst)
+	{
+		temp = ft_lstlast_camera(*alst);
+		temp->next = new;
+		new->next = NULL;
+		new->prev = temp;
+	}
 	else
-		return (res - res2);
+		*alst = new;
 }

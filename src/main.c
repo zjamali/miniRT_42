@@ -6,22 +6,35 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/13 12:06:23 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/16 18:27:02 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-#include "errno.h"
-#include "string.h"
 
-
-t_scene *ft_scene_init(char *file_name)
+double		max(double a, double b)
 {
-	extern int errno;
-	t_scene *scene;
+	if (a > b)
+		return (a);
+	else
+		return (b);
+}
+
+double		min(double a, double b)
+{
+	if (a > b)
+		return (b);
+	else
+		return (a);
+}
+
+t_scene		*ft_scene_init(char *file_name)
+{
+	extern int	errno;
+	t_scene		*scene;
 
 	scene = malloc(sizeof(t_scene));
-	scene->fd = open(file_name,O_RDONLY);
+	scene->fd = open(file_name, O_RDONLY);
 	if (scene->fd < 0)
 	{
 		ft_print_error(strerror(errno));
@@ -38,34 +51,35 @@ t_scene *ft_scene_init(char *file_name)
 	return (scene);
 }
 
-int main(int argc, char **argv)
+void		ft_make_image(t_scene *scene)
+{
+	ft_render(scene, scene->camera, 1);
+	ft_write_bmp(scene);
+}
+
+int			main(int argc, char **argv)
 {
 	t_scene *scene;
-	
-    if(argc > 1)
+
+	if (argc > 1)
 	{
 		scene = ft_scene_init(argv[1]);
-		scene = parsing(scene->fd,scene);
+		scene = parsing(scene->fd, scene);
 		if (argc == 2)
 		{
 			scene->mlx_ptr = mlx_init();
 			scene->win_ptr = mlx_new_window(scene->mlx_ptr,
-			scene->resolution.width,scene->resolution.height,argv[1]);
-			scene->img = ft_creat_img(scene,scene->mlx_ptr);
-			ft_render(scene,scene->camera,0);
-			mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,scene->img->img, 0, 0);
-			mlx_hook(scene->win_ptr, 2,0, ft_key_press,scene);
-			mlx_hook(scene->win_ptr,17,0,ft_close,scene); /// red button
+					scene->resolution.width, scene->resolution.height, argv[1]);
+			scene->img = ft_creat_img(scene, scene->mlx_ptr);
+			ft_render(scene, scene->camera, 0);
+			mlx_put_image_to_window(scene->mlx_ptr,
+				scene->win_ptr, scene->img->img, 0, 0);
+			mlx_hook(scene->win_ptr, 2, 0, ft_key_press, scene);
+			mlx_hook(scene->win_ptr, 17, 0, ft_close, scene);
 			mlx_loop(scene->mlx_ptr);
 		}
-		if (argc > 2 && !ft_strncmp(argv[2] , "--save",7)) /// save 
-		{
-			ft_render(scene,scene->camera,1);
-			ft_write_bmp(scene);
-		}
+		if (argc > 2 && !ft_strncmp(argv[2], "--save", 7))
+			ft_make_image(scene);
 	}
 	return (0);
 }
-
-
-/**************** BMP image ******************/

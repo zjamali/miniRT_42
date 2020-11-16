@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/12 18:01:53 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/16 20:22:57 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@
 #include <fcntl.h>
 #include <math.h>
 #include <mlx.h>
-//#include "/usr/X11/include/mlx.h"
-#define max(a,b) ((double)a > (double)b ? (double)a : (double)b)
-#define min(a,b) ((double)a > (double)b ? (double)b : (double)a)
+#include "errno.h"
+#include "string.h"
+
+
 #define PI 3.1415926535897932
 
 typedef struct  s_imag {
@@ -215,6 +216,8 @@ typedef struct s_shadow_variables
 	t_vector p;
 	int dark;
 
+	double shadaw;
+
 	t_vector light_to_p;
 
 	t_ray light_ray;
@@ -307,19 +310,25 @@ typedef struct s_cylinder_variables
 	double max;
 }t_cylinder_variables;
 
-typedef struct s_disk_variables
+typedef struct s_pixel_color
 {
-	double t;
-	t_vector x;
-	t_vector v;
-	double dot1;
-	double dot2;
-	t_vector scale_direction_to_p;
-	t_vector p;
-	t_vector op;
-	double h;
+	t_vector	colors;
+	t_vector	i_specular;
+	t_vector	i_diffuse;
+	t_vector	i_ambient;
+	double		shadow;
+
+	t_object	*closet_object;
+	t_object	*temp;
+	double		pixel_color;
+	double		closet_object_t;
+	double		closet_object1_t;
+
 	
-}t_disk_variables;
+}t_pixel_color;
+
+
+
 
 
 /***************     objects properties *******/
@@ -422,7 +431,7 @@ void    ft_check_element(char *line);
 int    ft_check_line(char *line);
 void    ft_check_scene(t_scene *scene);
 
-/***********************  bmp.C  ***********************/
+
 void ft_write_header(/*unsigned char *header,*/t_bmp *image,t_scene *scene);
 void ft_write_bmp(t_scene *scene);
 void    ft_creat_image_pixels_array(t_scene *scene);
@@ -435,11 +444,54 @@ t_vector *ft_calcule_rotaion_y_axis(double angle,t_vector *orientation);
 t_vector *ft_calcule_rotaion_z_axis(double angle,t_vector *orientation);
 
 
-void ft_make_translation(t_scene *scene);
-void ft_translate_cylinder(t_scene *scene);
-void ft_translate_traiangle(t_scene *scene);
-void ft_translate_square(t_scene *scene);
-void ft_translate_plane(t_scene *scene);
-void ft_translate_sphere(t_scene *scene);
+void	ft_make_translation(t_scene *scene);
+void	ft_translate_cylinder(t_scene *scene);
+void	ft_translate_traiangle(t_scene *scene);
+void	ft_translate_square(t_scene *scene);
+void	ft_translate_plane(t_scene *scene);
+void	ft_translate_sphere(t_scene *scene);
+
+void    ft_lstadd_back_camera(t_camera **alst, t_camera *new);
+t_light *ft_lstlast_light(t_light *lst);
+void    ft_lstadd_back(t_object **alst, t_object *new);
+void    ft_lstadd_back_light(t_light **alst, t_light *new);
+
+
+int ft_check_normal(char **norm);
+t_vector    ft_parse_normal(char **norm);
+t_vector    ft_parse_color(char **colors);
+t_vector    ft_parse_coord(char **coord);
+void  ft_element_can_transforme(t_scene *scene,char wich_element,void *the_element);
+
+void    ft_check_plane(t_obj_properties obj);
+void    ft_check_sphere(t_obj_properties obj);
+void    ft_check_square(t_obj_properties obj);
+void    ft_check_triangle(t_obj_properties obj);
+void    ft_check_cylinder(t_obj_properties obj);
+
+
+void    parsing_resolution(char **resol,t_scene *scene);
+void    parsing_ambiant(char **amb, t_scene *scene);
+void    parsing_camera(char **cam,t_scene *scene);
+void    parsing_light(char ** light_line,t_scene *scene);
+
+void    parsing_sphere(char **sph,t_scene *scene);
+void    parsing_plan(char **pl,t_scene *scene);
+void    parsing_square(char **sqr,t_scene *scene);
+void    parsing_triangle(char **tr,t_scene *scene);
+void    parsing_cylinder(char **cy,t_scene *scene);
+
+void    ft_check_element(char *line);
+int    ft_check_line(char *line);
+void    ft_check_scene(t_scene *scene);
+int ft_check_color(char **color);
+int ft_check_coords(char **coord);
+
+double	max(double a,double b);
+double	min(double a,double b);
+
+
+void		parse_rotation(char **line, t_scene *scene);
+void		parse_translation(char **line, t_scene *scene);
 
 # endif

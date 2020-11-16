@@ -1,4 +1,4 @@
-NAME  = minirt
+NAME  = miniRT
 
 SRC_PATH= src
 SRC_NAME=	main.c		vector.c	pixel_color.c	intersection.c \
@@ -6,7 +6,9 @@ SRC_NAME=	main.c		vector.c	pixel_color.c	intersection.c \
 		parsing.c	ft_split.c	ft_atoi.c	ft_atof.c \
 		ft_strncmp.c	minirt.c	bmp.c	hooks.c \
 		vector2.c	light2.c	check.c		transformation.c \
-		transformation2.c
+		transformation2.c	check2.c	list.c	list2.c		parsing2.c \
+		parse_scene.c	parsing_objects.c	parsing_objects2.c \
+		transformation3.c
 
 HDR_PATH= headers
 HDR_NAME= get_next_line.h	minirt.h
