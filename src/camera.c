@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 18:59:10 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/17 13:22:45 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/17 13:30:24 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,20 @@ t_vector			ft_camera_ray(t_scene *scene, t_camera *camera,
 	cast_ray.z = vbs.l.z + vbs.u.z * x * vbs.view_plane_half_width / vbs.w +
 	vbs.v.z * y * vbs.view_plane_half_height / vbs.h;
 	return (cast_ray);
+}
+
+double		max(double a, double b)
+{
+	if (a > b)
+		return (a);
+	else
+		return (b);
+}
+
+double		min(double a, double b)
+{
+	if (a > b)
+		return (b);
+	else
+		return (a);
 }

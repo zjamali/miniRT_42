@@ -6,27 +6,11 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/16 18:27:02 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/17 14:44:14 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-double		max(double a, double b)
-{
-	if (a > b)
-		return (a);
-	else
-		return (b);
-}
-
-double		min(double a, double b)
-{
-	if (a > b)
-		return (b);
-	else
-		return (a);
-}
 
 t_scene		*ft_scene_init(char *file_name)
 {
@@ -49,12 +33,6 @@ t_scene		*ft_scene_init(char *file_name)
 	scene->img = NULL;
 	scene->element_to_transform = NULL;
 	return (scene);
-}
-
-void		ft_make_image(t_scene *scene)
-{
-	ft_render(scene, scene->camera, 1);
-	ft_write_bmp(scene);
 }
 
 int			main(int argc, char **argv)
@@ -83,3 +61,61 @@ int			main(int argc, char **argv)
 	}
 	return (0);
 }
+
+void		ft_free_cameras(t_camera *cam)
+{
+	t_camera *cameras;
+	t_camera *cam_to_free;
+
+	cameras = cam;
+	while (cameras != NULL)
+	{
+		write(1,"\n1\n",3);
+		cam_to_free = cameras;
+		cameras = cameras->next;
+		free(cam_to_free);
+	}
+	free(cameras);
+}
+void 		ft_free_lights(t_light *lights)
+{
+	t_light *light;
+	t_light *light_to_free;
+
+	light = lights;
+
+	while (light != NULL)
+	{
+		write(1,"1",1);
+		light_to_free = light;
+		light = light->next;
+		free(light_to_free);
+	}
+	free(light);
+}
+/*
+void ft_free_scene(t_scene *scene)
+{
+	if (scene->camera != NULL)
+		ft_free_cameras(scene->camera);
+	if (scene->light != NULL)
+		ft_free_lights(scene->light);
+	if (scene->objects != NULL)
+		ft_free_objects(scene->objects);
+	if (scene->img != NULL)
+	{
+		ft_free_image(scene->img);
+		mlx_destroy_image(scene->mlx_ptr,scene->img->img);
+	}
+	if (scene->pixels != NULL)
+		ft_free_pixels(scene->pixels);
+	if (scene->ray != NULL)
+		free(scene->ray);
+	if (scene->element_to_transform != NULL)
+	{
+		free(scene->element_to_transform->element);
+		free(scene->element_to_transform);
+	}
+	mlx_clear_window(scene->mlx_ptr,scene->win_ptr);
+	mlx_destroy_window(scene->mlx_ptr,scene->win_ptr);
+}*/

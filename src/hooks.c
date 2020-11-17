@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:37:24 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/16 14:40:59 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/17 14:31:22 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int			ft_key_press(int keycode, t_scene *scene)
 
 int			ft_close(t_scene *scene)
 {
-	(void)scene;
+	ft_free_cameras(scene->camera);
+	ft_free_lights(scene->light);
 	exit(0);
 }

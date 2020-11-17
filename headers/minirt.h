@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/17 12:46:38 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/17 14:31:06 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,15 @@ typedef struct		s_bmp
 	int				fd;
 	int				row;
 }					t_bmp;
-
+void ft_free_cameras(t_camera *cam);
+void 		ft_free_lights(t_light *lights);
 void				ft_render(t_scene *scene, t_camera *camera, int n);
 t_ray				*ft_ray_creating(t_scene *scene, t_camera *camera,
 										int i, int j);
 void				my_mlx_pixel_put(t_imag *img, int x, int y, int color);
 t_camera			*ft_wich_camera(t_scene *scene, int keycode);
 t_pixel				int_color_to_pixel(int color);
+void				ft_make_image(t_scene *scene);
 void				ft_write_header(t_bmp *image, t_scene *scene);
 void				ft_write_bmp(t_scene *scene);
 void				ft_creat_image_pixels_array(t_scene *scene);

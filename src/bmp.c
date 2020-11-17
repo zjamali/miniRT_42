@@ -6,11 +6,17 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 11:03:17 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/17 12:56:24 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/17 13:31:55 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+void		ft_make_image(t_scene *scene)
+{
+	ft_render(scene, scene->camera, 1);
+	ft_write_bmp(scene);
+}
 
 void	ft_write_header(t_bmp *image, t_scene *scene)
 {
