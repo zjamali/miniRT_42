@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 11:03:17 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/16 11:11:38 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/17 12:56:24 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@ void	ft_write_header(t_bmp *image, t_scene *scene)
 	image->header[14] = 40;
 	image->header[26] = 1;
 	image->header[28] = 24;
-	image->pixelBytesPerRow = scene->resolution.width * sizeof(t_pixel);
-	image->paddingBytesPerRow = (4 - (image->pixelBytesPerRow % 4)) % 4;
-	image->sizeOfFileEntry = (unsigned int*)&image->header[2];
-	image->widthEntry = (unsigned int*)&image->header[18];
-	image->heightEntry = (unsigned int*)&image->header[22];
-	*image->sizeOfFileEntry = 54 + (image->pixelBytesPerRow +
-	image->paddingBytesPerRow) * scene->resolution.height;
-	*image->widthEntry = scene->resolution.width;
-	*image->heightEntry = scene->resolution.height;
+	image->pixel_bytes_per_row = scene->resolution.width * sizeof(t_pixel);
+	image->padding_bytes_per_row = (4 - (image->pixel_bytes_per_row % 4)) % 4;
+	image->size_of_file_entry = (unsigned int*)&image->header[2];
+	image->width_entry = (unsigned int*)&image->header[18];
+	image->height_entry = (unsigned int*)&image->header[22];
+	*image->size_of_file_entry = 54 + (image->pixel_bytes_per_row +
+	image->padding_bytes_per_row) * scene->resolution.height;
+	*image->width_entry = scene->resolution.width;
+	*image->height_entry = scene->resolution.height;
 }
 
 void	ft_write_bmp(t_scene *scene)
@@ -46,8 +46,8 @@ void	ft_write_bmp(t_scene *scene)
 	image->row = 0;
 	while (image->row < scene->resolution.height)
 	{
-		write(image->fd, scene->pixels[image->row], image->pixelBytesPerRow);
-		write(image->fd, image->zeroes, image->paddingBytesPerRow);
+		write(image->fd, scene->pixels[image->row], image->pixel_bytes_per_row);
+		write(image->fd, image->zeroes, image->padding_bytes_per_row);
 		image->row++;
 	}
 	close(image->fd);

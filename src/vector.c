@@ -6,14 +6,13 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/20 01:05:46 by zjamali           #+#    #+#             */
-/*   Updated: 2020/03/10 20:36:12 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/17 11:00:18 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-
-t_vector	bzero_vector()
+t_vector	bzero_vector(void)
 {
 	t_vector v3;
 
@@ -23,17 +22,15 @@ t_vector	bzero_vector()
 	return (v3);
 }
 
-/* the lenght of a vector */
-
-double lenght(t_vector v)
+double		lenght(t_vector v)
 {
 	return (v.x * v.x + v.y * v.y + v.z * v.z);
 }
 
-t_vector normalize(t_vector v)
+t_vector	normalize(t_vector v)
 {
-	double norme;
-	t_vector result;
+	double		norme;
+	t_vector	result;
 
 	norme = sqrt(lenght(v));
 	result.x = v.x / norme;
@@ -41,6 +38,7 @@ t_vector normalize(t_vector v)
 	result.z = v.z / norme;
 	return (result);
 }
+
 t_vector	vectorsproduit(t_vector v1, t_vector v2)
 {
 	t_vector result;
@@ -50,6 +48,7 @@ t_vector	vectorsproduit(t_vector v1, t_vector v2)
 	result.z = v1.z * v2.z;
 	return (result);
 }
+
 t_vector	vecttorscross(t_vector v1, t_vector v2)
 {
 	t_vector result;

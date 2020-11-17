@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 17:34:23 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/16 17:59:00 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/17 09:31:38 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,16 @@ t_vector	ft_calcule_normal_2(t_scene *scene, t_object *object)
 	if (object->object_type == 'p' || object->object_type == 'q')
 	{
 		n = object->orientation;
-		if (vectorsDot(n, scene->ray->direction) > __DBL_EPSILON__)
+		if (vectorsdot(n, scene->ray->direction) > __DBL_EPSILON__)
 			n = vectorscal(n, -1);
 	}
 	if (object->object_type == 't')
 	{
-		nrml.edge1 = vectorsSub(object->v3[1], object->v3[0]);
-		nrml.edge2 = vectorsSub(object->v3[2], object->v3[0]);
+		nrml.edge1 = vectorssub(object->v3[1], object->v3[0]);
+		nrml.edge2 = vectorssub(object->v3[2], object->v3[0]);
 		nrml.h = vecttorscross(nrml.edge1, nrml.edge2);
 		n = normalize(nrml.h);
-		if (vectorsDot(n, scene->ray->direction) > __DBL_EPSILON__)
+		if (vectorsdot(n, scene->ray->direction) > __DBL_EPSILON__)
 			n = vectorscal(n, -1);
 	}
 	return (n);
@@ -56,17 +56,17 @@ t_vector	ft_calcule_normal(t_scene *scene, t_object *object,
 
 	n = ft_calcule_normal_2(scene, object);
 	if (object->object_type == 's')
-		n = vectorsSub(p, object->origin);
+		n = vectorssub(p, object->origin);
 	if (object->object_type == 'c')
 	{
 		object->orientation = normalize(object->orientation);
-		nrml.oc = vectorsSub(scene->ray->origin, object->origin);
-		nrml.m = vectorsDot(scene->ray->direction, object->orientation) * t
-			+ vectorsDot(nrml.oc, object->orientation);
+		nrml.oc = vectorssub(scene->ray->origin, object->origin);
+		nrml.m = vectorsdot(scene->ray->direction, object->orientation) * t
+			+ vectorsdot(nrml.oc, object->orientation);
 		//    N = nrm( P-C-V*m )
-		nrml.normal = vectorsSub(p, object->origin);
+		nrml.normal = vectorssub(p, object->origin);
 		nrml.line_point = vectorscal(object->orientation, nrml.m);
-		n = vectorsSub(nrml.normal, nrml.line_point);
+		n = vectorssub(nrml.normal, nrml.line_point);
 	}
 	n = normalize(n);
 	return (n);

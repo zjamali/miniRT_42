@@ -6,492 +6,57 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/16 20:22:57 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/17 12:46:38 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
-#include "get_next_line.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <math.h>
-#include <mlx.h>
-#include "errno.h"
-#include "string.h"
+# include <stdlib.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <math.h>
+# include <mlx.h>
+# include <errno.h>
+# include <string.h>
+# include "get_next_line.h"
+# include "vectors.h"
+# include "scene.h"
+# include "transformation.h"
+# include "intersection.h"
+# include "parsing.h"
+# define PI 3.1415926535897932
 
-
-#define PI 3.1415926535897932
-
-typedef struct  s_imag {
-    void        *img;
-    char        *addr;
-    int         bits_per_pixel;
-    int         line_length;
-    int         endian;
-}               t_imag;
-
-typedef struct s_vector
+typedef struct		s_bmp
 {
-	float x,y,z;
-}t_vector;
-
-typedef struct s_sphere
-{
-	t_vector origin;
-	double  radius;
-	t_vector color;
-}t_sphere;
-
-typedef struct s_plane
-{
-	t_vector coord;
-	t_vector orientation;
-	t_vector color;
-}t_plane;
-
-typedef struct s_triangle
-{
-	t_vector vectors[3];
-	t_vector color;
-}t_triangle;
-
-typedef struct s_square
-{
-	t_vector center;
-	t_vector normal;
-	double edge_size;
-	t_vector color;
-}t_square;
-
-typedef struct s_cylinder
-{
-	t_vector coord;
-	t_vector normal;
-	double height;
-	double diameter;
-	t_vector color;
-}t_cylinder;
-
-typedef struct s_ray
-{
-	t_vector origin;
-	t_vector direction;
-}t_ray;
-
-typedef struct  s_camera
-{
-	t_vector lookfrom;
-	t_vector orientaion;
-	double fov;
-	struct s_camera *next;
-	struct s_camera *prev;
-}t_camera;
-
-typedef struct  s_object
-{
-	void *object;
-	t_vector *color;
-	t_vector origin;
-	t_vector orientation;
-	char object_type;
-	t_vector v3[3];
-	double size;
-	double radius;
-	double diameter;
-	struct s_object *next;
-}t_object;
-
-typedef struct s_ambient
-{
-	double intensity;
-	t_vector color;
-}t_ambient;
-
-typedef struct s_light
-{
-	t_vector origin;
-	double intensity;
-	t_vector color;
-	struct s_light *next;
-	
-}t_light;
-
-typedef struct resolution
-{
-	int height;
-	int width;
-}t_resolution;
-
-typedef struct s_pixel {
-    unsigned char b;
-    unsigned char g;
-    unsigned char r;
-}t_pixel;
-
-typedef struct s_transformation
-{
-	t_vector trans;
-	t_vector rot;
-}t_transformation;
-
-typedef  struct s_elemet_to_transform
-{
-	char wich_element;
-	void *element;
-	t_transformation transform;
-}t_element_to_transform;
-
-
-typedef struct  s_scene
-{
-	t_ambient ambient;
-	t_resolution resolution;
-	t_camera *camera;
-	t_light *light;
-	int color_of_pixel;
-	int fd;
-	t_ray *ray;
-	t_object *objects;
-	t_imag *img;
-
-	void *mlx_ptr;
-	void *win_ptr;
-
-	t_element_to_transform *element_to_transform;
-
-	t_pixel **pixels;
-}t_scene;
-/**********          variables        ********************/
-typedef struct s_camera_variables
-{
-	t_vector castRay;
-	t_vector up;
-	t_vector n;
-	t_vector u;
-	t_vector c;
-	t_vector l;
-	t_vector v;
-
-
-	double theta;
-	double aspectRatio;
-	double viewPlaneHalfWidth;
-	double viewPlaneHalfHeight;
-	
-	double W;
-	double H;
-	
-}t_camera_variables;
-
-
-typedef struct s_phong_variables
-{
-	double m;
-	t_vector color;
-	t_vector color1;
-	t_vector l_p;
-	t_vector scale_direction_to_p;
-	t_vector from_camera_to_p;
-	t_vector p;
-	t_vector n;
-	
-	double i_diffuse;
-	
-	int specular;
-	double dot;
-	t_vector r;
-	t_vector reflection;
-	double i_specular;
-	int specular_shiness;
-	
-}t_phong_variables;
-
-typedef struct s_shadow_variables
-{
-	
-	t_vector scale_direction_to_p;
-	t_vector p;
-	int dark;
-
-	double shadaw;
-
-	t_vector light_to_p;
-
-	t_ray light_ray;
-	double closet_object_t;
-
-	t_vector light_to_c;
-	t_object *temps;
-
-	double light_to_c_lenght;
-	double light_to_p_lenght;
-	
-}t_shadow_variables;
-
-typedef struct s_normal_variables
-{
-	double m;
-	t_vector edge1;
-	t_vector edge2;
-	t_vector h;
-	t_vector oc;
-	t_vector normal;
-	t_vector line_point;
-}t_noraml_variables;
-
-/******** object variables *******/
-typedef struct s_sphere_varibales
-{
-	t_vector oc;
-	double a;
-	double b;
-	double c;
-	double delta;
-	double t;
-	double t1;
-	double t2;
-	
-}t_sphere_variables;
-
-typedef struct s_plane_variables
-{
-	double t;
-	t_vector x;
-	t_vector v;
-	t_vector d;
-	double dot2;
-	double dot1;
-	
-}t_plane_variables;
-
-typedef struct s_traingle_variables
-{
-	double epsilon;
-	
-	t_vector edge1;
-	t_vector edge2;
-	t_vector h;
-	t_vector s;
-	t_vector q;
-	double a;
-	double f;
-	double u;
-	double v;
-	double t;
-	
-}t_triangle_variables;
-
-typedef struct s_square_variables
-{
-	double size;
-	t_vector e1;
-	t_vector e2;
-	t_vector scale_direction_to_p;
-	t_vector p;
-	t_vector u;
-	double r;
-}t_square_variables;
-
-typedef struct s_cylinder_variables
-{
-	double t;
-	t_vector oc;
-	double a;
-	double b;
-	double c;
-	double delta;
-	double t1;
-	double t2;
-
-	double min;
-	double max;
-}t_cylinder_variables;
-
-typedef struct s_pixel_color
-{
-	t_vector	colors;
-	t_vector	i_specular;
-	t_vector	i_diffuse;
-	t_vector	i_ambient;
-	double		shadow;
-
-	t_object	*closet_object;
-	t_object	*temp;
-	double		pixel_color;
-	double		closet_object_t;
-	double		closet_object1_t;
-
-	
-}t_pixel_color;
-
-
-
-
-
-/***************     objects properties *******/
-
-typedef struct s_obj_properties
-{
-	char **origin;
-    char **normal;
-
-	double diameter;
-	double size;
-
-	char **cord1;
-    char **cord2;
-    char **cord3;
-    char **color;
-}t_obj_properties;
-
-/************************** bmp *************************/
-
-typedef struct s_bmp
-{
-	unsigned char header[54];
-	int fd;
-	unsigned int pixelBytesPerRow;
-	unsigned int paddingBytesPerRow;
-	unsigned int* sizeOfFileEntry;
-	unsigned int* widthEntry;
-	unsigned int* heightEntry;
-	unsigned char zeroes[3];
-	int row;
-	
-}t_bmp;
-
-
-
-/***********************  VECTOR.C  ***********************/
-t_vector  vectorsadd(t_vector v1,t_vector v2);
-t_vector vectorscal(t_vector v ,double s);
-t_vector vectordiv(t_vector v, double d);
-t_vector vectorsSub(t_vector v1, t_vector v2);
-double vectorsDot(t_vector v1, t_vector v2);
-double lenght(t_vector v);
-t_vector normalize(t_vector v);
-t_vector vectorsproduit(t_vector v1,t_vector v2);
-t_vector vecttorscross(t_vector v1,t_vector v2);
-
-
-/***********************  CAMERA.C  ***********************/
-t_vector ft_camera_ray(t_scene *scene,t_camera *camera,double x,double y);
-/***********************  INTERSECTION.C  ***********************/
-double hit_sphere(t_ray ray,t_sphere *s);
-double hit_plane(t_ray ray,t_plane *plane);
-double hit_triangle(t_ray ray,t_triangle *triangle);
-double hit_square(t_ray ray,t_square *s_square);
-double hit_cylinder(t_ray ray,t_cylinder *cylinder);
-
-/***********************  LIGHT.C  ***********************/
-t_vector ft_specular(t_scene *scene,double t,t_object *object);
-t_vector ft_diffuse(t_scene *scene,double t,t_object *object);
-t_vector ft_ambient(t_ambient ambient,t_vector *color);
-double  ft_shadow(t_scene *scene,double t,t_object *closet_object);
-t_vector bzero_vector();
-
-/***********************  PIXEL_COLOR.C  ***********************/
-
-int ft_color_of_pixel(t_scene *scene);
-double rgbconvert(int ir, int ig, int ib);
-
-/***********************  FT_SPLIT.C  ***********************/
-char			**ft_split(char const *s, char c);
-/***********************  ft_atoi.C  ***********************/
-int				ft_atoi(const char *str);
-/***********************  ft_atof.C  ***********************/
-double			ft_atof(const char *str);
-
-/***********************  PARCING.C  ***********************/
-t_scene *parsing(int fd,t_scene *scene);
-
-/***********************  strncmp.C  ***********************/
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-
-/***********************   ***********************/
-void ft_print_error(char *error);
-t_pixel int_color_to_pixel(int color);
-t_camera *ft_wich_camera(t_scene *scene,int keycode);
-int ft_key_press(int keycode,t_scene *scene);
-int ft_close(t_scene *scene);
-
-
-/**********************  *****************************/
-void ft_render(t_scene *scene,t_camera *camera,int n);
-t_ray *ft_ray_creating(t_scene *scene,t_camera *camera,int i,int j);
-void            my_mlx_pixel_put(t_imag *img, int x, int y, int color);
-t_imag  *ft_creat_img(t_scene *scene,void *mlx_ptr);
-t_vector	ft_calcule_normal(t_scene *scene, t_object *object, t_vector p, double t);
-double	ft_get_first_intersection(t_object *temps,t_ray p_ray,t_object *closet_object);
-
-void    ft_check_element(char *line);
-int    ft_check_line(char *line);
-void    ft_check_scene(t_scene *scene);
-
-
-void ft_write_header(/*unsigned char *header,*/t_bmp *image,t_scene *scene);
-void ft_write_bmp(t_scene *scene);
-void    ft_creat_image_pixels_array(t_scene *scene);
-
-
-void ft_make_rotation(t_scene *scene);
-t_vector ft_calcule_rotaion(t_vector orientation,t_vector rotaion);
-t_vector *ft_calcule_rotaion_x_axis(double angle,t_vector *orientation);
-t_vector *ft_calcule_rotaion_y_axis(double angle,t_vector *orientation);
-t_vector *ft_calcule_rotaion_z_axis(double angle,t_vector *orientation);
-
-
-void	ft_make_translation(t_scene *scene);
-void	ft_translate_cylinder(t_scene *scene);
-void	ft_translate_traiangle(t_scene *scene);
-void	ft_translate_square(t_scene *scene);
-void	ft_translate_plane(t_scene *scene);
-void	ft_translate_sphere(t_scene *scene);
-
-void    ft_lstadd_back_camera(t_camera **alst, t_camera *new);
-t_light *ft_lstlast_light(t_light *lst);
-void    ft_lstadd_back(t_object **alst, t_object *new);
-void    ft_lstadd_back_light(t_light **alst, t_light *new);
-
-
-int ft_check_normal(char **norm);
-t_vector    ft_parse_normal(char **norm);
-t_vector    ft_parse_color(char **colors);
-t_vector    ft_parse_coord(char **coord);
-void  ft_element_can_transforme(t_scene *scene,char wich_element,void *the_element);
-
-void    ft_check_plane(t_obj_properties obj);
-void    ft_check_sphere(t_obj_properties obj);
-void    ft_check_square(t_obj_properties obj);
-void    ft_check_triangle(t_obj_properties obj);
-void    ft_check_cylinder(t_obj_properties obj);
-
-
-void    parsing_resolution(char **resol,t_scene *scene);
-void    parsing_ambiant(char **amb, t_scene *scene);
-void    parsing_camera(char **cam,t_scene *scene);
-void    parsing_light(char ** light_line,t_scene *scene);
-
-void    parsing_sphere(char **sph,t_scene *scene);
-void    parsing_plan(char **pl,t_scene *scene);
-void    parsing_square(char **sqr,t_scene *scene);
-void    parsing_triangle(char **tr,t_scene *scene);
-void    parsing_cylinder(char **cy,t_scene *scene);
-
-void    ft_check_element(char *line);
-int    ft_check_line(char *line);
-void    ft_check_scene(t_scene *scene);
-int ft_check_color(char **color);
-int ft_check_coords(char **coord);
-
-double	max(double a,double b);
-double	min(double a,double b);
-
-
-void		parse_rotation(char **line, t_scene *scene);
-void		parse_translation(char **line, t_scene *scene);
-
-# endif
+	unsigned char	header[54];
+	unsigned int	pixel_bytes_per_row;
+	unsigned int	padding_bytes_per_row;
+	unsigned int	*size_of_file_entry;
+	unsigned int	*width_entry;
+	unsigned int	*height_entry;
+	unsigned char	zeroes[3];
+	int				fd;
+	int				row;
+}					t_bmp;
+
+void				ft_render(t_scene *scene, t_camera *camera, int n);
+t_ray				*ft_ray_creating(t_scene *scene, t_camera *camera,
+										int i, int j);
+void				my_mlx_pixel_put(t_imag *img, int x, int y, int color);
+t_camera			*ft_wich_camera(t_scene *scene, int keycode);
+t_pixel				int_color_to_pixel(int color);
+void				ft_write_header(t_bmp *image, t_scene *scene);
+void				ft_write_bmp(t_scene *scene);
+void				ft_creat_image_pixels_array(t_scene *scene);
+void				ft_print_error(char *error);
+int					ft_key_press(int keycode, t_scene *scene);
+int					ft_close(t_scene *scene);
+char				**ft_split(char const *s, char c);
+int					ft_atoi(const char *str);
+double				ft_atof(const char *str);
+int					ft_strncmp(const char *s1, const char *s2, size_t n);
+double				max(double a, double b);
+double				min(double a, double b);
+
+#endif

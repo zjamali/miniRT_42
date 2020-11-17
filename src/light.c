@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/16 17:34:08 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/17 09:29:56 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 double		ft_calcule_shadaw(t_scene *scene, t_object *closet_object,
 		t_light *light, t_shadow_variables *shadow)
 {
-	shadow->light_to_p = vectorsSub(shadow->p, light->origin);
+	shadow->light_to_p = vectorssub(shadow->p, light->origin);
 	shadow->light_ray.origin = light->origin;
 	shadow->light_ray.direction = normalize(shadow->light_to_p);
 	shadow->temps = scene->objects;
@@ -25,7 +25,7 @@ double		ft_calcule_shadaw(t_scene *scene, t_object *closet_object,
 			shadow->closet_object_t);
 	shadow->light_to_c = vectorsadd(shadow->light_to_c,
 			shadow->light_ray.origin);
-	shadow->light_to_c = vectorsSub(shadow->light_to_c,
+	shadow->light_to_c = vectorssub(shadow->light_to_c,
 			shadow->light_ray.origin);
 	shadow->light_to_c_lenght = lenght(shadow->light_to_c);
 	shadow->light_to_p_lenght = lenght(shadow->light_to_p);
@@ -63,13 +63,13 @@ double		ft_shadow(t_scene *scene, double t, t_object *closet_object)
 
 t_vector	ft_calcule_specular(t_light *light, t_phong_variables *spr)
 {
-	spr->l_p = vectorsSub(spr->p, light->origin);
+	spr->l_p = vectorssub(spr->p, light->origin);
 	spr->l_p = normalize(spr->l_p);
-	spr->dot = vectorsDot(spr->l_p, spr->n);
+	spr->dot = vectorsdot(spr->l_p, spr->n);
 	spr->r = vectorscal(spr->n, spr->dot * 2);
-	spr->reflection = vectorsSub(spr->r, spr->l_p);
+	spr->reflection = vectorssub(spr->r, spr->l_p);
 	spr->reflection = normalize(spr->reflection);
-	spr->dot = vectorsDot(spr->from_camera_to_p, spr->reflection);
+	spr->dot = vectorsdot(spr->from_camera_to_p, spr->reflection);
 	spr->dot = min(spr->dot, 0.0);
 	spr->i_specular = 1 * pow(spr->dot, spr->specular_shiness);
 	spr->color1 = vectorscal(light->color, spr->i_specular);
@@ -114,9 +114,9 @@ t_vector	ft_diffuse(t_scene *scene, double t, t_object *object)
 	light = scene->light;
 	while (light != NULL)
 	{
-		dfs.l_p = vectorsSub(light->origin, dfs.p);
+		dfs.l_p = vectorssub(light->origin, dfs.p);
 		dfs.l_p = normalize(dfs.l_p);
-		dfs.i_diffuse = vectorsDot(dfs.l_p, dfs.n);
+		dfs.i_diffuse = vectorsdot(dfs.l_p, dfs.n);
 		dfs.i_diffuse = dfs.i_diffuse;
 		dfs.i_diffuse = max(0, dfs.i_diffuse);
 		dfs.color1.x = object->color->x / 255 * light->color.x
