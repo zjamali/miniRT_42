@@ -39,8 +39,12 @@ typedef struct		s_bmp
 	int				fd;
 	int				row;
 }					t_bmp;
-void ft_free_cameras(t_camera *cam);
-void 		ft_free_lights(t_light *lights);
+
+void 				ft_free_scene(t_scene *scene);
+void 				ft_free_pixels(t_scene *scene);
+void 				ft_free_objects(t_object *objects);
+void 				ft_free_cameras(t_camera *cam);
+void 				ft_free_lights(t_light *lights);
 void				ft_render(t_scene *scene, t_camera *camera, int n);
 t_ray				*ft_ray_creating(t_scene *scene, t_camera *camera,
 										int i, int j);
@@ -55,6 +59,7 @@ void				ft_print_error(char *error);
 int					ft_key_press(int keycode, t_scene *scene);
 int					ft_close(t_scene *scene);
 char				**ft_split(char const *s, char c);
+void				*ft_memset(void *b, int c, size_t len);
 int					ft_atoi(const char *str);
 double				ft_atof(const char *str);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);

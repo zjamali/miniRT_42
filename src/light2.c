@@ -12,13 +12,13 @@
 
 #include "minirt.h"
 
-t_vector	ft_ambient(t_ambient ambient, t_vector *color)
+t_vector	ft_ambient(t_ambient ambient, t_vector color)
 {
 	t_vector i_ambient;
 
-	i_ambient.x = ambient.intensity * color->x / 255;
-	i_ambient.y = ambient.intensity * color->y / 255;
-	i_ambient.z = ambient.intensity * color->z / 255;
+	i_ambient.x = ambient.intensity * color.x / 255;
+	i_ambient.y = ambient.intensity * color.y / 255;
+	i_ambient.z = ambient.intensity * color.z / 255;
 	i_ambient.x = min(1, i_ambient.x);
 	i_ambient.y = min(1, i_ambient.y);
 	i_ambient.z = min(1, i_ambient.z);

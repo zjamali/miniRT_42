@@ -33,7 +33,7 @@ void		parsing_sphere(char **sph, t_scene *scene)
 	new_object->object_type = 's';
 	new_object->object = sphere;
 	new_object->origin = sphere->origin;
-	new_object->color = &sphere->color;
+	new_object->color = sphere->color;
 	new_object->radius = sphere->radius;
 	new_object->next = NULL;
 	ft_lstadd_back(&scene->objects, new_object);
@@ -62,7 +62,7 @@ void		parsing_plan(char **pl, t_scene *scene)
 	new_object->object = plane;
 	new_object->origin = plane->coord;
 	new_object->orientation = plane->orientation;
-	new_object->color = &plane->color;
+	new_object->color = plane->color;
 	new_object->next = NULL;
 	ft_lstadd_back(&scene->objects, new_object);
 	ft_element_can_transforme(scene, 'p', new_object);
@@ -78,7 +78,7 @@ t_object	*ft_create_square(t_square *square)
 	new_object->origin = square->center;
 	new_object->orientation = square->normal;
 	new_object->size = square->edge_size;
-	new_object->color = &square->color;
+	new_object->color = square->color;
 	new_object->next = NULL;
 	return (new_object);
 }

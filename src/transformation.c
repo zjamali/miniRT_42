@@ -14,17 +14,16 @@
 
 t_vector		ft_calcule_rotaion(t_vector orientation, t_vector rotaion)
 {
-	t_vector *new_orientation;
+	t_vector new_orientation;
 
-	new_orientation = malloc(sizeof(t_vector));
-	new_orientation->x = orientation.x;
-	new_orientation->y = orientation.y;
-	new_orientation->z = orientation.z;
+	new_orientation.x = orientation.x;
+	new_orientation.y = orientation.y;
+	new_orientation.z = orientation.z;
 	new_orientation = ft_calcule_rotaion_x_axis(rotaion.x, new_orientation);
 	new_orientation = ft_calcule_rotaion_y_axis(rotaion.y, new_orientation);
 	new_orientation = ft_calcule_rotaion_z_axis(rotaion.z, new_orientation);
-	*new_orientation = normalize(*new_orientation);
-	return (*new_orientation);
+	new_orientation = normalize(new_orientation);
+	return (new_orientation);
 }
 
 void			ft_make_rotation2(t_scene *scene)

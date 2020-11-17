@@ -119,11 +119,11 @@ t_vector	ft_diffuse(t_scene *scene, double t, t_object *object)
 		dfs.i_diffuse = vectorsdot(dfs.l_p, dfs.n);
 		dfs.i_diffuse = dfs.i_diffuse;
 		dfs.i_diffuse = max(0, dfs.i_diffuse);
-		dfs.color1.x = object->color->x / 255 * light->color.x
+		dfs.color1.x = object->color.x / 255 * light->color.x
 			* light->intensity * dfs.i_diffuse;
-		dfs.color1.y = object->color->y / 255 * light->color.y
+		dfs.color1.y = object->color.y / 255 * light->color.y
 			* light->intensity * dfs.i_diffuse;
-		dfs.color1.z = object->color->z / 255 * light->color.z
+		dfs.color1.z = object->color.z / 255 * light->color.z
 			* light->intensity * dfs.i_diffuse;
 		light = light->next;
 		dfs.color = vectorsadd(dfs.color, dfs.color1);

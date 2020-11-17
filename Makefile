@@ -8,7 +8,7 @@ SRC_NAME=	main.c		vector.c	pixel_color.c	intersection.c \
 		vector2.c	light2.c	check.c		transformation.c \
 		transformation2.c	check2.c	list.c	list2.c		parsing2.c \
 		parse_scene.c	parsing_objects.c	parsing_objects2.c \
-		transformation3.c	intersection2.c
+		transformation3.c	intersection2.c	free.c	ft_memset.c \
 
 HDR_PATH= headers
 HDR_NAME= get_next_line.h	minirt.h

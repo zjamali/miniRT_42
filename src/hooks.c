@@ -51,7 +51,10 @@ int			ft_key_press(int keycode, t_scene *scene)
 
 	camera = NULL;
 	if (keycode == 53)
+	{
+		ft_free_scene(scene);
 		exit(0);
+	}
 	else if (keycode == 123 || keycode == 124)
 	{
 		camera = ft_wich_camera(scene, keycode);
@@ -64,7 +67,6 @@ int			ft_key_press(int keycode, t_scene *scene)
 
 int			ft_close(t_scene *scene)
 {
-	ft_free_cameras(scene->camera);
-	ft_free_lights(scene->light);
+	ft_free_scene(scene);
 	exit(0);
 }

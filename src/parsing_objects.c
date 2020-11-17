@@ -18,7 +18,7 @@ t_object	*ft_create_triangle(t_triangle *triangle)
 
 	new_object = malloc(sizeof(t_object));
 	new_object->object = triangle;
-	new_object->color = &triangle->color;
+	new_object->color = triangle->color;
 	new_object->object_type = 't';
 	new_object->v3[0] = triangle->vectors[0];
 	new_object->v3[1] = triangle->vectors[1];
@@ -56,7 +56,7 @@ t_object	*ft_create_cylinder(t_cylinder *cylinder)
 
 	new_object = malloc(sizeof(t_object));
 	new_object->object = cylinder;
-	new_object->color = &cylinder->color;
+	new_object->color = cylinder->color;
 	new_object->object_type = 'c';
 	new_object->origin = cylinder->coord;
 	new_object->orientation = cylinder->normal;

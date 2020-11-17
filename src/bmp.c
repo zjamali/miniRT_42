@@ -16,6 +16,7 @@ void		ft_make_image(t_scene *scene)
 {
 	ft_render(scene, scene->camera, 1);
 	ft_write_bmp(scene);
+	ft_free_pixels(scene);
 }
 
 void	ft_write_header(t_bmp *image, t_scene *scene)
@@ -41,7 +42,8 @@ void	ft_write_bmp(t_scene *scene)
 {
 	t_bmp *image;
 
-	image = malloc(sizeof(t_bmp));
+	image = (t_bmp*)malloc(sizeof(t_bmp));
+	ft_memset((void*)image,0,sizeof(t_bmp));
 	ft_write_header(image, scene);
 	image->fd = open("image.bmp", O_WRONLY | O_CREAT | O_TRUNC,
 		S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
@@ -57,6 +59,7 @@ void	ft_write_bmp(t_scene *scene)
 		image->row++;
 	}
 	close(image->fd);
+	free(image);
 }
 
 void	ft_creat_image_pixels_array(t_scene *scene)
@@ -64,10 +67,10 @@ void	ft_creat_image_pixels_array(t_scene *scene)
 	int i;
 
 	i = 0;
-	scene->pixels = malloc(sizeof(t_pixel*) * scene->resolution.height);
+	scene->pixels = (t_pixel**)malloc(sizeof(t_pixel*) * scene->resolution.height);
 	while (i < scene->resolution.height)
 	{
-		scene->pixels[i] = malloc(sizeof(t_pixel) * scene->resolution.width);
+		scene->pixels[i] = (t_pixel*)malloc(sizeof(t_pixel) * scene->resolution.width);
 		i++;
 	}
 }

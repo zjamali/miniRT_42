@@ -77,7 +77,7 @@ typedef struct		s_camera
 typedef struct		s_object
 {
 	void			*object;
-	t_vector		*color;
+	t_vector		color;
 	t_vector		origin;
 	t_vector		orientation;
 	char			object_type;
@@ -153,7 +153,7 @@ t_vector			ft_camera_ray(t_scene *scene, t_camera
 									*camera, double x, double y);
 t_vector			ft_specular(t_scene *scene, double t, t_object *object);
 t_vector			ft_diffuse(t_scene *scene, double t, t_object *object);
-t_vector			ft_ambient(t_ambient ambient, t_vector *color);
+t_vector			ft_ambient(t_ambient ambient, t_vector color);
 double				ft_shadow(t_scene *scene, double t,
 											t_object *closet_object);
 int					ft_color_of_pixel(t_scene *scene);
