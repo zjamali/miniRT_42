@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/17 14:31:06 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 10:11:17 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ typedef struct		s_bmp
 	int				row;
 }					t_bmp;
 
-void 				ft_free_scene(t_scene *scene);
-void 				ft_free_pixels(t_scene *scene);
-void 				ft_free_objects(t_object *objects);
-void 				ft_free_cameras(t_camera *cam);
-void 				ft_free_lights(t_light *lights);
+void				ft_free_scene(t_scene *scene);
+void				ft_free_pixels(t_scene *scene);
+void				ft_free_objects(t_object *objects);
+void				ft_free_cameras(t_camera *cam);
+void				ft_free_lights(t_light *lights);
 void				ft_render(t_scene *scene, t_camera *camera, int n);
 t_ray				*ft_ray_creating(t_scene *scene, t_camera *camera,
 										int i, int j);

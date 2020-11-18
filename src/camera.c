@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 18:59:10 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/17 13:30:24 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 10:10:09 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_camera_variables	ft_camera_properties(t_scene *scene, t_camera *camera)
 }
 
 t_vector			ft_camera_ray(t_scene *scene, t_camera *camera,
-					double x, double y)
+							double x, double y)
 {
 	t_vector			cast_ray;
 	t_camera_variables	vbs;
@@ -65,7 +65,7 @@ t_vector			ft_camera_ray(t_scene *scene, t_camera *camera,
 	return (cast_ray);
 }
 
-double		max(double a, double b)
+double				max(double a, double b)
 {
 	if (a > b)
 		return (a);
@@ -73,7 +73,7 @@ double		max(double a, double b)
 		return (b);
 }
 
-double		min(double a, double b)
+double				min(double a, double b)
 {
 	if (a > b)
 		return (b);

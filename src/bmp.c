@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 11:03:17 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/17 13:31:55 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 10:06:10 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void		ft_make_image(t_scene *scene)
 	ft_free_pixels(scene);
 }
 
-void	ft_write_header(t_bmp *image, t_scene *scene)
+void		ft_write_header(t_bmp *image, t_scene *scene)
 {
 	image->header[0] = 66;
 	image->header[1] = 77;
@@ -38,12 +38,12 @@ void	ft_write_header(t_bmp *image, t_scene *scene)
 	*image->height_entry = scene->resolution.height;
 }
 
-void	ft_write_bmp(t_scene *scene)
+void		ft_write_bmp(t_scene *scene)
 {
 	t_bmp *image;
 
 	image = (t_bmp*)malloc(sizeof(t_bmp));
-	ft_memset((void*)image,0,sizeof(t_bmp));
+	ft_memset((void*)image, 0, sizeof(t_bmp));
 	ft_write_header(image, scene);
 	image->fd = open("image.bmp", O_WRONLY | O_CREAT | O_TRUNC,
 		S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
@@ -62,15 +62,17 @@ void	ft_write_bmp(t_scene *scene)
 	free(image);
 }
 
-void	ft_creat_image_pixels_array(t_scene *scene)
+void		ft_creat_image_pixels_array(t_scene *scene)
 {
 	int i;
 
 	i = 0;
-	scene->pixels = (t_pixel**)malloc(sizeof(t_pixel*) * scene->resolution.height);
+	scene->pixels = (t_pixel**)malloc(sizeof(t_pixel*) *
+								scene->resolution.height);
 	while (i < scene->resolution.height)
 	{
-		scene->pixels[i] = (t_pixel*)malloc(sizeof(t_pixel) * scene->resolution.width);
+		scene->pixels[i] = (t_pixel*)malloc(sizeof(t_pixel) *
+								scene->resolution.width);
 		i++;
 	}
 }
