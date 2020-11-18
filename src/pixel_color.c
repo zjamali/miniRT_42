@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:09:11 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 17:43:02 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 18:24:46 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,44 +102,50 @@ double		ft_get_intersection(t_object *temps, t_ray p_ray,
 	}
 	return (closet_object_t);
 }
-
-
+/*
+int ft_check_darness(t_scene *scene, t_object *closet_object, t_shadow_variables shadow)
+{
+	
+	
+	
+}
+*/
 
 int				ft_chech_pixel_in_dark(t_scene *scene,
 						t_object *closet_object , double t)
 {
-	t_shadow_variables	shadow;
+	t_shadow_variables	dark;
 	t_light				*light;
 
-	shadow.scale_direction_to_p = vectorscal(scene->ray->direction, t);
-	shadow.p = vectorsadd(scene->ray->origin, shadow.scale_direction_to_p); 
-	shadow.dark = 0;
+	dark.scale_direction_to_p = vectorscal(scene->ray->direction, t);
+	dark.p = vectorsadd(scene->ray->origin, dark.scale_direction_to_p); 
+	dark.dark = 0;
 	light = scene->light;
-	shadow.shadaw = 0;
+	dark.shadaw = 0;
 	while (light != NULL)
 	{
-		shadow.light_to_p = vectorssub(shadow.p, light->origin);
-		shadow.light_ray.origin = light->origin;
-		shadow.light_ray.direction = normalize(shadow.light_to_p);
-		shadow.temps = scene->objects;
-		shadow.closet_object_t = ft_get_intersection(shadow.temps,
-		shadow.light_ray, closet_object);
-		shadow.light_to_c = vectorscal(shadow.light_ray.direction,
-		shadow.closet_object_t);
-		shadow.light_to_c = vectorsadd(shadow.light_to_c,
-		shadow.light_ray.origin);
-		shadow.light_to_c = vectorssub(shadow.light_to_c,
-		shadow.light_ray.origin);
-		shadow.light_to_c_lenght = lenght(shadow.light_to_c);
-		shadow.light_to_c_lenght = shadow.light_to_c_lenght;
-		shadow.light_to_p_lenght = lenght(shadow.light_to_p);
-		if (shadow.light_to_p_lenght > shadow.light_to_c_lenght)
+		dark.light_to_p = vectorssub(dark.p, light->origin);
+		dark.light_ray.origin = light->origin;
+		dark.light_ray.direction = normalize(dark.light_to_p);
+		dark.temps = scene->objects;
+		dark.closet_object_t = ft_get_intersection(dark.temps,
+		dark.light_ray, closet_object);
+		dark.light_to_c = vectorscal(dark.light_ray.direction,
+		dark.closet_object_t);
+		dark.light_to_c = vectorsadd(dark.light_to_c,
+		dark.light_ray.origin);
+		dark.light_to_c = vectorssub(dark.light_to_c,
+		dark.light_ray.origin);
+		dark.light_to_c_lenght = lenght(dark.light_to_c);
+		dark.light_to_c_lenght = dark.light_to_c_lenght;
+		dark.light_to_p_lenght = lenght(dark.light_to_p);
+		if (dark.light_to_p_lenght > dark.light_to_c_lenght)
 		{
-			shadow.dark = shadow.dark + 1;
+			dark.dark = dark.dark + 1;
 		}
 		light = light->next;
 	}
-	if (shadow.dark == scene->light_number)
+	if (dark.dark == scene->light_number)
 		return (0);
 	return 1;
 }

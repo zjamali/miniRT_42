@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 17:34:23 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 14:59:53 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 18:18:30 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ double		ft_get_first_intersection(t_object *temps, t_ray p_ray,
 			}
 		temps = temps->next;
 	}
-	(void)closet_object;
 	// for doesnt intersect with same object with calcule it shadaw
 	if (closet_object == first_intersection_object)
 	{
