@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 13:44:05 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 19:43:12 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ typedef struct		s_bmp
 	int				row;
 }					t_bmp;
 
+int					ft_chech_pixel_in_dark(t_scene *scene,
+						t_object *closet_object, double t);
+t_vector 			ft_calcule_pixel_color(t_scene *scene,
+							t_object *closet_object, double t);
 double				ft_hit_objects(t_object *temps, t_ray p_ray);
 void				ft_free_scene(t_scene *scene);
 void				ft_free_pixels(t_scene *scene);

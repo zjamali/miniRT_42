@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:10:33 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/16 14:31:12 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 20:30:46 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,16 @@ int			ft_check_line(char *line)
 			ft_print_error("undifined symbole in the scene file");
 		i++;
 	}
+	i = 1;
+	while (line[i] !='\0')
+	{
+		if (line[i] == ',' && line[i + 1] == ',')
+			ft_print_error("two comma in line");
+		i++;
+	}
 	return (1);
 }
 
-/*
-	mlx_get_screen_size(scene->mlx_ptr,&width,&height);
- */
 
 void		ft_check_scene(t_scene *scene)
 {

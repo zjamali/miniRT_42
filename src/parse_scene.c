@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:50:46 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 13:42:32 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 20:44:33 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void		parsing_light(char **light_line, t_scene *scene)
 	char		**color;
 	double		intensity;
 	t_light		*light;
-	
+
 	if (light_line[3] == NULL)
 		ft_print_error("you have to specify the light \
 				coordination point,brightness and color.");
@@ -90,6 +90,11 @@ void		parsing_line(char *line, t_scene *scene)
 	char **split;
 
 	split = ft_split(line, ' ');
+	if (split[1] == NULL)
+	{
+		ft_free_scene(scene);
+		ft_print_error("empty coordination");
+	}
 	if (split[0][0] == 'R')
 		parsing_resolution(split, scene);
 	else if (split[0][0] == 'A')

@@ -6,17 +6,25 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 17:41:03 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 20:58:38 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
+void ft_check_file(char *file_name)
+{
+	int i;
+	
+	i = 0;
+	while (file_name[i] != '\0')
+		i++;
+	if (ft_strncmp(file_name + i - 2,"rt",2))
+		ft_print_error("file extention not .rt ");
+}
 t_scene		*ft_scene_init(char *file_name)
 {
 	extern int	errno;
 	t_scene		*scene;
-
 	scene = malloc(sizeof(t_scene));
 	scene->fd = open(file_name, O_RDONLY);
 	if (scene->fd < 0)
@@ -24,6 +32,7 @@ t_scene		*ft_scene_init(char *file_name)
 		ft_print_error(strerror(errno));
 		exit(EXIT_FAILURE);
 	}
+	ft_check_file(file_name);
 	scene->resolution.height = 0;
 	scene->resolution.width = 0;
 	scene->ambient.intensity = -1;

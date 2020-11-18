@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 19:59:10 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/16 20:00:05 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 20:32:40 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@ void		parsing_sphere(char **sph, t_scene *scene)
 	t_object			*new_object;
 
 	if (sph[3] == NULL)
+	{
+		ft_free_scene(scene);
 		ft_print_error("you have to specify the sphere center coordination\
 				point,diameter and color.");
+	}
 	obj.origin = ft_split(sph[1], ',');
 	obj.color = ft_split(sph[3], ',');
 	obj.diameter = ft_atof(sph[2]);

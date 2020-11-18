@@ -6,13 +6,13 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:09:11 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 18:24:46 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 19:39:43 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-double			ft_calcule_objects__t(t_ray *ray, t_object *temp)
+double					ft_calcule_objects__t(t_ray *ray, t_object *temp)
 {
 	double t;
 
@@ -30,7 +30,7 @@ double			ft_calcule_objects__t(t_ray *ray, t_object *temp)
 	return (t);
 }
 
-t_pixel_color	ft_init_pixel_color(t_scene *scene)
+t_pixel_color			ft_init_pixel_color(t_scene *scene)
 {
 	t_pixel_color pixel_color;
 
@@ -47,110 +47,32 @@ t_pixel_color	ft_init_pixel_color(t_scene *scene)
 	return (pixel_color);
 }
 
-t_vector		ft_calculate_pixel_its_color(t_scene *scene,
-					double closet_object_t, t_object *closet_object)
+t_vector				ft_calculate_pixel_its_color(t_scene *scene,
+		double closet_object_t, t_object *closet_object)
 {
 	t_pixel_color pxl;
 
 	pxl = ft_init_pixel_color(scene);
-	
 	pxl.shadow = ft_shadow(scene, closet_object_t, closet_object);
 	pxl.i_ambient = ft_ambient(scene->ambient, closet_object->color);
-		if (closet_object->object_type == 's' || closet_object->object_type == 'c')
-	pxl.i_specular = ft_specular(scene, closet_object_t, closet_object);
+	if (closet_object->object_type == 's' || closet_object->object_type == 'c')
+		pxl.i_specular = ft_specular(scene, closet_object_t, closet_object);
 	if (pxl.shadow < 1)
-		pxl.i_specular = vectorscal(pxl.i_specular,0);
+		pxl.i_specular = vectorscal(pxl.i_specular, 0);
 	pxl.i_diffuse = ft_diffuse(scene, closet_object_t, closet_object);
 	pxl.colors.y = pxl.i_ambient.y * scene->ambient.color.x + pxl.shadow *
-									(pxl.i_diffuse.y + pxl.i_specular.y);
+		(pxl.i_diffuse.y + pxl.i_specular.y);
 	pxl.colors.x = pxl.i_ambient.x * scene->ambient.color.y + pxl.shadow *
-									(pxl.i_diffuse.x + pxl.i_specular.x);
+		(pxl.i_diffuse.x + pxl.i_specular.x);
 	pxl.colors.z = pxl.i_ambient.z * scene->ambient.color.z + pxl.shadow *
-									(pxl.i_diffuse.z + pxl.i_specular.z);
+		(pxl.i_diffuse.z + pxl.i_specular.z);
 	pxl.colors.x = min(255, pxl.colors.x);
 	pxl.colors.y = min(255, pxl.colors.y);
 	pxl.colors.z = min(255, pxl.colors.z);
 	return (pxl.colors);
 }
 
-double		ft_get_intersection(t_object *temps, t_ray p_ray,
-			t_object *closet_object)
-{
-	double		closet_object1_t;
-	double		closet_object_t;
-	t_object	*first_intersection_object;
-
-	closet_object1_t = 0;
-	closet_object_t = 1000000000000;
-	while (temps != NULL)
-	{
-		closet_object1_t = ft_hit_objects(temps, p_ray);
-		if (closet_object1_t > 0)
-			if (closet_object1_t < closet_object_t)
-			{
-				first_intersection_object = temps;
-				closet_object_t = closet_object1_t;
-			}
-		temps = temps->next;
-	}
-	(void)closet_object;
-	// for doesnt intersect with same object with calcule it shadaw
-	if (closet_object == first_intersection_object)
-	{
-		return (closet_object_t  + 0.05);
-		//return (10000000000000);
-	}
-	return (closet_object_t);
-}
-/*
-int ft_check_darness(t_scene *scene, t_object *closet_object, t_shadow_variables shadow)
-{
-	
-	
-	
-}
-*/
-
-int				ft_chech_pixel_in_dark(t_scene *scene,
-						t_object *closet_object , double t)
-{
-	t_shadow_variables	dark;
-	t_light				*light;
-
-	dark.scale_direction_to_p = vectorscal(scene->ray->direction, t);
-	dark.p = vectorsadd(scene->ray->origin, dark.scale_direction_to_p); 
-	dark.dark = 0;
-	light = scene->light;
-	dark.shadaw = 0;
-	while (light != NULL)
-	{
-		dark.light_to_p = vectorssub(dark.p, light->origin);
-		dark.light_ray.origin = light->origin;
-		dark.light_ray.direction = normalize(dark.light_to_p);
-		dark.temps = scene->objects;
-		dark.closet_object_t = ft_get_intersection(dark.temps,
-		dark.light_ray, closet_object);
-		dark.light_to_c = vectorscal(dark.light_ray.direction,
-		dark.closet_object_t);
-		dark.light_to_c = vectorsadd(dark.light_to_c,
-		dark.light_ray.origin);
-		dark.light_to_c = vectorssub(dark.light_to_c,
-		dark.light_ray.origin);
-		dark.light_to_c_lenght = lenght(dark.light_to_c);
-		dark.light_to_c_lenght = dark.light_to_c_lenght;
-		dark.light_to_p_lenght = lenght(dark.light_to_p);
-		if (dark.light_to_p_lenght > dark.light_to_c_lenght)
-		{
-			dark.dark = dark.dark + 1;
-		}
-		light = light->next;
-	}
-	if (dark.dark == scene->light_number)
-		return (0);
-	return 1;
-}
-
-int				ft_color_of_pixel(t_scene *scene)
+int						ft_color_of_pixel(t_scene *scene)
 {
 	t_pixel_color pxl;
 
@@ -170,14 +92,22 @@ int				ft_color_of_pixel(t_scene *scene)
 	}
 	if (pxl.closet_object != NULL)
 	{
-		if (ft_chech_pixel_in_dark(scene,pxl.closet_object, pxl.closet_object_t) != 0)
-		{
-				pxl.colors = ft_calculate_pixel_its_color(scene,
-							pxl.closet_object_t, pxl.closet_object);
-		}
-		else
-			pxl.colors = vectorscal(ft_ambient(scene->ambient,pxl.closet_object->color),255);
+		pxl.colors = ft_calcule_pixel_color(scene,
+								pxl.closet_object, pxl.closet_object_t);
 		pxl.pixel_color = rgbconvert(pxl.colors.x, pxl.colors.y, pxl.colors.z);
 	}
 	return (pxl.pixel_color);
+}
+
+t_vector				ft_calcule_pixel_color(t_scene *scene,
+								t_object *closet_object, double t)
+{
+	t_vector color;
+
+	if (ft_chech_pixel_in_dark(scene, closet_object, t) != 0)
+		color = ft_calculate_pixel_its_color(scene, t, closet_object);
+	else
+		color = vectorscal(ft_ambient(scene->ambient,
+											closet_object->color), 255);
+	return (color);
 }
