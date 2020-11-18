@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 11:21:52 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/17 13:07:59 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 13:41:37 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ typedef struct		s_elmt_to_tran
 
 typedef struct		s_scene
 {
+	int				light_number;
 	t_ambient		ambient;
 	t_resolution	resolution;
 	t_camera		*camera;

@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/17 09:29:56 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 14:54:15 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ double		ft_calcule_shadaw(t_scene *scene, t_object *closet_object,
 	shadow->light_to_c = vectorssub(shadow->light_to_c,
 			shadow->light_ray.origin);
 	shadow->light_to_c_lenght = lenght(shadow->light_to_c);
+	shadow->light_to_c_lenght = shadow->light_to_c_lenght;
 	shadow->light_to_p_lenght = lenght(shadow->light_to_p);
 	if (shadow->light_to_p_lenght > shadow->light_to_c_lenght)
 	{

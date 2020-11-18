@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:09:11 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/16 20:36:53 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 14:30:33 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,17 @@ t_vector		ft_calculate_pixel_its_color(t_scene *scene,
 	t_pixel_color pxl;
 
 	pxl = ft_init_pixel_color(scene);
-	pxl.i_diffuse = ft_diffuse(scene, closet_object_t, closet_object);
+	
 	pxl.shadow = ft_shadow(scene, closet_object_t, closet_object);
 	pxl.i_ambient = ft_ambient(scene->ambient, closet_object->color);
-	if (closet_object->object_type == 's' || closet_object->object_type == 'c')
+	if (pxl.shadow > (1 - scene->light_number * 0.4) && pxl.shadow != 0)
+	{
+		//pxl.i_specular = vectorscal(pxl.i_specular, 0);
+		//pxl.i_diffuse = vectorscal(pxl.i_diffuse, 0);
+		pxl.i_diffuse = ft_diffuse(scene, closet_object_t, closet_object);
+		if (closet_object->object_type == 's' || closet_object->object_type == 'c')
 		pxl.i_specular = ft_specular(scene, closet_object_t, closet_object);
-	if (pxl.shadow < 1)
-		pxl.i_specular = vectorscal(pxl.i_specular, 0);
+	}
 	pxl.colors.y = pxl.i_ambient.y * scene->ambient.color.x + pxl.shadow *
 									(pxl.i_diffuse.y + pxl.i_specular.y);
 	pxl.colors.x = pxl.i_ambient.x * scene->ambient.color.y + pxl.shadow *

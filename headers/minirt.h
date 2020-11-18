@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 10:11:17 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 13:44:05 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,10 @@
 # include "parsing.h"
 # define PI 3.1415926535897932
 
+
+
+#include <stdio.h>
+
 typedef struct		s_bmp
 {
 	unsigned char	header[54];
@@ -40,6 +44,7 @@ typedef struct		s_bmp
 	int				row;
 }					t_bmp;
 
+double				ft_hit_objects(t_object *temps, t_ray p_ray);
 void				ft_free_scene(t_scene *scene);
 void				ft_free_pixels(t_scene *scene);
 void				ft_free_objects(t_object *objects);

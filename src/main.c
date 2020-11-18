@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/17 14:44:14 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/18 13:43:41 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_scene		*ft_scene_init(char *file_name)
 	scene->objects = NULL;
 	scene->img = NULL;
 	scene->element_to_transform = NULL;
+	scene->light_number = 0;
 	return (scene);
 }
 
@@ -43,6 +44,7 @@ int			main(int argc, char **argv)
 	{
 		scene = ft_scene_init(argv[1]);
 		scene = parsing(scene->fd, scene);
+		printf("\n->%d\n",scene->light_number);
 		if (argc == 2)
 		{
 			scene->mlx_ptr = mlx_init();
