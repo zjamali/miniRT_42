@@ -16,7 +16,6 @@ void		ft_free_scene(t_scene *scene)
 {
 	if (scene != NULL)
 	{
-		write(1, "free", 4);
 		if (scene->camera != NULL)
 			ft_free_cameras(scene->camera);
 		if (scene->light != NULL)
@@ -30,8 +29,9 @@ void		ft_free_scene(t_scene *scene)
 			mlx_clear_window(scene->mlx_ptr, scene->win_ptr);
 			mlx_destroy_window(scene->mlx_ptr, scene->win_ptr);
 		}
-		if (scene->pixels != NULL)
-			ft_free_pixels(scene);
+		write(1, "free", 4);
+		//if (scene->pixels != NULL)
+		//	ft_free_pixels(scene);
 		if (scene->ray != NULL)
 			free(scene->ray);
 		if (scene->element_to_transform != NULL)
