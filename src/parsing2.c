@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 20:00:56 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/17 11:54:47 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/19 14:09:48 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,11 @@ t_vector	ft_parse_color(char **colors)
 t_vector	ft_parse_coord(char **coord)
 {
 	t_vector coords;
-
+	write(1,coord[1],ft_strlen(coord[1]));
 	coords.x = ft_atof(coord[0]);
 	coords.y = ft_atof(coord[1]);
 	coords.z = ft_atof(coord[2]);
+	printf("[%f]",coords.y);
 	return (coords);
 }
 

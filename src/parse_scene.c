@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:50:46 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 20:44:33 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/19 14:08:26 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,26 +84,9 @@ void		parsing_light(char **light_line, t_scene *scene)
 	ft_element_can_transforme(scene, 'l', light);
 	scene->light_number++;
 }
-
-void		parsing_line(char *line, t_scene *scene)
+void		parsing_line_objects(t_scene *scene, char **split)
 {
-	char **split;
-
-	split = ft_split(line, ' ');
-	if (split[1] == NULL)
-	{
-		ft_free_scene(scene);
-		ft_print_error("empty coordination");
-	}
-	if (split[0][0] == 'R')
-		parsing_resolution(split, scene);
-	else if (split[0][0] == 'A')
-		parsing_ambiant(split, scene);
-	else if (split[0][0] == 'l')
-		parsing_light(split, scene);
-	else if (ft_strncmp(split[0], "c", 2) == 0)
-		parsing_camera(split, scene);
-	else if (ft_strncmp(split[0], "pl", 2) == 0)
+	if (ft_strncmp(split[0], "pl", 2) == 0)
 		parsing_plan(split, scene);
 	else if (ft_strncmp(split[0], "sp", 2) == 0)
 		parsing_sphere(split, scene);
@@ -113,10 +96,69 @@ void		parsing_line(char *line, t_scene *scene)
 		parsing_triangle(split, scene);
 	else if (ft_strncmp(split[0], "cy", 2) == 0)
 		parsing_cylinder(split, scene);
+}
+
+char *ft_remake_line(char *line)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (line[i] != '\0')
+	{
+		if (line[i] == ' ' && line[i + 1] == ',')
+		{
+			j = i;
+			while(line[j] == ' ')
+			{
+				line[j] = '.';
+				j--;
+			}
+		}
+		if (line[i] == ',' && line[i + 1] == ' ')
+		{
+			j = i + 1;
+			while(line[j] == ' ')
+			{
+				line[j] = '0';
+				j++;
+			}
+			if (line[j] == '-')
+			{
+				line[i + 1] = '-';
+				line[j] = '0'; 
+			}
+		}
+		i++;
+	}
+	printf("%s\n",line);
+	return line;
+}
+
+void		parsing_line(char *line, t_scene *scene)
+{
+	char **split;
+	
+	line = ft_remake_line(line);
+	split = ft_split(line, ' ');
+	if (split[1] == NULL)
+	{
+		ft_free_scene(scene);
+		ft_print_error("empty coordination");
+	}	
+	if (split[0][0] == 'R')
+		parsing_resolution(split, scene);
+	else if (split[0][0] == 'A')
+		parsing_ambiant(split, scene);
+	else if (split[0][0] == 'l')
+		parsing_light(split, scene);
+	else if (ft_strncmp(split[0], "c", 2) == 0)
+		parsing_camera(split, scene);
 	else if (ft_strncmp(split[0], "tra", 3) == 0)
 		parse_translation(split, scene);
 	else if (ft_strncmp(split[0], "rot", 3) == 0)
 		parse_rotation(split, scene);
+	parsing_line_objects(scene,split);
 }
 
 t_scene		*parsing(int fd, t_scene *scene)

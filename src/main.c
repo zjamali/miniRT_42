@@ -6,12 +6,12 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 20:58:38 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/19 08:46:32 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-void ft_check_file(char *file_name)
+void		ft_check_file(char *file_name)
 {
 	int i;
 	
@@ -21,6 +21,7 @@ void ft_check_file(char *file_name)
 	if (ft_strncmp(file_name + i - 2,"rt",2))
 		ft_print_error("file extention not .rt ");
 }
+
 t_scene		*ft_scene_init(char *file_name)
 {
 	extern int	errno;
