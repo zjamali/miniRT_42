@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 20:00:56 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/19 14:09:48 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/19 14:46:17 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ int			ft_check_normal(char **norm)
 		return (1);
 	else
 	{
-		normal.x = ft_atof(norm[0]);
-		normal.y = ft_atof(norm[1]);
-		normal.z = ft_atof(norm[2]);
+		normal.x = ft_atod(norm[0]);
+		normal.y = ft_atod(norm[1]);
+		normal.z = ft_atod(norm[2]);
 		if (normal.x < -1 || normal.x > 1 || normal.y < -1 || normal.y > 1 ||
 				normal.z < -1 || normal.z > 1)
 			return (1);
@@ -36,9 +36,9 @@ t_vector	ft_parse_normal(char **norm)
 {
 	t_vector normal;
 
-	normal.x = ft_atof(norm[0]);
-	normal.y = ft_atof(norm[1]);
-	normal.z = ft_atof(norm[2]);
+	normal.x = ft_atod(norm[0]);
+	normal.y = ft_atod(norm[1]);
+	normal.z = ft_atod(norm[2]);
 	normal = normalize(normal);
 	return (normal);
 }
@@ -57,9 +57,9 @@ t_vector	ft_parse_coord(char **coord)
 {
 	t_vector coords;
 	write(1,coord[1],ft_strlen(coord[1]));
-	coords.x = ft_atof(coord[0]);
-	coords.y = ft_atof(coord[1]);
-	coords.z = ft_atof(coord[2]);
+	coords.x = ft_atod(coord[0]);
+	coords.y = ft_atod(coord[1]);
+	coords.z = ft_atod(coord[2]);
 	printf("[%f]",coords.y);
 	return (coords);
 }

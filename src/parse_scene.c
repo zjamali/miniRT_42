@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:50:46 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/19 14:08:26 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/19 14:45:36 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void		parsing_ambiant(char **amb, t_scene *scene)
 		ft_print_error("You can't specify ambient twice.");
 	if (amb[1] == NULL || amb[2] == NULL)
 		ft_print_error("you have to specify the intensity and color.");
-	scene->ambient.intensity = ft_atof(amb[1]);
+	scene->ambient.intensity = ft_atod(amb[1]);
 	color = ft_split(amb[2], ',');
 	scene->ambient.color.x = ft_atoi(color[0]);
 	scene->ambient.color.y = ft_atoi(color[1]);
@@ -68,7 +68,7 @@ void		parsing_light(char **light_line, t_scene *scene)
 				coordination point,brightness and color.");
 	origin = ft_split(light_line[1], ',');
 	color = ft_split(light_line[3], ',');
-	intensity = ft_atof(light_line[2]);
+	intensity = ft_atod(light_line[2]);
 	if (ft_check_coords(origin))
 		ft_print_error("light coordination point x,y,z");
 	if (ft_check_color(color))

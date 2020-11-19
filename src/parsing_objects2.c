@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 19:59:10 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 20:32:40 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/19 14:46:09 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void		parsing_sphere(char **sph, t_scene *scene)
 	}
 	obj.origin = ft_split(sph[1], ',');
 	obj.color = ft_split(sph[3], ',');
-	obj.diameter = ft_atof(sph[2]);
+	obj.diameter = ft_atod(sph[2]);
 	ft_check_sphere(obj);
 	sphere = malloc(sizeof(t_sphere));
 	sphere->radius = obj.diameter / 2.0;
@@ -98,7 +98,7 @@ void		parsing_square(char **sqr, t_scene *scene)
 	obj.origin = ft_split(sqr[1], ',');
 	obj.normal = ft_split(sqr[2], ',');
 	obj.color = ft_split(sqr[4], ',');
-	obj.size = ft_atof(sqr[3]);
+	obj.size = ft_atod(sqr[3]);
 	ft_check_square(obj);
 	square = malloc(sizeof(t_square));
 	square->edge_size = obj.size;
