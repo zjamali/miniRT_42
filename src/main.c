@@ -30,13 +30,13 @@ t_scene		*ft_scene_init(char *file_name)
 	extern int	errno;
 	t_scene		*scene;
 
-	scene = malloc(sizeof(t_scene));
+	scene = (t_scene*)malloc(sizeof(t_scene));
+	if (!scene)
+		ft_print_error(scene,"allocation error");
+	ft_memset((void*)scene, 0, sizeof(t_scene));
 	scene->fd = open(file_name, O_RDONLY);
 	if (scene->fd < 0)
-	{
 		ft_print_error(scene, strerror(errno));
-		exit(1);
-	}
 	ft_check_file_name(file_name, scene);
 	scene->resolution.height = 0;
 	scene->resolution.width = 0;

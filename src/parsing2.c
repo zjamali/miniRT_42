@@ -67,7 +67,11 @@ void		ft_element_can_transforme(t_scene *scene, char wich_element,
 			void *the_element)
 {
 	if (scene->element_to_transform == NULL)
-		scene->element_to_transform = malloc(sizeof(t_elmt_to_tran));
-	scene->element_to_transform->wich_element = wich_element;
+	{
+		if (!(scene->element_to_transform = (t_elmt_to_tran*)malloc(sizeof(t_elmt_to_tran))))
+			ft_print_error(scene,"allocation error");
+		ft_memset((void*)scene->element_to_transform, 0, sizeof(t_elmt_to_tran));
+	}
+		scene->element_to_transform->wich_element = wich_element;
 	scene->element_to_transform->element = the_element;
 }

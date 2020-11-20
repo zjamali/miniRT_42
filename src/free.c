@@ -29,9 +29,7 @@ void		ft_free_scene(t_scene *scene)
 			mlx_clear_window(scene->mlx_ptr, scene->win_ptr);
 			mlx_destroy_window(scene->mlx_ptr, scene->win_ptr);
 		}
-		write(1, "free", 4);
-		//if (scene->pixels != NULL)
-		//	ft_free_pixels(scene);
+		write(1, "\nfree the scene\n", ft_strlen("\nfree the scene\n"));
 		if (scene->ray != NULL)
 			free(scene->ray);
 		if (scene->element_to_transform != NULL)

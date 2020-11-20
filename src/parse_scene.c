@@ -43,7 +43,9 @@ void		parsing_camera(char **cam, t_scene *scene)
 		ft_print_error(scene, "camera lookfrom in coordination x,y,z");
 	if (ft_check_normal(orient))
 		ft_print_error(scene, "camera orientation in x,y,z");
-	camera = malloc(sizeof(t_camera));
+	if (!(camera = (t_camera*)malloc(sizeof(t_camera))))
+		ft_print_error(scene,"allocation error");
+	ft_memset((void*)camera, 0, sizeof(t_camera));
 	camera->lookfrom = ft_parse_coord(origin);
 	camera->orientaion = ft_parse_normal(orient);
 	camera->next = NULL;
@@ -75,7 +77,8 @@ void		parsing_light(char **light_line, t_scene *scene)
 		ft_print_error(scene, "light color red,green,blue in range [0,255]");
 	if (intensity < 0 || intensity > 1)
 		ft_print_error(scene, "light britness must be in range [0,1]");
-	light = malloc(sizeof(t_light));
+	if (!(light = (t_light*)malloc(sizeof(t_light))))
+		ft_print_error(scene, "allocation error");
 	light->origin = ft_parse_coord(origin);
 	light->color = ft_parse_color(color);
 	light->intensity = intensity;
@@ -149,6 +152,43 @@ char		*ft_remake_line(char *line)
 	return (line);
 }
 
+int			ft_check_cordinations(char *line)
+{
+	int i;
+	int	a;
+
+	i = 0;
+	a = 0;
+
+	while (line[i])
+	{
+		if (line[i] == ',')
+			a++;
+		i++;
+	}
+	if (a > 2)
+		return (1);
+	return (0);
+}
+
+int ft_check_properties(char **line)
+{
+	int i;
+	int result;
+
+	i = 0;
+	result = 1;
+	while (line[i])
+	{
+		printf("%s\n %d",line[i],i);
+		result =  ft_check_cordinations(line[i]);
+		if (result == 1)
+			return 1;
+		i++;
+	}
+	return 0;
+}
+
 void		parsing_line(char *line, t_scene *scene)
 {
 	char **split;
@@ -157,6 +197,8 @@ void		parsing_line(char *line, t_scene *scene)
 	split = ft_split(line, ' ');
 	if (split[1] == NULL)
 		ft_print_error(scene, "empty coordination");
+	if (ft_check_properties(split))
+		ft_print_error(scene, "too much coords");
 	if (split[0][0] == 'R')
 		parsing_resolution(split, scene);
 	else if (split[0][0] == 'A')

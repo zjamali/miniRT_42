@@ -12,11 +12,13 @@
 
 #include "minirt.h"
 
-t_object	*ft_create_triangle(t_triangle *triangle)
+t_object	*ft_create_triangle(t_scene *scene, t_triangle *triangle)
 {
 	t_object *new_object;
 
-	new_object = malloc(sizeof(t_object));
+	if (!(new_object = (t_object*)malloc(sizeof(t_object))))
+		ft_print_error(scene, "allocation error");
+	ft_memset((void*)new_object, 0, sizeof(t_object));
 	new_object->object = triangle;
 	new_object->color = triangle->color;
 	new_object->object_type = 't';
@@ -40,21 +42,25 @@ void		parsing_triangle(char **tr, t_scene *scene)
 	obj.cord3 = ft_split(tr[3], ',');
 	obj.color = ft_split(tr[4], ',');
 	ft_check_triangle(scene, obj);
-	triangle = malloc(sizeof(t_triangle));
+	if (!(triangle = (t_triangle*)malloc(sizeof(t_triangle))))
+		ft_print_error(scene, "allocation error");
+	ft_memset((void*)triangle, 0, sizeof(t_triangle));
 	triangle->vectors[0] = ft_parse_coord(obj.cord1);
 	triangle->vectors[1] = ft_parse_coord(obj.cord2);
 	triangle->vectors[2] = ft_parse_coord(obj.cord3);
 	triangle->color = ft_parse_color(obj.color);
-	new_object = ft_create_triangle(triangle);
+	new_object = ft_create_triangle(scene, triangle);
 	ft_lstadd_back(&scene->objects, new_object);
 	ft_element_can_transforme(scene, 't', new_object);
 }
 
-t_object	*ft_create_cylinder(t_cylinder *cylinder)
+t_object	*ft_create_cylinder(t_scene *scene, t_cylinder *cylinder)
 {
 	t_object *new_object;
 
-	new_object = malloc(sizeof(t_object));
+	if (!(new_object = (t_object*)malloc(sizeof(t_object))))
+		ft_print_error(scene,"allocation error");
+	ft_memset((void*)new_object, 0, sizeof(t_object));
 	new_object->object = cylinder;
 	new_object->color = cylinder->color;
 	new_object->object_type = 'c';
@@ -81,13 +87,15 @@ void		parsing_cylinder(char **cy, t_scene *scene)
 	obj.diameter = ft_atod(cy[3]);
 	obj.size = ft_atod(cy[4]);
 	ft_check_cylinder(scene, obj);
-	cylinder = malloc(sizeof(t_cylinder));
+	if (!(cylinder = (t_cylinder*)malloc(sizeof(t_cylinder))))
+		ft_print_error(scene,"allocation error");
+	ft_memset((void*)cylinder, 0, sizeof(t_cylinder));
 	cylinder->coord = ft_parse_coord(obj.origin);
 	cylinder->normal = ft_parse_normal(obj.normal);
 	cylinder->color = ft_parse_color(obj.color);
 	cylinder->diameter = obj.diameter;
 	cylinder->height = obj.size;
-	new_object = ft_create_cylinder(cylinder);
+	new_object = ft_create_cylinder(scene, cylinder);
 	ft_lstadd_back(&scene->objects, new_object);
 	ft_element_can_transforme(scene, 'y', new_object);
 }

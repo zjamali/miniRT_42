@@ -27,30 +27,36 @@ void	ft_check_element(t_scene *scene, char *line, int i)
 		ft_print_error(scene, "unknown element in the scene.");
 }
 
-void		ft_check_symboles(t_scene *scene, char *line, int i)
+void		ft_check_symboles(t_scene *scene, char *line, int *n)
 {
+	int i;
+	int	bol;
+	
+	i = *n;
+	bol = 0;
 	while(line[i] != '\0')
 	{
-		write(1,&line[i],ft_strlen(&line[i]));
-		write(1,"\n",1);
 		if (line[i] == ' ' || line[i] == '-' || line[i] == ',' || line[i] == '.' 
 		|| (line[i] >= '0' && line[i] <= '9') || line[i] == '+' || 
 		line[i] == 'R' || line[i] == 'A' || line[i] == 'l' || line[i] == '\t' || line[i] == 'c' ||
 		line[i] == 'p' || line[i] == 'l' || line[i] == 's' || line[i] == 'q' || line[i] == 'y' ||
 		line[i] == 't' || line[i] == 'r' || line[i] == 'o')
 		{
+			if (line[i] == ',' && bol == 0)
+				ft_print_error(scene, "missing cord");
+			else if (line[i] == ',')
+				bol = 0;
+			if (line[i] >= '0' && line[i] <= '9')
+				bol = 1;
 			i++;
 		}
 		else
 			ft_print_error(scene,"undifined symbole");
-		
 	}
-	
 }
 
 int			ft_check_line(t_scene *scene, char *line)
 {
-	
 	int i;
 
 	i = 0;
@@ -59,7 +65,7 @@ int			ft_check_line(t_scene *scene, char *line)
 	if (line[i] == '\0')
 		return (0);
 	ft_check_element(scene, line, i);
-	ft_check_symboles(scene,line,i);
+	ft_check_symboles(scene,line,&i);
 	i = 0;
 	while (line[i] != '\0')
 	{
@@ -112,6 +118,8 @@ int			ft_check_coords(char **coord)
 	{
 		return (0);
 	}
+	if(coord[3] != NULL)
+		return 0;
 	if (coord[0] == NULL || coord[1] == NULL || coord[2] == NULL)
 		return (1);
 	return (0);

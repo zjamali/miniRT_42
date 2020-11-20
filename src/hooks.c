@@ -24,7 +24,10 @@ t_imag		*ft_creat_img(t_scene *scene, void *mlx_ptr)
 {
 	t_imag *imag;
 
-	imag = malloc(sizeof(t_imag));
+	imag = (t_imag*)malloc(sizeof(t_imag));
+	if (!imag)
+		ft_print_error(scene,"allocation error");
+	ft_memset((void*)imag, 0, sizeof(t_imag));
 	imag->img = mlx_new_image(mlx_ptr, scene->resolution.width,
 			scene->resolution.height);
 	imag->addr = mlx_get_data_addr(imag->img, &imag->bits_per_pixel,

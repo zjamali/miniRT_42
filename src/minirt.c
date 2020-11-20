@@ -14,6 +14,7 @@
 
 void		ft_print_error(t_scene *scene, char *error)
 {
+
 	ft_free_scene(scene);
 	write(2, "Error\n", 6);
 	write(2, error, ft_strlen(error));
@@ -40,7 +41,10 @@ t_ray		*ft_ray_creating(t_scene *scene, t_camera *camera, int i, int j)
 {
 	t_ray *ray;
 
-	ray = malloc(sizeof(t_ray));
+	ray = (t_ray*)malloc(sizeof(t_ray));
+	if (!ray)
+		ft_print_error(scene, "allocation error");
+	ft_memset((void*)ray, 0, sizeof(t_ray));
 	ray->origin = camera->lookfrom;
 	ray->direction = ft_camera_ray(scene, camera, i, j);
 	ray->direction = normalize(ray->direction);

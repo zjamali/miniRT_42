@@ -43,6 +43,8 @@ void		ft_write_bmp(t_scene *scene)
 	t_bmp *image;
 
 	image = (t_bmp*)malloc(sizeof(t_bmp));
+	if (!image)
+		ft_print_error(scene,"allocation error");
 	ft_memset((void*)image, 0, sizeof(t_bmp));
 	ft_write_header(image, scene);
 	image->fd = open("image.bmp", O_WRONLY | O_CREAT | O_TRUNC,
