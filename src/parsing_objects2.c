@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 19:59:10 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/19 14:46:09 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/20 09:40:02 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,13 @@ void		parsing_sphere(char **sph, t_scene *scene)
 	t_object			*new_object;
 
 	if (sph[3] == NULL)
-	{
-		ft_free_scene(scene);
-		ft_print_error("you have to specify the sphere center coordination\
-				point,diameter and color.");
-	}
+		ft_print_error(scene, "you have to specify the sphere center \
+		coordination point,diameter and color.");
+
 	obj.origin = ft_split(sph[1], ',');
 	obj.color = ft_split(sph[3], ',');
 	obj.diameter = ft_atod(sph[2]);
-	ft_check_sphere(obj);
+	ft_check_sphere(scene, obj);
 	sphere = malloc(sizeof(t_sphere));
 	sphere->radius = obj.diameter / 2.0;
 	sphere->origin = ft_parse_coord(obj.origin);
@@ -50,12 +48,12 @@ void		parsing_plan(char **pl, t_scene *scene)
 	t_object			*new_object;
 
 	if (pl[3] == NULL)
-		ft_print_error("you have to specify the plan coordination\
+		ft_print_error(scene, "you have to specify the plan coordination\
 				point,orientation and color.");
 	obj.origin = ft_split(pl[1], ',');
 	obj.normal = ft_split(pl[2], ',');
 	obj.color = ft_split(pl[3], ',');
-	ft_check_plane(obj);
+	ft_check_plane(scene, obj);
 	plane = malloc(sizeof(t_plane));
 	plane->coord = ft_parse_coord(obj.origin);
 	plane->orientation = ft_parse_normal(obj.normal);
@@ -93,13 +91,13 @@ void		parsing_square(char **sqr, t_scene *scene)
 	t_object			*new_object;
 
 	if (sqr[4] == NULL)
-		ft_print_error("you have to specify the square center coordination\
-				point,orientation,edge size and color.");
+		ft_print_error(scene, "you have to specify the square center \
+		coordination point,orientation,edge size and color.");
 	obj.origin = ft_split(sqr[1], ',');
 	obj.normal = ft_split(sqr[2], ',');
 	obj.color = ft_split(sqr[4], ',');
 	obj.size = ft_atod(sqr[3]);
-	ft_check_square(obj);
+	ft_check_square(scene, obj);
 	square = malloc(sizeof(t_square));
 	square->edge_size = obj.size;
 	square->center = ft_parse_coord(obj.origin);

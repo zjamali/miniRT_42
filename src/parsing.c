@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/16 19:22:01 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/20 09:28:37 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void		parse_translation(char **line, t_scene *scene)
 	char	**tran;
 
 	if (line[1] == NULL)
-		ft_print_error("you have to specify the transation coordination");
+		ft_print_error(scene, "you have to specify the transation coordination");
 	else
 	{
 		tran = ft_split(line[1], ',');
@@ -69,7 +69,7 @@ void		parse_rotation(char **line, t_scene *scene)
 	char **rot;
 
 	if (line[1] == NULL)
-		ft_print_error("you have to specify the rotation angles");
+		ft_print_error(scene, "you have to specify the rotation angles");
 	else
 	{
 		rot = ft_split(line[1], ',');
@@ -84,9 +84,9 @@ void		parse_rotation(char **line, t_scene *scene)
 void		parsing_resolution(char **resol, t_scene *scene)
 {
 	if (scene->resolution.height != 0)
-		ft_print_error("You can't specify resolution twice.");
+		ft_print_error(scene, "You can't specify resolution twice.");
 	if (resol[1] == NULL || resol[2] == NULL)
-		ft_print_error("you have to specify the width and height.");
+		ft_print_error(scene, "you have to specify the width and height.");
 	scene->resolution.width = ft_atoi(resol[1]);
 	scene->resolution.height = ft_atoi(resol[2]);
 }

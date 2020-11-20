@@ -6,18 +6,19 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/20 01:04:46 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/16 18:49:32 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/20 10:18:46 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void		ft_print_error(char *error)
+void		ft_print_error(t_scene *scene, char *error)
 {
+	ft_free_scene(scene);
 	write(2, "Error\n", 6);
 	write(2, error, ft_strlen(error));
 	write(2, "\n", 1);
-	exit(EXIT_FAILURE);
+	exit(1);
 }
 
 double		rgbconvert(int ir, int ig, int ib)

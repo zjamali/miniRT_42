@@ -6,30 +6,51 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:10:33 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/19 10:55:52 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/20 14:58:22 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void		ft_check_element(char *line)
+void	ft_check_element(t_scene *scene, char *line, int i)
 {
-	char **split;
-	int i;
-	
+	char	**split;
+
+	//split = &line;
+	split = ft_split(line + i, ' ');
 	i = 0;
-	split = ft_split(line, ' ');
-	if (split[0][0] != 'R' && split[0][0] != 'A' && split[0][0] != 'l'
-		&& ft_strncmp(split[0], "c", 2) && ft_strncmp(split[0], "pl", 2) &&
-		ft_strncmp(split[0], "sp", 2) && ft_strncmp(split[0], "sq", 2) &&
-		ft_strncmp(split[0], "tr", 2) && ft_strncmp(split[0], "cy", 2) &&
-		ft_strncmp(split[0], "rot", 3) && ft_strncmp(split[0], "tra", 3) && 
-		(split[0][0] == ' '))
-		ft_print_error("unknown element in the scene.");
+	if (split[i][0] != 'R' && split[i][0] != 'A' && split[i][0] != 'l'
+		&& ft_strncmp(split[i], "c", 2) && ft_strncmp(split[i], "pl", 2) &&
+		ft_strncmp(split[i], "sp", 2) && ft_strncmp(split[i], "sq", 2) &&
+		ft_strncmp(split[i], "tr", 2) && ft_strncmp(split[i], "cy", 2) &&
+		ft_strncmp(split[i], "rot", 3) && ft_strncmp(split[i], "tra", 3) )
+		ft_print_error(scene, "unknown element in the scene.");
 }
 
-int			ft_check_line(char *line)
+void		ft_check_symboles(t_scene *scene, char *line, int i)
 {
+	while(line[i] != '\0')
+	{
+		write(1,&line[i],ft_strlen(&line[i]));
+		write(1,"\n",1);
+		if (line[i] == ' ' || line[i] == '-' || line[i] == ',' || line[i] == '.' 
+		|| (line[i] >= '0' && line[i] <= '9') || line[i] == '+' || 
+		line[i] == 'R' || line[i] == 'A' || line[i] == 'l' || line[i] == '\t' || line[i] == 'c' ||
+		line[i] == 'p' || line[i] == 'l' || line[i] == 's' || line[i] == 'q' || line[i] == 'y' ||
+		line[i] == 't' || line[i] == 'r' || line[i] == 'o')
+		{
+			i++;
+		}
+		else
+			ft_print_error(scene,"undifined symbole");
+		
+	}
+	
+}
+
+int			ft_check_line(t_scene *scene, char *line)
+{
+	
 	int i;
 
 	i = 0;
@@ -37,19 +58,13 @@ int			ft_check_line(char *line)
 		i++;
 	if (line[i] == '\0')
 		return (0);
-	ft_check_element(line);
-	while (line[i] != '\0')
-	{
-		if (line[i] != ' ' && line[i] != '\t' && line[i] != ',' &&
-				line[i] != '.' && (line[i] < '0' && line[i] > '9'))
-			ft_print_error("undifined symbole in the scene file");
-		i++;
-	}
-	i = 1;
+	ft_check_element(scene, line, i);
+	ft_check_symboles(scene,line,i);
+	i = 0;
 	while (line[i] != '\0')
 	{
 		if (line[i] == ',' && line[i + 1] == ',')
-			ft_print_error("two comma in line");
+			ft_print_error(scene, "two comma in line");
 		i++;
 	}
 	return (1);
@@ -63,10 +78,10 @@ void		ft_check_scene(t_scene *scene)
 	width = 5120;
 	height = 2880;
 	if (scene->camera == NULL)
-		ft_print_error("No camera in the scene,you need at least\
+		ft_print_error(scene, "No camera in the scene,you need at least\
 		one camera in the scene.");
 	if (scene->resolution.height == 0 && scene->resolution.width == 0)
-		ft_print_error("you have to specify the resolution.");
+		ft_print_error(scene, "you have to specify the resolution.");
 	if (scene->resolution.height > height)
 		scene->resolution.height = height;
 	if (scene->resolution.width > width)
@@ -93,15 +108,11 @@ int			ft_check_color(char **color)
 
 int			ft_check_coords(char **coord)
 {
-	
-	if (coord[0][0] == ' ' || coord[1] != NULL)
+	if (coord[0][0] == ' ' || coord[1] != NULL )
 	{
-		return 0;
+		return (0);
 	}
-	if (/*coord[0] == NULL || coord[1] == NULL || */coord[2] == NULL)
-	{
-		write(1,"jjj",3);
+	if (coord[0] == NULL || coord[1] == NULL || coord[2] == NULL)
 		return (1);
-	}
 	return (0);
 }

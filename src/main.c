@@ -6,34 +6,38 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/19 08:46:32 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/20 11:24:14 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-void		ft_check_file(char *file_name)
+
+void		ft_check_file_name(char *file_name, t_scene *scene)
 {
 	int i;
-	
+
 	i = 0;
 	while (file_name[i] != '\0')
 		i++;
-	if (ft_strncmp(file_name + i - 2,"rt",2))
-		ft_print_error("file extention not .rt ");
+	if (ft_strncmp(file_name + i - 2, "rt", 2))
+	{
+		ft_print_error(scene, "file extention not .rt ");
+	}
 }
 
 t_scene		*ft_scene_init(char *file_name)
 {
 	extern int	errno;
 	t_scene		*scene;
+
 	scene = malloc(sizeof(t_scene));
 	scene->fd = open(file_name, O_RDONLY);
 	if (scene->fd < 0)
 	{
-		ft_print_error(strerror(errno));
-		exit(EXIT_FAILURE);
+		ft_print_error(scene, strerror(errno));
+		exit(1);
 	}
-	ft_check_file(file_name);
+	ft_check_file_name(file_name, scene);
 	scene->resolution.height = 0;
 	scene->resolution.width = 0;
 	scene->ambient.intensity = -1;
@@ -54,7 +58,6 @@ int			main(int argc, char **argv)
 	{
 		scene = ft_scene_init(argv[1]);
 		scene = parsing(scene->fd, scene);
-		//printf("\n->%d\n",scene->light_number);
 		if (argc == 2)
 		{
 			scene->mlx_ptr = mlx_init();

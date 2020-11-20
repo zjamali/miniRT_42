@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 19:24:04 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/19 14:45:49 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/20 09:40:12 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ void		parsing_triangle(char **tr, t_scene *scene)
 	t_object			*new_object;
 
 	if (tr[4] == NULL)
-		ft_print_error("you have to specify 3 trangle points and its color.");
+		ft_print_error(scene, "you have to specify 3 trangle points and its color.");
 	obj.cord1 = ft_split(tr[1], ',');
 	obj.cord2 = ft_split(tr[2], ',');
 	obj.cord3 = ft_split(tr[3], ',');
 	obj.color = ft_split(tr[4], ',');
-	ft_check_triangle(obj);
+	ft_check_triangle(scene, obj);
 	triangle = malloc(sizeof(t_triangle));
 	triangle->vectors[0] = ft_parse_coord(obj.cord1);
 	triangle->vectors[1] = ft_parse_coord(obj.cord2);
@@ -73,14 +73,14 @@ void		parsing_cylinder(char **cy, t_scene *scene)
 	t_object			*new_object;
 
 	if (cy[5] == NULL)
-		ft_print_error("you have to specify cylinder coordination points\
+		ft_print_error(scene, "you have to specify cylinder coordination points\
 		,orientation,diametre,size and color.");
 	obj.origin = ft_split(cy[1], ',');
 	obj.normal = ft_split(cy[2], ',');
 	obj.color = ft_split(cy[5], ',');
 	obj.diameter = ft_atod(cy[3]);
 	obj.size = ft_atod(cy[4]);
-	ft_check_cylinder(obj);
+	ft_check_cylinder(scene, obj);
 	cylinder = malloc(sizeof(t_cylinder));
 	cylinder->coord = ft_parse_coord(obj.origin);
 	cylinder->normal = ft_parse_normal(obj.normal);

@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/19 14:32:04 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/20 09:23:10 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void				ft_make_image(t_scene *scene);
 void				ft_write_header(t_bmp *image, t_scene *scene);
 void				ft_write_bmp(t_scene *scene);
 void				ft_creat_image_pixels_array(t_scene *scene);
-void				ft_print_error(char *error);
+void				ft_print_error(t_scene *scene, char *error);
 int					ft_key_press(int keycode, t_scene *scene);
 int					ft_close(t_scene *scene);
 char				**ft_split(char const *s, char c);

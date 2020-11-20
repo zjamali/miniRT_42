@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 12:10:36 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/17 13:06:43 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/20 12:44:58 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ typedef struct	s_obj_properties
 }				t_obj_properties;
 
 t_scene			*parsing(int fd, t_scene *scene);
-void			ft_check_element(char *line);
-int				ft_check_line(char *line);
+void			ft_check_element(t_scene *scene,char *line, int i);
+int				ft_check_line(t_scene *scene, char *line);
 void			ft_check_scene(t_scene *scene);
 void			ft_lstadd_back_camera(t_camera **alst, t_camera *news);
 t_light			*ft_lstlast_light(t_light *lst);
@@ -43,11 +43,11 @@ t_vector		ft_parse_color(char **colors);
 t_vector		ft_parse_coord(char **coord);
 void			ft_element_can_transforme(t_scene *scene, char wich_element,
 											void *the_element);
-void			ft_check_plane(t_obj_properties obj);
-void			ft_check_sphere(t_obj_properties obj);
-void			ft_check_square(t_obj_properties obj);
-void			ft_check_triangle(t_obj_properties obj);
-void			ft_check_cylinder(t_obj_properties obj);
+void			ft_check_plane(t_scene *scene, t_obj_properties obj);
+void			ft_check_sphere(t_scene *scene, t_obj_properties obj);
+void			ft_check_square(t_scene *scene, t_obj_properties obj);
+void			ft_check_triangle(t_scene *scene, t_obj_properties obj);
+void			ft_check_cylinder(t_scene *scene, t_obj_properties obj);
 void			parsing_resolution(char **resol, t_scene *scene);
 void			parsing_ambiant(char **amb, t_scene *scene);
 void			parsing_camera(char **cam, t_scene *scene);
@@ -57,8 +57,6 @@ void			parsing_plan(char **pl, t_scene *scene);
 void			parsing_square(char **sqr, t_scene *scene);
 void			parsing_triangle(char **tr, t_scene *scene);
 void			parsing_cylinder(char **cy, t_scene *scene);
-void			ft_check_element(char *line);
-int				ft_check_line(char *line);
 void			ft_check_scene(t_scene *scene);
 int				ft_check_color(char **color);
 int				ft_check_coords(char **coord);

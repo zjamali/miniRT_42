@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:50:46 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/19 14:45:36 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/20 14:32:21 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ void		parsing_ambiant(char **amb, t_scene *scene)
 	char **color;
 
 	if (scene->ambient.intensity != -1)
-		ft_print_error("You can't specify ambient twice.");
-	if (amb[1] == NULL || amb[2] == NULL)
-		ft_print_error("you have to specify the intensity and color.");
+		ft_print_error(scene, "You can't specify ambient twice.");
+	if (amb[1] == NULL || amb[2] == NULL || amb[3] != NULL)
+		ft_print_error(scene, "you have to specify the intensity and color.");
 	scene->ambient.intensity = ft_atod(amb[1]);
 	color = ft_split(amb[2], ',');
 	scene->ambient.color.x = ft_atoi(color[0]);
@@ -34,15 +34,15 @@ void		parsing_camera(char **cam, t_scene *scene)
 	int			fiel_view;
 	t_camera	*camera;
 
-	if (cam[3] == NULL)
-		ft_print_error("camera need lookfrom,orientation and field of view");
+	if (cam[3] == NULL || cam[4] != NULL )
+		ft_print_error(scene, "camera need lookfrom,orientation,field of view");
 	origin = ft_split(cam[1], ',');
 	orient = ft_split(cam[2], ',');
 	fiel_view = ft_atoi(cam[3]);
 	if (ft_check_coords(origin))
-		ft_print_error("camera lookfrom in coordination x,y,z");
+		ft_print_error(scene, "camera lookfrom in coordination x,y,z");
 	if (ft_check_normal(orient))
-		ft_print_error("camera orientation in x,y,z");
+		ft_print_error(scene, "camera orientation in x,y,z");
 	camera = malloc(sizeof(t_camera));
 	camera->lookfrom = ft_parse_coord(origin);
 	camera->orientaion = ft_parse_normal(orient);
@@ -50,7 +50,7 @@ void		parsing_camera(char **cam, t_scene *scene)
 	camera->prev = NULL;
 	camera->fov = fiel_view;
 	if (camera->fov > 180 || camera->fov < 0)
-		ft_print_error("camera is field of view must be between \
+		ft_print_error(scene, "camera is field of view must be between \
 				0 and 180");
 	ft_lstadd_back_camera(&scene->camera, camera);
 	ft_element_can_transforme(scene, 'c', camera);
@@ -64,17 +64,17 @@ void		parsing_light(char **light_line, t_scene *scene)
 	t_light		*light;
 
 	if (light_line[3] == NULL)
-		ft_print_error("you have to specify the light \
+		ft_print_error(scene, "you have to specify the light \
 				coordination point,brightness and color.");
 	origin = ft_split(light_line[1], ',');
 	color = ft_split(light_line[3], ',');
 	intensity = ft_atod(light_line[2]);
 	if (ft_check_coords(origin))
-		ft_print_error("light coordination point x,y,z");
+		ft_print_error(scene, "light coordination point x,y,z");
 	if (ft_check_color(color))
-		ft_print_error("light color red,green,blue in range [0,255]");
+		ft_print_error(scene, "light color red,green,blue in range [0,255]");
 	if (intensity < 0 || intensity > 1)
-		ft_print_error("light britness must be in range [0,1]");
+		ft_print_error(scene, "light britness must be in range [0,1]");
 	light = malloc(sizeof(t_light));
 	light->origin = ft_parse_coord(origin);
 	light->color = ft_parse_color(color);
@@ -84,6 +84,7 @@ void		parsing_light(char **light_line, t_scene *scene)
 	ft_element_can_transforme(scene, 'l', light);
 	scene->light_number++;
 }
+
 void		parsing_line_objects(t_scene *scene, char **split)
 {
 	if (ft_strncmp(split[0], "pl", 2) == 0)
@@ -98,7 +99,25 @@ void		parsing_line_objects(t_scene *scene, char **split)
 		parsing_cylinder(split, scene);
 }
 
-char *ft_remake_line(char *line)
+void		ft_spaces_after_comma(char *line, int i, int j)
+{
+	if (line[i] == ',' && line[i + 1] == ' ')
+	{
+		j = i + 1;
+		while (line[j] == ' ')
+		{
+			line[j] = '0';
+			j++;
+		}
+		if (line[j] == '-')
+		{
+			line[i + 1] = '-';
+			line[j] = '0';
+		}
+	}
+}
+
+char		*ft_remake_line(char *line)
 {
 	int i;
 	int j;
@@ -106,46 +125,38 @@ char *ft_remake_line(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
+		if ( (line[i] == '\t' || line[i] == '\n' ||
+			line[i] == '\v' || line[i] == '\f' || line[i] == '\r'))
+			line[i] = ' ';
+		i++;
+	}
+	i =  0;
+	while (line[i] != '\0')
+	{
 		if (line[i] == ' ' && line[i + 1] == ',')
 		{
 			j = i;
-			while(line[j] == ' ')
+			while (line[j] == ' ')
 			{
 				line[j] = '.';
 				j--;
 			}
 		}
-		if (line[i] == ',' && line[i + 1] == ' ')
-		{
-			j = i + 1;
-			while(line[j] == ' ')
-			{
-				line[j] = '0';
-				j++;
-			}
-			if (line[j] == '-')
-			{
-				line[i + 1] = '-';
-				line[j] = '0'; 
-			}
-		}
+		ft_spaces_after_comma(line, i, j);
 		i++;
 	}
-	printf("%s\n",line);
-	return line;
+	//printf("%s\n", line);
+	return (line);
 }
 
 void		parsing_line(char *line, t_scene *scene)
 {
 	char **split;
-	
+
 	line = ft_remake_line(line);
 	split = ft_split(line, ' ');
 	if (split[1] == NULL)
-	{
-		ft_free_scene(scene);
-		ft_print_error("empty coordination");
-	}	
+		ft_print_error(scene, "empty coordination");
 	if (split[0][0] == 'R')
 		parsing_resolution(split, scene);
 	else if (split[0][0] == 'A')
@@ -158,7 +169,7 @@ void		parsing_line(char *line, t_scene *scene)
 		parse_translation(split, scene);
 	else if (ft_strncmp(split[0], "rot", 3) == 0)
 		parse_rotation(split, scene);
-	parsing_line_objects(scene,split);
+	parsing_line_objects(scene, split);
 }
 
 t_scene		*parsing(int fd, t_scene *scene)
@@ -169,14 +180,17 @@ t_scene		*parsing(int fd, t_scene *scene)
 	{
 		if (line[0])
 		{
-			if (ft_check_line(line))
+			if (ft_check_line(scene, line))
+			{
 				parsing_line(line, scene);
-			free(line);
+			}
+			if (line != NULL)
+				free(line);
 		}
 	}
 	if (line[0])
 	{
-		if (ft_check_line(line))
+		if (ft_check_line(scene, line))
 			parsing_line(line, scene);
 		free(line);
 	}
