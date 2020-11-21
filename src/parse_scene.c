@@ -168,10 +168,12 @@ int			ft_check_cordinations(char *line)
 	}
 	if (a > 2)
 		return (1);
+	if (a == 1)
+		return (2);
 	return (0);
 }
 
-int ft_check_properties(char **line)
+int ft_check_properties(t_scene *scene, char **line)
 {
 	int i;
 	int result;
@@ -183,7 +185,9 @@ int ft_check_properties(char **line)
 		printf("%s\n %d",line[i],i);
 		result =  ft_check_cordinations(line[i]);
 		if (result == 1)
-			return 1;
+			ft_print_error(scene, "too much coordination");
+		if (result == 2)
+			ft_print_error(scene, "missing coodinations");
 		i++;
 	}
 	return 0;
@@ -197,8 +201,9 @@ void		parsing_line(char *line, t_scene *scene)
 	split = ft_split(line, ' ');
 	if (split[1] == NULL)
 		ft_print_error(scene, "empty coordination");
-	if (ft_check_properties(split))
-		ft_print_error(scene, "too much coords");
+	ft_check_properties(scene,split);
+	//if (ft_check_properties(split) == 1)
+	//	ft_print_error(scene, "too much coords");
 	if (split[0][0] == 'R')
 		parsing_resolution(split, scene);
 	else if (split[0][0] == 'A')

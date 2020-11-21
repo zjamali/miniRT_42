@@ -33,6 +33,7 @@ void		ft_check_symboles(t_scene *scene, char *line, int *n)
 	int	bol;
 	
 	i = *n;
+	i = 0;
 	bol = 0;
 	while(line[i] != '\0')
 	{
@@ -118,8 +119,8 @@ int			ft_check_coords(char **coord)
 	{
 		return (0);
 	}
-	if(coord[3] != NULL)
-		return 0;
+//	if(coord[3] != NULL)
+//		return 0;
 	if (coord[0] == NULL || coord[1] == NULL || coord[2] == NULL)
 		return (1);
 	return (0);
