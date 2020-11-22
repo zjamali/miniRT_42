@@ -3,7 +3,7 @@ NAME  = miniRT
 SRC_PATH= src
 SRC_NAME=	main.c		vector.c	pixel_color.c	intersection.c \
 		camera.c 	light.c		get_next_line.c get_next_line_utils.c \
-		parsing.c	ft_split.c	ft_atoi.c	ft_atof.c \
+		parsing.c	ft_split.c	ft_atoi.c	ft_atod.c \
 		ft_strncmp.c	minirt.c	bmp.c	hooks.c \
 		vector2.c	light2.c	check.c		transformation.c \
 		transformation2.c	check2.c	list.c	list2.c		parsing2.c \

@@ -140,15 +140,13 @@ char		*ft_remake_line(char *line)
 		{
 			j = i;
 			while (line[j] == ' ')
-			{
-				line[j] = '.';
-				j--;
-			}
+				line[j--] = '.';
 		}
 		ft_spaces_after_comma(line, i, j);
 		i++;
 	}
-	//printf("%s\n", line);
+	write(1, line,ft_strlen(line));
+	write(1, "\n", 1);
 	return (line);
 }
 
@@ -159,7 +157,6 @@ int			ft_check_cordinations(char *line)
 
 	i = 0;
 	a = 0;
-
 	while (line[i])
 	{
 		if (line[i] == ',')
@@ -182,7 +179,6 @@ int ft_check_properties(t_scene *scene, char **line)
 	result = 1;
 	while (line[i])
 	{
-		printf("%s\n %d",line[i],i);
 		result =  ft_check_cordinations(line[i]);
 		if (result == 1)
 			ft_print_error(scene, "too much coordination");

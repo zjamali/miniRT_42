@@ -86,11 +86,14 @@ t_vector	ft_specular(t_scene *scene, double t, t_object *object)
 	spr.p = vectorsadd(scene->ray->origin, spr.scale_direction_to_p);
 	spr.from_camera_to_p = vectorscal(scene->ray->direction, -1);
 	spr.from_camera_to_p = normalize(spr.from_camera_to_p);
-	spr.specular_shiness = 0;
+	spr.specular_shiness = 3000;
 	if (object->object_type == 's')
 		spr.specular_shiness = 256;
 	else if (object->object_type == 'c')
 		spr.specular_shiness = 50;
+	else if (object->object_type == 'p')
+		spr.specular_shiness = 200;
+	
 	spr.n = ft_calcule_normal(scene, object, spr.p, t);
 	spr.color = bzero_vector();
 	light = scene->light;
