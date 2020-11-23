@@ -47,6 +47,7 @@ typedef struct		s_phong_variables
 	t_vector		reflection;
 	double			i_specular;
 	int				specular_shiness;
+	double			ks;
 
 }					t_phong_variables;
 

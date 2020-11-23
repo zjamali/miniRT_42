@@ -87,9 +87,37 @@ t_vector	ft_calcule_specular(t_light *light, t_phong_variables *spr)
 	spr->reflection = normalize(spr->reflection);
 	spr->dot = vectorsdot(spr->from_camera_to_p, spr->reflection);
 	spr->dot = min(spr->dot, 0.0);
-	spr->i_specular = 1 * pow(spr->dot, spr->specular_shiness);
+	spr->i_specular = spr->ks * pow(spr->dot, spr->specular_shiness);
 	spr->color1 = vectorscal(light->color, spr->i_specular);
 	return (spr->color1);
+}
+void		ft_object_shiness(t_phong_variables *spr, t_object *object)
+{
+	if (object->object_type == 's')
+	{
+		spr->ks = 0.5;
+		spr->specular_shiness = 50/*256*/;
+	}
+	else if (object->object_type == 'c')
+	{
+		spr->ks = 0.2;
+		spr->specular_shiness = 2/*50*/;
+	}
+	else if (object->object_type == 'p')
+	{
+		spr->ks = 0.2;
+		spr->specular_shiness = 1500/*200*/;
+	}
+	else if (object->object_type == 't')
+	{
+		spr->specular_shiness = 10;
+		spr->ks = 0.2;
+	}
+	else if (object->object_type == 'q')
+	{
+		spr->specular_shiness = 1500;
+		spr->ks = 0.2;	
+	}
 }
 
 t_vector	ft_specular(t_scene *scene, double t, t_object *object)
@@ -102,12 +130,8 @@ t_vector	ft_specular(t_scene *scene, double t, t_object *object)
 	spr.from_camera_to_p = vectorscal(scene->ray->direction, -1);
 	spr.from_camera_to_p = normalize(spr.from_camera_to_p);
 	spr.specular_shiness = 3000;
-	if (object->object_type == 's')
-		spr.specular_shiness = 256;
-	else if (object->object_type == 'c')
-		spr.specular_shiness = 50;
-	else if (object->object_type == 'p')
-		spr.specular_shiness = 200;
+	spr.ks = 1;
+	ft_object_shiness(&spr, object);
 	spr.n = ft_calcule_normal(scene, object, spr.p, t);
 	spr.color = bzero_vector();
 	light = scene->light;
