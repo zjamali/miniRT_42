@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/23 20:28:29 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/23 20:50:51 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,9 @@ double		ft_calcule_shadaw(t_scene *scene, t_object *closet_object,
 	{
 		if (ft_real_check_shadaw(shadow->light_to_c,
 			scene->ray->direction))
-		shadow->shadaw = shadow->shadaw + 0.45;
+		{
+			shadow->shadaw = shadow->shadaw + 0.45;
+		}
 		shadow->dark = 1;
 	}
 	return (shadow->shadaw);
