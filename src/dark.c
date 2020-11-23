@@ -32,7 +32,6 @@ double					ft_get_intersection(t_object *temps, t_ray p_ray,
 			}
 		temps = temps->next;
 	}
-	(void)closet_object;
 	// for doesnt intersect with same object with calcule it shadaw
 	if (closet_object == first_intersection_object)
 	{
@@ -51,7 +50,7 @@ t_shadow_variables		ft_calcule_darkness(t_shadow_variables dark)
 	dark.light_to_c = vectorssub(dark.light_to_c,
 			dark.light_ray.origin);
 	dark.light_to_c_lenght = lenght(dark.light_to_c);
-	dark.light_to_c_lenght = dark.light_to_c_lenght;
+	//dark.light_to_c_lenght = dark.light_to_c_lenght;
 	dark.light_to_p_lenght = lenght(dark.light_to_p);
 	return (dark);
 }
@@ -76,9 +75,7 @@ int						ft_chech_pixel_in_dark(t_scene *scene,
 				dark.light_ray, closet_object);
 		dark = ft_calcule_darkness(dark);
 		if (dark.light_to_p_lenght > dark.light_to_c_lenght)
-		{
 			dark.dark = dark.dark + 1;
-		}
 		light = light->next;
 	}
 	if (dark.dark == scene->light_number)

@@ -28,7 +28,6 @@ double		ft_calcule_shadaw(t_scene *scene, t_object *closet_object,
 	shadow->light_to_c = vectorssub(shadow->light_to_c,
 			shadow->light_ray.origin);
 	shadow->light_to_c_lenght = lenght(shadow->light_to_c);
-	shadow->light_to_c_lenght = shadow->light_to_c_lenght;
 	shadow->light_to_p_lenght = lenght(shadow->light_to_p);
 	if (shadow->light_to_p_lenght > shadow->light_to_c_lenght)
 	{

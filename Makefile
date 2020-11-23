@@ -6,7 +6,7 @@ SRC_NAME=	main.c		vector.c	pixel_color.c	intersection.c \
 		parsing.c	ft_split.c	ft_atoi.c	ft_atod.c \
 		ft_strncmp.c	minirt.c	bmp.c	hooks.c \
 		vector2.c	light2.c	check.c		transformation.c \
-		transformation2.c	check2.c	list.c	list2.c		parsing2.c \
+		transformation2.c	check_object	list.c	list2.c		parsing2.c \
 		parse_scene.c	parsing_objects.c	parsing_objects2.c \
 		transformation3.c	intersection2.c	free.c	ft_memset.c	dark.c \
 

@@ -50,12 +50,14 @@ t_vector			ft_camera_ray(t_scene *scene, t_camera *camera,
 	vbs.view_plane_half_width = vbs.aspect_ratio * tan(vbs.theta / 2);
 	vbs.view_plane_half_height = -1 * tan(vbs.theta / 2);
 	vbs.c = vectorscal(vbs.n, -1);
+
 	vbs.l.x = vbs.c.x - vbs.u.x * vbs.view_plane_half_width / 2 - vbs.v.x *
 	vbs.view_plane_half_height / 2;
 	vbs.l.y = vbs.c.y - vbs.u.y * vbs.view_plane_half_width / 2 - vbs.v.y *
 	vbs.view_plane_half_height / 2;
 	vbs.l.z = vbs.c.z - vbs.u.z * vbs.view_plane_half_width / 2 - vbs.v.z *
 	vbs.view_plane_half_height / 2;
+
 	cast_ray.x = vbs.l.x + vbs.u.x * x * vbs.view_plane_half_width / vbs.w +
 	vbs.v.x * y * vbs.view_plane_half_height / vbs.h;
 	cast_ray.y = vbs.l.y + vbs.u.y * x * vbs.view_plane_half_width / vbs.w +

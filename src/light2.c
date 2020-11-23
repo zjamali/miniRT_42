@@ -56,9 +56,7 @@ t_vector	ft_calcule_normal(t_scene *scene, t_object *object,
 
 	n = ft_calcule_normal_2(scene, object);
 	if (object->object_type == 's')
-	{
 		n = vectorssub(p, object->origin);
-	}
 	if (object->object_type == 'c')
 	{
 		object->orientation = normalize(object->orientation);

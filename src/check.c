@@ -99,9 +99,7 @@ int			ft_check_color(char **color)
 	t_vector colors;
 
 	if (color[0] == NULL || color[1] == NULL || color[2] == NULL)
-	{
 		return (1);
-	}
 	else
 	{
 		colors = ft_parse_color(color);
@@ -115,11 +113,7 @@ int			ft_check_color(char **color)
 int			ft_check_coords(char **coord)
 {
 	if (coord[0][0] == ' ' || coord[1] != NULL )
-	{
 		return (0);
-	}
-//	if(coord[3] != NULL)
-//		return 0;
 	if (coord[0] == NULL || coord[1] == NULL || coord[2] == NULL)
 		return (1);
 	return (0);
