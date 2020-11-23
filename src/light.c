@@ -6,11 +6,23 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 18:30:18 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/23 20:28:29 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+int			ft_real_check_shadaw(t_vector light_to_c,
+t_vector ray_direction)
+{
+	double dot;
+
+	dot = vectorsdot(light_to_c, ray_direction);
+	if (dot > 0)
+		return (1);
+	else
+		return (0);
+}
 
 double		ft_calcule_shadaw(t_scene *scene, t_object *closet_object,
 		t_light *light, t_shadow_variables *shadow)
@@ -31,6 +43,8 @@ double		ft_calcule_shadaw(t_scene *scene, t_object *closet_object,
 	shadow->light_to_p_lenght = lenght(shadow->light_to_p);
 	if (shadow->light_to_p_lenght > shadow->light_to_c_lenght)
 	{
+		if (ft_real_check_shadaw(shadow->light_to_c,
+			scene->ray->direction))
 		shadow->shadaw = shadow->shadaw + 0.45;
 		shadow->dark = 1;
 	}
@@ -92,7 +106,6 @@ t_vector	ft_specular(t_scene *scene, double t, t_object *object)
 		spr.specular_shiness = 50;
 	else if (object->object_type == 'p')
 		spr.specular_shiness = 200;
-	
 	spr.n = ft_calcule_normal(scene, object, spr.p, t);
 	spr.color = bzero_vector();
 	light = scene->light;

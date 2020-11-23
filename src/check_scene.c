@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check.c                                            :+:      :+:    :+:   */
+/*   check_scene.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:10:33 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/20 14:58:22 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/23 20:24:05 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	ft_check_element(t_scene *scene, char *line, int i)
+void		ft_check_element(t_scene *scene, char *line, int i)
 {
 	char	**split;
 
@@ -22,7 +22,7 @@ void	ft_check_element(t_scene *scene, char *line, int i)
 		&& ft_strncmp(split[i], "c", 2) && ft_strncmp(split[i], "pl", 2) &&
 		ft_strncmp(split[i], "sp", 2) && ft_strncmp(split[i], "sq", 2) &&
 		ft_strncmp(split[i], "tr", 2) && ft_strncmp(split[i], "cy", 2) &&
-		ft_strncmp(split[i], "rot", 3) && ft_strncmp(split[i], "tra", 3) )
+		ft_strncmp(split[i], "rot", 3) && ft_strncmp(split[i], "tra", 3))
 		ft_print_error(scene, "unknown element in the scene.");
 }
 
@@ -33,13 +33,14 @@ void		ft_check_symboles(t_scene *scene, char *line)
 
 	i = 0;
 	bol = 0;
-	while(line[i] != '\0')
+	while (line[i] != '\0')
 	{
 		if (line[i] == ' ' || line[i] == '-' || line[i] == ',' || line[i] == '.'
-		|| (line[i] >= '0' && line[i] <= '9') || line[i] == '+' ||line[i] == 'R'
+		|| line[i] == 'a' || line[i] == '+' || line[i] == 'R'
 		|| line[i] == 'A' || line[i] == 'l' || line[i] == '\t' || line[i] == 'c'
 		|| line[i] == 'p' || line[i] == 'l' || line[i] == 's' || line[i] == 'q'
-		|| line[i] == 'y' || line[i] == 't' || line[i] == 'r' || line[i] == 'o')
+		|| line[i] == 'y' || line[i] == 't' || line[i] == 'r' || line[i] == 'o'
+		|| (line[i] >= '0' && line[i] <= '9'))
 		{
 			if (line[i] == ',' && bol == 0)
 				ft_print_error(scene, "missing cord");
@@ -50,7 +51,7 @@ void		ft_check_symboles(t_scene *scene, char *line)
 			i++;
 		}
 		else
-			ft_print_error(scene,"undifined symbole");
+			ft_print_error(scene, "undifined symbole");
 	}
 }
 
@@ -65,7 +66,7 @@ int			ft_check_line(t_scene *scene, char *line)
 	if (line[i] == '\0')
 		return (0);
 	ft_check_element(scene, line, i);
-	ft_check_symboles(scene,line);
+	ft_check_symboles(scene, line);
 	i = 0;
 	while (line[i] != '\0')
 	{
@@ -112,7 +113,7 @@ int			ft_check_color(char **color)
 
 int			ft_check_coords(char **coord)
 {
-	if (coord[0][0] == ' ' || coord[1] != NULL )
+	if (coord[0][0] == ' ' || coord[1] != NULL)
 		return (0);
 	if (coord[0] == NULL || coord[1] == NULL || coord[2] == NULL)
 		return (1);

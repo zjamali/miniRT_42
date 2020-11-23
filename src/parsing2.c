@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 20:00:56 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/20 08:56:37 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/23 16:28:02 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,12 @@ void		ft_element_can_transforme(t_scene *scene, char wich_element,
 {
 	if (scene->element_to_transform == NULL)
 	{
-		if (!(scene->element_to_transform = (t_elmt_to_tran*)malloc(sizeof(t_elmt_to_tran))))
-			ft_print_error(scene,"allocation error");
-		ft_memset((void*)scene->element_to_transform, 0, sizeof(t_elmt_to_tran));
+		if (!(scene->element_to_transform =
+		(t_elmt_to_tran*)malloc(sizeof(t_elmt_to_tran))))
+			ft_print_error(scene, "allocation error");
+		ft_memset((void*)scene->element_to_transform, 0,
+			sizeof(t_elmt_to_tran));
 	}
-		scene->element_to_transform->wich_element = wich_element;
+	scene->element_to_transform->wich_element = wich_element;
 	scene->element_to_transform->element = the_element;
 }

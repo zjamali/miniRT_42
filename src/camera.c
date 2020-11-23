@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 18:59:10 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 10:10:09 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/23 20:21:49 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,12 @@ t_vector			ft_camera_ray(t_scene *scene, t_camera *camera,
 	vbs.view_plane_half_width = vbs.aspect_ratio * tan(vbs.theta / 2);
 	vbs.view_plane_half_height = -1 * tan(vbs.theta / 2);
 	vbs.c = vectorscal(vbs.n, -1);
-
 	vbs.l.x = vbs.c.x - vbs.u.x * vbs.view_plane_half_width / 2 - vbs.v.x *
 	vbs.view_plane_half_height / 2;
 	vbs.l.y = vbs.c.y - vbs.u.y * vbs.view_plane_half_width / 2 - vbs.v.y *
 	vbs.view_plane_half_height / 2;
 	vbs.l.z = vbs.c.z - vbs.u.z * vbs.view_plane_half_width / 2 - vbs.v.z *
 	vbs.view_plane_half_height / 2;
-
 	cast_ray.x = vbs.l.x + vbs.u.x * x * vbs.view_plane_half_width / vbs.w +
 	vbs.v.x * y * vbs.view_plane_half_height / vbs.h;
 	cast_ray.y = vbs.l.y + vbs.u.y * x * vbs.view_plane_half_width / vbs.w +
@@ -65,20 +63,4 @@ t_vector			ft_camera_ray(t_scene *scene, t_camera *camera,
 	cast_ray.z = vbs.l.z + vbs.u.z * x * vbs.view_plane_half_width / vbs.w +
 	vbs.v.z * y * vbs.view_plane_half_height / vbs.h;
 	return (cast_ray);
-}
-
-double				max(double a, double b)
-{
-	if (a > b)
-		return (a);
-	else
-		return (b);
-}
-
-double				min(double a, double b)
-{
-	if (a > b)
-		return (b);
-	else
-		return (a);
 }

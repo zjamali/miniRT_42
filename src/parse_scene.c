@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:50:46 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/20 14:32:21 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/23 17:09:31 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,14 @@ void		parsing_ambiant(char **amb, t_scene *scene)
 	scene->ambient.color.z = ft_atoi(color[2]);
 }
 
+void		ft_check_camera(t_scene *scene, char **origin, char **orient)
+{
+	if (ft_check_coords(origin))
+		ft_print_error(scene, "camera lookfrom in coordination x,y,z");
+	if (ft_check_normal(orient))
+		ft_print_error(scene, "camera orientation in x,y,z");
+}
+
 void		parsing_camera(char **cam, t_scene *scene)
 {
 	char		**origin;
@@ -34,17 +42,14 @@ void		parsing_camera(char **cam, t_scene *scene)
 	int			fiel_view;
 	t_camera	*camera;
 
-	if (cam[3] == NULL || cam[4] != NULL )
+	if (cam[3] == NULL || cam[4] != NULL)
 		ft_print_error(scene, "camera need lookfrom,orientation,field of view");
 	origin = ft_split(cam[1], ',');
 	orient = ft_split(cam[2], ',');
 	fiel_view = ft_atoi(cam[3]);
-	if (ft_check_coords(origin))
-		ft_print_error(scene, "camera lookfrom in coordination x,y,z");
-	if (ft_check_normal(orient))
-		ft_print_error(scene, "camera orientation in x,y,z");
+	ft_check_camera(scene, origin, orient);
 	if (!(camera = (t_camera*)malloc(sizeof(t_camera))))
-		ft_print_error(scene,"allocation error");
+		ft_print_error(scene, "allocation error");
 	ft_memset((void*)camera, 0, sizeof(t_camera));
 	camera->lookfrom = ft_parse_coord(origin);
 	camera->orientaion = ft_parse_normal(orient);
@@ -66,8 +71,7 @@ void		parsing_light(char **light_line, t_scene *scene)
 	t_light		*light;
 
 	if (light_line[3] == NULL)
-		ft_print_error(scene, "you have to specify the light \
-				coordination point,brightness and color.");
+		ft_print_error(scene, "light need point,brightness and color.");
 	origin = ft_split(light_line[1], ',');
 	color = ft_split(light_line[3], ',');
 	intensity = ft_atod(light_line[2]);
@@ -128,12 +132,12 @@ char		*ft_remake_line(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if ( (line[i] == '\t' || line[i] == '\n' ||
-			line[i] == '\v' || line[i] == '\f' || line[i] == '\r'))
+		if (line[i] == '\t' || line[i] == '\n' ||
+			line[i] == '\v' || line[i] == '\f' || line[i] == '\r')
 			line[i] = ' ';
 		i++;
 	}
-	i =  0;
+	i = 0;
 	while (line[i] != '\0')
 	{
 		if (line[i] == ' ' && line[i + 1] == ',')
@@ -145,8 +149,6 @@ char		*ft_remake_line(char *line)
 		ft_spaces_after_comma(line, i, j);
 		i++;
 	}
-	write(1, line,ft_strlen(line));
-	write(1, "\n", 1);
 	return (line);
 }
 
@@ -170,7 +172,7 @@ int			ft_check_cordinations(char *line)
 	return (0);
 }
 
-int ft_check_properties(t_scene *scene, char **line)
+int			ft_check_properties(t_scene *scene, char **line)
 {
 	int i;
 	int result;
@@ -179,14 +181,14 @@ int ft_check_properties(t_scene *scene, char **line)
 	result = 1;
 	while (line[i])
 	{
-		result =  ft_check_cordinations(line[i]);
+		result = ft_check_cordinations(line[i]);
 		if (result == 1)
 			ft_print_error(scene, "too much coordination");
 		if (result == 2)
 			ft_print_error(scene, "missing coodinations");
 		i++;
 	}
-	return 0;
+	return (0);
 }
 
 void		parsing_line(char *line, t_scene *scene)
@@ -194,12 +196,12 @@ void		parsing_line(char *line, t_scene *scene)
 	char **split;
 
 	line = ft_remake_line(line);
+	write(1, line, ft_strlen(line));
+	write(1, "\n", 1);
 	split = ft_split(line, ' ');
 	if (split[1] == NULL)
 		ft_print_error(scene, "empty coordination");
-	ft_check_properties(scene,split);
-	//if (ft_check_properties(split) == 1)
-	//	ft_print_error(scene, "too much coords");
+	ft_check_properties(scene, split);
 	if (split[0][0] == 'R')
 		parsing_resolution(split, scene);
 	else if (split[0][0] == 'A')

@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/20 09:28:37 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/23 10:26:58 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ void		parse_translation(char **line, t_scene *scene)
 	char	**tran;
 
 	if (line[1] == NULL)
-		ft_print_error(scene, "you have to specify the transation coordination");
+		ft_print_error(scene, "you have to specify \
+		the transation coordination");
 	else
 	{
 		tran = ft_split(line[1], ',');

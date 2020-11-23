@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 19:24:04 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/20 09:40:12 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/23 16:45:58 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void		parsing_triangle(char **tr, t_scene *scene)
 	t_object			*new_object;
 
 	if (tr[4] == NULL)
-		ft_print_error(scene, "you have to specify 3 trangle points and its color.");
+		ft_print_error(scene, "you have to specify 3 trangle\
+										points and its color.");
 	obj.cord1 = ft_split(tr[1], ',');
 	obj.cord2 = ft_split(tr[2], ',');
 	obj.cord3 = ft_split(tr[3], ',');
@@ -59,7 +60,7 @@ t_object	*ft_create_cylinder(t_scene *scene, t_cylinder *cylinder)
 	t_object *new_object;
 
 	if (!(new_object = (t_object*)malloc(sizeof(t_object))))
-		ft_print_error(scene,"allocation error");
+		ft_print_error(scene, "allocation error");
 	ft_memset((void*)new_object, 0, sizeof(t_object));
 	new_object->object = cylinder;
 	new_object->color = cylinder->color;
@@ -88,7 +89,7 @@ void		parsing_cylinder(char **cy, t_scene *scene)
 	obj.size = ft_atod(cy[4]);
 	ft_check_cylinder(scene, obj);
 	if (!(cylinder = (t_cylinder*)malloc(sizeof(t_cylinder))))
-		ft_print_error(scene,"allocation error");
+		ft_print_error(scene, "allocation error");
 	ft_memset((void*)cylinder, 0, sizeof(t_cylinder));
 	cylinder->coord = ft_parse_coord(obj.origin);
 	cylinder->normal = ft_parse_normal(obj.normal);

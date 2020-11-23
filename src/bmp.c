@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 11:03:17 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 10:06:10 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/23 10:21:29 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void		ft_write_bmp(t_scene *scene)
 
 	image = (t_bmp*)malloc(sizeof(t_bmp));
 	if (!image)
-		ft_print_error(scene,"allocation error");
+		ft_print_error(scene, "allocation error");
 	ft_memset((void*)image, 0, sizeof(t_bmp));
 	ft_write_header(image, scene);
 	image->fd = open("image.bmp", O_WRONLY | O_CREAT | O_TRUNC,

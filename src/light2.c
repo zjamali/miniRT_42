@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 17:34:23 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 20:20:45 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/23 19:53:03 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,9 @@ t_vector	ft_calcule_normal(t_scene *scene, t_object *object,
 
 	n = ft_calcule_normal_2(scene, object);
 	if (object->object_type == 's')
+	{
 		n = vectorssub(p, object->origin);
+	}
 	if (object->object_type == 'c')
 	{
 		object->orientation = normalize(object->orientation);
@@ -113,7 +115,6 @@ double		ft_get_first_intersection(t_object *temps, t_ray p_ray,
 	if (closet_object == first_intersection_object)
 	{
 		return (closet_object_t + 100);
-		//return (10000000000000);
 	}
 	return (closet_object_t);
 }

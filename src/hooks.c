@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:37:24 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 18:22:27 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/23 10:25:50 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_imag		*ft_creat_img(t_scene *scene, void *mlx_ptr)
 
 	imag = (t_imag*)malloc(sizeof(t_imag));
 	if (!imag)
-		ft_print_error(scene,"allocation error");
+		ft_print_error(scene, "allocation error");
 	ft_memset((void*)imag, 0, sizeof(t_imag));
 	imag->img = mlx_new_image(mlx_ptr, scene->resolution.width,
 			scene->resolution.height);

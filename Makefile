@@ -5,10 +5,10 @@ SRC_NAME=	main.c		vector.c	pixel_color.c	intersection.c \
 		camera.c 	light.c		get_next_line.c get_next_line_utils.c \
 		parsing.c	ft_split.c	ft_atoi.c	ft_atod.c \
 		ft_strncmp.c	minirt.c	bmp.c	hooks.c \
-		vector2.c	light2.c	check.c		transformation.c \
-		transformation2.c	check_object	list.c	list2.c		parsing2.c \
+		vector2.c	light2.c	check_scene.c		rotation.c \
+		translation.c	check_object.c	list.c	list2.c		parsing2.c \
 		parse_scene.c	parsing_objects.c	parsing_objects2.c \
-		transformation3.c	intersection2.c	free.c	ft_memset.c	dark.c \
+		rotation_xyz.c	intersection2.c	free.c	ft_memset.c	dark.c \
 
 HDR_PATH= headers
 HDR_NAME= get_next_line.h	minirt.h
@@ -30,7 +30,7 @@ HDR_INC= -I ./headers/
 MLX= -lmlx -framework OpenGL -framework AppKit #-lX11
 ## MLX_INC= /usr/local/include
 MLX_LIB1= /usr/local/lib
-MLX_LIB2= /usr/X11/lib
+##MLX_LIB2= /usr/X11/lib
 
 
 # *****     rules     ***** #
@@ -38,7 +38,7 @@ MLX_LIB2= /usr/X11/lib
 all: $(NAME)
 
 $(NAME): $(OBJ)
-		@$(COM) $(CFLAGE) -L$(MLX_LIB1) -L$(MLX_LIB2) $(OBJ) $(MLX) -o $@
+		@$(COM) $(CFLAGE) -L$(MLX_LIB1) $(OBJ) $(MLX) -o $@
 		@echo "         Made by : \033[1;91mzjamali\033[m"
 		@echo "          _       _______ _____    "
 		@echo "         (_)     (_) ___ \_   _|   "
