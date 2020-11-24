@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 20:37:37 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/23 17:25:33 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 12:29:45 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ void			ft_make_rotation(t_scene *scene)
 		cy->normal = ft_calcule_rotaion(cy->normal,
 		scene->element_to_transform->transform.rot);
 	}
+	ft_make_rotation2(scene);
 	scene->element_to_transform->transform.rot = bzero_vector();
 }

@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:50:46 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/23 17:09:31 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 12:49:01 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void		parsing_ambiant(char **amb, t_scene *scene)
 	if (scene->ambient.intensity != -1)
 		ft_print_error(scene, "You can't specify ambient twice.");
 	if (amb[1] == NULL || amb[2] == NULL || amb[3] != NULL)
-		ft_print_error(scene, "you have to specify the intensity and color.");
+		ft_print_error(scene, "you have to specify just the intensity and color.");
 	scene->ambient.intensity = ft_atod(amb[1]);
 	color = ft_split(amb[2], ',');
 	scene->ambient.color.x = ft_atoi(color[0]);
@@ -42,7 +42,7 @@ void		parsing_camera(char **cam, t_scene *scene)
 	int			fiel_view;
 	t_camera	*camera;
 
-	if (cam[3] == NULL || cam[4] != NULL)
+	if (cam[1] == NULL || cam[2] == NULL ||cam[3] == NULL || cam[4] != NULL)
 		ft_print_error(scene, "camera need lookfrom,orientation,field of view");
 	origin = ft_split(cam[1], ',');
 	orient = ft_split(cam[2], ',');
@@ -70,7 +70,8 @@ void		parsing_light(char **light_line, t_scene *scene)
 	double		intensity;
 	t_light		*light;
 
-	if (light_line[3] == NULL)
+	if (light_line[1] == NULL || light_line[2] == NULL ||light_line[3] == NULL ||
+			light_line[4] != NULL)
 		ft_print_error(scene, "light need point,brightness and color.");
 	origin = ft_split(light_line[1], ',');
 	color = ft_split(light_line[3], ',');
@@ -100,7 +101,7 @@ void		parsing_line_objects(t_scene *scene, char **split)
 		parsing_sphere(split, scene);
 	else if (ft_strncmp(split[0], "sq", 2) == 0)
 		parsing_square(split, scene);
-	else if (ft_strncmp(split[0], "tr", 3) == 0)
+	else if (ft_strncmp(split[0], "tr", 2) == 0)
 		parsing_triangle(split, scene);
 	else if (ft_strncmp(split[0], "cy", 2) == 0)
 		parsing_cylinder(split, scene);
@@ -210,9 +211,11 @@ void		parsing_line(char *line, t_scene *scene)
 		parsing_light(split, scene);
 	else if (ft_strncmp(split[0], "c", 2) == 0)
 		parsing_camera(split, scene);
-	else if (ft_strncmp(split[0], "tra", 3) == 0)
+	else if (ft_strncmp(split[0], "ts", 2) == 0)
+	{
 		parse_translation(split, scene);
-	else if (ft_strncmp(split[0], "rot", 3) == 0)
+	}
+	else if (ft_strncmp(split[0], "ro", 2) == 0)
 		parse_rotation(split, scene);
 	parsing_line_objects(scene, split);
 }

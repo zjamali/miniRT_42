@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/23 20:50:51 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 12:06:07 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,8 @@ void		ft_object_shiness(t_phong_variables *spr, t_object *object)
 	}
 	else if (object->object_type == 'q')
 	{
-		spr->specular_shiness = 1500;
-		spr->ks = 0.2;	
+		spr->specular_shiness = 200;
+		spr->ks = 0.2;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 19:24:04 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/23 16:45:58 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 12:49:30 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ void		parsing_triangle(char **tr, t_scene *scene)
 	t_triangle			*triangle;
 	t_object			*new_object;
 
-	if (tr[4] == NULL)
-		ft_print_error(scene, "you have to specify 3 trangle\
+	if (tr[1] == NULL || tr[2] == NULL || tr[3] == NULL || tr[4] == NULL || tr[5] != NULL)
+		ft_print_error(scene, "you have to specify just 3 trangle\
 										points and its color.");
 	obj.cord1 = ft_split(tr[1], ',');
 	obj.cord2 = ft_split(tr[2], ',');
@@ -79,8 +79,9 @@ void		parsing_cylinder(char **cy, t_scene *scene)
 	t_cylinder			*cylinder;
 	t_object			*new_object;
 
-	if (cy[5] == NULL)
-		ft_print_error(scene, "you have to specify cylinder coordination points\
+	if (cy[1] == NULL || cy[2] == NULL ||cy[3] == NULL || cy[4] == NULL|| cy[5] == NULL
+		|| cy[6] != NULL)
+		ft_print_error(scene, "you have to specify just cylinder coordination points\
 		,orientation,diametre,size and color.");
 	obj.origin = ft_split(cy[1], ',');
 	obj.normal = ft_split(cy[2], ',');

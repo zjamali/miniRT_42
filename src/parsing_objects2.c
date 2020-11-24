@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 19:59:10 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/23 16:47:10 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 12:49:48 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ t_obj_properties	ft_parsing_sphere_properties(char **sph, t_scene *scene)
 {
 	t_obj_properties obj;
 
-	if (sph[3] == NULL)
+	if (sph[1] == NULL || sph[2] == NULL|| sph[3] == NULL || sph[4] != NULL)
 	{
-		ft_print_error(scene, "you have to specify the sphere center \
+		ft_print_error(scene, "you have to specify just the sphere center \
 		coordination point,diameter and color.");
 	}
 	obj.origin = ft_split(sph[1], ',');
@@ -58,8 +58,8 @@ t_obj_properties	ft_parsing_plan_properties(char **pl, t_scene *scene)
 {
 	t_obj_properties obj;
 
-	if (pl[3] == NULL)
-		ft_print_error(scene, "you have to specify the plan coordination\
+	if (pl[1] == NULL || pl[2] == NULL|| pl[3] == NULL || pl[4] != NULL)
+		ft_print_error(scene, "you have to specify just the plan coordination\
 				point,orientation and color.");
 	obj.origin = ft_split(pl[1], ',');
 	obj.normal = ft_split(pl[2], ',');
@@ -118,7 +118,7 @@ void				parsing_square(char **sqr, t_scene *scene)
 	t_object			*new_object;
 
 	if (sqr[4] == NULL)
-		ft_print_error(scene, "you have to specify the square center \
+		ft_print_error(scene, "you have to specify just the square center \
 		coordination point,orientation,edge size and color.");
 	obj.origin = ft_split(sqr[1], ',');
 	obj.normal = ft_split(sqr[2], ',');

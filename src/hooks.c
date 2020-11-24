@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:37:24 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/23 10:25:50 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 12:15:06 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,25 @@ t_camera	*ft_wich_camera(t_scene *scene, int keycode)
 
 	if (cam == NULL)
 		cam = scene->camera;
-	if (keycode == 124 && cam->next != NULL)
+	if (cam->next != NULL && keycode == 124)
+	{
 		cam = cam->next;
-	if (keycode == 123 && cam->prev != NULL)
+		ft_render(scene, cam, 0);
+		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
+		scene->img->img, 0, 0);
+	}
+	if (cam->prev != NULL && keycode == 123)
+	{
 		cam = cam->prev;
+		ft_render(scene, cam, 0);
+		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
+		scene->img->img, 0, 0);
+	}
 	return (cam);
 }
 
 int			ft_key_press(int keycode, t_scene *scene)
 {
-	t_camera	*camera;
-
-	camera = NULL;
 	if (keycode == 53)
 	{
 		ft_free_scene(scene);
@@ -60,10 +67,7 @@ int			ft_key_press(int keycode, t_scene *scene)
 	}
 	else if (keycode == 123 || keycode == 124)
 	{
-		camera = ft_wich_camera(scene, keycode);
-		ft_render(scene, camera, 0);
-		mlx_put_image_to_window(scene->mlx_ptr, scene->win_ptr,
-				scene->img->img, 0, 0);
+		ft_wich_camera(scene, keycode);
 	}
 	return (0);
 }
