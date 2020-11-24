@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 12:10:36 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/24 14:38:06 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 17:55:08 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,8 @@ typedef struct	s_obj_properties
 	char		**color;
 }				t_obj_properties;
 
-
 t_scene			*parsing(int fd, t_scene *scene);
-void			ft_check_element(t_scene *scene,char *line, int i);
+void			ft_check_element(t_scene *scene, char *line, int i);
 int				ft_check_line(t_scene *scene, char *line);
 void			ft_check_scene(t_scene *scene);
 void			ft_lstadd_back_camera(t_camera **alst, t_camera *news);

@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:50:46 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/24 14:35:44 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 16:25:07 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,72 +24,6 @@ void		parsing_line_objects(t_scene *scene, char **split)
 		parsing_triangle(split, scene);
 	else if (ft_strncmp(split[0], "cy", 2) == 0)
 		parsing_cylinder(split, scene);
-}
-
-void		ft_spaces_after_comma(char *line, int i, int j)
-{
-	if (line[i] == ',' && line[i + 1] == ' ')
-	{
-		j = i + 1;
-		while (line[j] == ' ')
-		{
-			line[j] = '0';
-			j++;
-		}
-		if (line[j] == '-')
-		{
-			line[i + 1] = '-';
-			line[j] = '0';
-		}
-	}
-}
-
-char		*ft_remake_line(char *line)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while (line[i] != '\0')
-	{
-		if (line[i] == '\t' || line[i] == '\n' ||
-			line[i] == '\v' || line[i] == '\f' || line[i] == '\r')
-			line[i] = ' ';
-		i++;
-	}
-	i = 0;
-	while (line[i] != '\0')
-	{
-		if (line[i] == ' ' && line[i + 1] == ',')
-		{
-			j = i;
-			while (line[j] == ' ')
-				line[j--] = '.';
-		}
-		ft_spaces_after_comma(line, i, j);
-		i++;
-	}
-	return (line);
-}
-
-int			ft_check_cordinations(char *line)
-{
-	int i;
-	int	a;
-
-	i = 0;
-	a = 0;
-	while (line[i])
-	{
-		if (line[i] == ',')
-			a++;
-		i++;
-	}
-	if (a > 2)
-		return (1);
-	if (a == 1)
-		return (2);
-	return (0);
 }
 
 int			ft_check_properties(t_scene *scene, char **line)

@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 14:10:33 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/24 13:21:25 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 17:52:58 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ void		ft_check_scene(t_scene *scene)
 	int height;
 	int width;
 
-	width = 5120;
-	height = 2880;
+	mlx_get_screen_size(scene->mlx_ptr, &width, &height);
 	if (scene->camera == NULL)
 		ft_print_error(scene, "No camera in the scene,you need at least\
 		one camera in the scene.");

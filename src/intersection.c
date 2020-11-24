@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:01:20 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/17 10:10:31 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 17:53:52 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ double					hit_triangle(t_ray ray, t_triangle *triangle)
 
 	tr = ft_calcule_triangle(ray, triangle);
 	if (tr.a > -tr.epsilon && tr.a < tr.epsilon)
-		return (0);    // This ray is parallel to this triangle.
+		return (0);
 	tr.f = 1.0 / tr.a;
 	tr.s = vectorssub(ray.origin, triangle->vectors[0]);
 	tr.u = vectorsdot(tr.s, tr.h);
@@ -42,12 +42,11 @@ double					hit_triangle(t_ray ray, t_triangle *triangle)
 	tr.v = tr.f * tr.v;
 	if (tr.v < 0.0 || tr.u + tr.v > 1.0)
 		return (0);
-	// At this stage we can compute t to find out where the intersection point is on the line.
 	tr.t = vectorsdot(tr.q, tr.edge2);
 	tr.t = tr.f * tr.t;
-	if (tr.t > tr.epsilon) // ray intersection
+	if (tr.t > tr.epsilon)
 		return (tr.t);
-	else // This means that there is a line intersection but not a ray intersection.
+	else
 		return (0);
 }
 
@@ -63,7 +62,8 @@ t_cylinder_variables	ft_calcule_cylinder_var(t_ray ray, t_cylinder *cylinder)
 				(vectorsdot(ray.direction, cylinder->normal) *
 					vectorsdot(cy.oc, cylinder->normal)));
 	cy.c = vectorsdot(cy.oc, cy.oc) -
-		vectorsdot(cy.oc, cylinder->normal) * vectorsdot(cy.oc, cylinder->normal)
+		vectorsdot(cy.oc, cylinder->normal) * vectorsdot(cy.oc,
+			cylinder->normal)
 		- (cylinder->diameter / 2) * (cylinder->diameter / 2);
 	return (cy);
 }
@@ -85,7 +85,6 @@ double					hit_cylinder(t_ray ray, t_cylinder *cylinder)
 		cy.t = cy.t2;
 	else
 		cy.t = cy.t1;
-	//    m = D|V*t + X|V
 	cy.min = vectorsdot(ray.direction, cylinder->normal) * cy.t2 +
 			vectorsdot(cy.oc, cylinder->normal);
 	cy.max = vectorsdot(ray.direction, cylinder->normal) * cy.t1 +

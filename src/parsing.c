@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/24 12:52:39 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 16:49:29 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,11 @@ void		parse_rotation(char **line, t_scene *scene)
 
 void		parsing_resolution(char **resol, t_scene *scene)
 {
+	int height;
+	int width;
+
+	width = 5120;
+	height = 2880;
 	if (scene->resolution.height != 0)
 		ft_print_error(scene, "You can't specify resolution twice.");
 	if (resol[1] == NULL || resol[2] == NULL)

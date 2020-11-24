@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 17:34:23 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/23 19:53:03 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 17:54:08 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ t_vector	ft_calcule_normal(t_scene *scene, t_object *object,
 		nrml.oc = vectorssub(scene->ray->origin, object->origin);
 		nrml.m = vectorsdot(scene->ray->direction, object->orientation) * t
 			+ vectorsdot(nrml.oc, object->orientation);
-		//    N = nrm( P-C-V*m )
 		nrml.normal = vectorssub(p, object->origin);
 		nrml.line_point = vectorscal(object->orientation, nrml.m);
 		n = vectorssub(nrml.normal, nrml.line_point);
@@ -74,47 +73,31 @@ t_vector	ft_calcule_normal(t_scene *scene, t_object *object,
 	return (n);
 }
 
-double		ft_hit_objects(t_object *temps, t_ray p_ray)
+t_vector	ft_diffuse(t_scene *scene, double t, t_object *object)
 {
-	double	closet_object1_t;
+	t_phong_variables	dfs;
+	t_light				*light;
 
-	if (temps->object_type == 'c')
-		closet_object1_t = hit_cylinder(p_ray, temps->object);
-	if (temps->object_type == 's')
-		closet_object1_t = hit_sphere(p_ray, temps->object);
-	else if (temps->object_type == 'p')
-		closet_object1_t = hit_plane(p_ray, temps->object);
-	else if (temps->object_type == 't')
-		closet_object1_t = hit_triangle(p_ray, temps->object);
-	else if (temps->object_type == 'q')
-		closet_object1_t = hit_square(p_ray, temps->object);
-	return (closet_object1_t);
-}
-
-double		ft_get_first_intersection(t_object *temps, t_ray p_ray,
-			t_object *closet_object)
-{
-	double		closet_object1_t;
-	double		closet_object_t;
-	t_object	*first_intersection_object;
-
-	closet_object1_t = 0;
-	closet_object_t = 1000000000000;
-	while (temps != NULL)
+	dfs.scale_direction_to_p = vectorscal(scene->ray->direction, t);
+	dfs.p = vectorsadd(scene->ray->origin, dfs.scale_direction_to_p);
+	dfs.n = ft_calcule_normal(scene, object, dfs.p, t);
+	dfs.color = bzero_vector();
+	light = scene->light;
+	while (light != NULL)
 	{
-		closet_object1_t = ft_hit_objects(temps, p_ray);
-		if (closet_object1_t > 0)
-			if (closet_object1_t < closet_object_t)
-			{
-				first_intersection_object = temps;
-				closet_object_t = closet_object1_t;
-			}
-		temps = temps->next;
+		dfs.l_p = vectorssub(light->origin, dfs.p);
+		dfs.l_p = normalize(dfs.l_p);
+		dfs.i_diffuse = vectorsdot(dfs.l_p, dfs.n);
+		dfs.i_diffuse = dfs.i_diffuse;
+		dfs.i_diffuse = max(0, dfs.i_diffuse);
+		dfs.color1.x = object->color.x / 255 * light->color.x
+			* light->intensity * dfs.i_diffuse;
+		dfs.color1.y = object->color.y / 255 * light->color.y
+			* light->intensity * dfs.i_diffuse;
+		dfs.color1.z = object->color.z / 255 * light->color.z
+			* light->intensity * dfs.i_diffuse;
+		light = light->next;
+		dfs.color = vectorsadd(dfs.color, dfs.color1);
 	}
-	// for doesnt intersect with same object with calcule it shadaw
-	if (closet_object == first_intersection_object)
-	{
-		return (closet_object_t + 100);
-	}
-	return (closet_object_t);
+	return (dfs.color);
 }

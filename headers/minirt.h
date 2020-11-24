@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/24 14:38:37 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 17:56:16 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <math.h>
-# include <mlx.h>
+# include "mlx.h"
 # include <errno.h>
 # include <string.h>
 # include "get_next_line.h"
@@ -26,10 +26,6 @@
 # include "intersection.h"
 # include "parsing.h"
 # define PI 3.1415926535897932
-
-
-
-#include <stdio.h>
 
 typedef struct		s_bmp
 {
@@ -44,16 +40,19 @@ typedef struct		s_bmp
 	int				row;
 }					t_bmp;
 
-void		parsing_light(char **lit, t_scene *scene);
-void		parsing_camera(char **cam, t_scene *scene);
-void		ft_check_camera(t_scene *scene, char **origin, char **orient);
-void		parsing_ambiant(char **amb, t_scene *scene);
-
+int					ft_check_cordinations(char *line);
+int					ft_check_cordinations(char *line);
+void				parsing_light(char **lit, t_scene *scene);
+void				parsing_camera(char **cam, t_scene *scene);
+void				ft_check_camera(t_scene *scene, char **origin,
+														char **orient);
+void				parsing_ambiant(char **amb, t_scene *scene);
+char				*ft_remake_line(char *line);
 
 double				ft_atod(const char *str);
 int					ft_chech_pixel_in_dark(t_scene *scene,
 						t_object *closet_object, double t);
-t_vector 			ft_calcule_pixel_color(t_scene *scene,
+t_vector			ft_calcule_pixel_color(t_scene *scene,
 							t_object *closet_object, double t);
 double				ft_hit_objects(t_object *temps, t_ray p_ray);
 void				ft_free_scene(t_scene *scene);
@@ -63,7 +62,7 @@ void				ft_free_cameras(t_camera *cam);
 void				ft_free_lights(t_light *lights);
 void				ft_render(t_scene *scene, t_camera *camera, int n);
 t_ray				*ft_ray_creating(t_scene *scene, t_camera *camera,
-										int i, int j);
+															int i, int j);
 void				my_mlx_pixel_put(t_imag *img, int x, int y, int color);
 t_camera			*ft_wich_camera(t_scene *scene, int keycode);
 t_pixel				int_color_to_pixel(int color);
@@ -81,5 +80,6 @@ double				ft_atof(const char *str);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 double				max(double a, double b);
 double				min(double a, double b);
+int					mlx_get_screen_size(void *mlx_ptr, int *sizex, int *sizey);
 
 #endif
