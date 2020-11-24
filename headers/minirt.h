@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/24 17:56:16 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 19:35:11 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <math.h>
-# include "mlx.h"
 # include <errno.h>
 # include <string.h>
+# include "mlx.h"
 # include "get_next_line.h"
 # include "vectors.h"
 # include "scene.h"
@@ -40,7 +40,6 @@ typedef struct		s_bmp
 	int				row;
 }					t_bmp;
 
-int					ft_check_cordinations(char *line);
 int					ft_check_cordinations(char *line);
 void				parsing_light(char **lit, t_scene *scene);
 void				parsing_camera(char **cam, t_scene *scene);
@@ -76,7 +75,6 @@ int					ft_close(t_scene *scene);
 char				**ft_split(char const *s, char c);
 void				*ft_memset(void *b, int c, size_t len);
 int					ft_atoi(const char *str);
-double				ft_atof(const char *str);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 double				max(double a, double b);
 double				min(double a, double b);

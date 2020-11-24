@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 12:10:36 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/24 17:55:08 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 18:33:33 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void			parsing_plan(char **pl, t_scene *scene);
 void			parsing_square(char **sqr, t_scene *scene);
 void			parsing_triangle(char **tr, t_scene *scene);
 void			parsing_cylinder(char **cy, t_scene *scene);
-void			ft_check_scene(t_scene *scene);
 int				ft_check_color(char **color);
 int				ft_check_coords(char **coord);
 void			parse_rotation(char **line, t_scene *scene);

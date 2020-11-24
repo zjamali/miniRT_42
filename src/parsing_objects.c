@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 19:24:04 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/24 13:15:51 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 18:50:15 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,9 @@ void		parsing_cylinder(char **cy, t_scene *scene)
 			points,orientation,diametre,size and color.");
 	obj.origin = ft_split(cy[1], ',');
 	obj.normal = ft_split(cy[2], ',');
-	obj.color = ft_split(cy[5], ',');
-	obj.diameter = ft_atod(cy[3]);
-	obj.size = ft_atod(cy[4]);
+	obj.color = ft_split(cy[3], ',');
+	obj.diameter = ft_atod(cy[4]);
+	obj.size = ft_atod(cy[5]);
 	ft_check_cylinder(scene, obj);
 	if (!(cylinder = (t_cylinder*)malloc(sizeof(t_cylinder))))
 		ft_print_error(scene, "allocation error");

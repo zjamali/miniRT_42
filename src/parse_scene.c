@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/16 18:50:46 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/24 16:25:07 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 18:16:51 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ void		parsing_line(char *line, t_scene *scene)
 	char **split;
 
 	line = ft_remake_line(line);
-	write(1, line, ft_strlen(line));
-	write(1, "\n", 1);
 	split = ft_split(line, ' ');
 	if (split[1] == NULL)
 		ft_print_error(scene, "empty coordination");

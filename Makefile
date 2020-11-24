@@ -1,5 +1,7 @@
 NAME  = miniRT
 
+MMS_PATH = ./minilibx_mms
+OGL_PATH = ./minilibx_opengl
 SRC_PATH= src
 SRC_NAME=	main.c		vector.c	pixel_color.c	intersection.c \
 		camera.c 	light.c		get_next_line.c get_next_line_utils.c \
@@ -11,7 +13,8 @@ SRC_NAME=	main.c		vector.c	pixel_color.c	intersection.c \
 		rotation_xyz.c	intersection2.c	free.c	ft_memset.c	dark.c light3.c\
 
 HDR_PATH= headers
-HDR_NAME= get_next_line.h	minirt.h
+HDR_NAME= get_next_line.h	minirt.h	intersection.h	mlx.h	parsing.h	scene.h \
+			transformation.h	vectors.h \
 
 OBJ_PATH= objs
 OBJ_NAME= $(SRC_NAME:.c=.o)
@@ -25,15 +28,16 @@ HDR= $(addprefix $(HDR_PATH)/,$(HDR_NAME))
 
 COM= gcc
 CFLAGE= -Wall -Wextra -Werror
-HDR_INC= -I ./headers/ -I minilibx_mms_20200219/mlx.h
+HDR_INC= -I ./headers/
 
-MLX= -lmlx -framework OpenGL -framework AppKit
-MLX_LIB= lib/
+MLX= -framework OpenGL -framework AppKit
+MLX_LIB= minilibx_opengl/
 # *****     rules     ***** #
 
-all: $(NAME)
+all: ogl mms $(NAME)
 
 $(NAME): $(OBJ)
+		@cp ./minilibx_mms/libmlx.dylib .
 		@$(COM) $(CFLAGE) -L$(MLX_LIB) libmlx.dylib $(OBJ) $(MLX) -o $@
 		@echo "         Made by : \033[1;91mzjamali\033[m"
 		@echo "          _       _______ _____    "
@@ -48,6 +52,12 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c $(HDR)
 	@mkdir $(OBJ_PATH) 2> /dev/null || true
 	@$(COM) $(CFLAGE) $(HDR_INC) -o $@ -c $<
 
+ogl:
+	@make -sC $(OGL_PATH)
+
+mms:
+	@make -sC $(MMS_PATH)
+
 clean:
 	@rm -rf $(OBJ)
 	@rmdir $(OBJ_PATH) 2> /dev/null || true
@@ -55,6 +65,9 @@ clean:
 		
 fclean: clean
 	@rm -rf $(NAME)
+	@rm -f libmlx.dylib
+	@make -sC $(OGL_PATH) clean
+	@make -sC $(MMS_PATH) clean
 	@echo "miniRT : Removing miniRT"
 		
 re: fclean all

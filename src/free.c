@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 10:06:37 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 10:08:09 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 18:16:05 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void		ft_free_scene(t_scene *scene)
 			mlx_clear_window(scene->mlx_ptr, scene->win_ptr);
 			mlx_destroy_window(scene->mlx_ptr, scene->win_ptr);
 		}
-		write(1, "\nfree the scene\n", ft_strlen("\nfree the scene\n"));
 		if (scene->ray != NULL)
 			free(scene->ray);
 		if (scene->element_to_transform != NULL)
