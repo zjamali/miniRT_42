@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 19:05:13 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/20 09:23:10 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 14:38:37 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,11 @@ typedef struct		s_bmp
 	int				fd;
 	int				row;
 }					t_bmp;
+
+void		parsing_light(char **lit, t_scene *scene);
+void		parsing_camera(char **cam, t_scene *scene);
+void		ft_check_camera(t_scene *scene, char **origin, char **orient);
+void		parsing_ambiant(char **amb, t_scene *scene);
 
 
 double				ft_atod(const char *str);

@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/17 12:10:36 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/20 12:44:58 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 14:38:06 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct	s_obj_properties
 	char		**cord3;
 	char		**color;
 }				t_obj_properties;
+
 
 t_scene			*parsing(int fd, t_scene *scene);
 void			ft_check_element(t_scene *scene,char *line, int i);

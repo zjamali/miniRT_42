@@ -6,27 +6,11 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:24:02 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/23 20:25:49 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 14:31:41 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-double		max(double a, double b)
-{
-	if (a > b)
-		return (a);
-	else
-		return (b);
-}
-
-double		min(double a, double b)
-{
-	if (a > b)
-		return (b);
-	else
-		return (a);
-}
 
 void		ft_check_file_name(char *file_name, t_scene *scene)
 {

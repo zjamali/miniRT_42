@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 19:02:08 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/24 12:06:07 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 13:13:53 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,22 +91,23 @@ t_vector	ft_calcule_specular(t_light *light, t_phong_variables *spr)
 	spr->color1 = vectorscal(light->color, spr->i_specular);
 	return (spr->color1);
 }
+
 void		ft_object_shiness(t_phong_variables *spr, t_object *object)
 {
 	if (object->object_type == 's')
 	{
 		spr->ks = 0.5;
-		spr->specular_shiness = 50/*256*/;
+		spr->specular_shiness = 50;
 	}
 	else if (object->object_type == 'c')
 	{
 		spr->ks = 0.2;
-		spr->specular_shiness = 2/*50*/;
+		spr->specular_shiness = 2;
 	}
 	else if (object->object_type == 'p')
 	{
 		spr->ks = 0.2;
-		spr->specular_shiness = 1500/*200*/;
+		spr->specular_shiness = 1500;
 	}
 	else if (object->object_type == 't')
 	{

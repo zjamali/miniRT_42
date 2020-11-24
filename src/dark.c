@@ -6,7 +6,7 @@
 /*   By: zjamali <zjamali@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 19:38:11 by zjamali           #+#    #+#             */
-/*   Updated: 2020/11/18 19:39:51 by zjamali          ###   ########.fr       */
+/*   Updated: 2020/11/24 13:24:11 by zjamali          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,8 @@ double					ft_get_intersection(t_object *temps, t_ray p_ray,
 			}
 		temps = temps->next;
 	}
-	// for doesnt intersect with same object with calcule it shadaw
 	if (closet_object == first_intersection_object)
-	{
 		return (closet_object_t + 0.05);
-		//return (10000000000000);
-	}
 	return (closet_object_t);
 }
 
@@ -50,7 +46,6 @@ t_shadow_variables		ft_calcule_darkness(t_shadow_variables dark)
 	dark.light_to_c = vectorssub(dark.light_to_c,
 			dark.light_ray.origin);
 	dark.light_to_c_lenght = lenght(dark.light_to_c);
-	//dark.light_to_c_lenght = dark.light_to_c_lenght;
 	dark.light_to_p_lenght = lenght(dark.light_to_p);
 	return (dark);
 }
