@@ -59,7 +59,7 @@ Square:	`sq {position} {orientation} {side size} {color}`
 * The square size side.
 * R,G,B colors in range [0-255].
 
-Cylinder:	`cy {position} {orientation} {diameter} {height} {color}`
+Cylinder:	`cy {position} {orientation} {color} {diameter} {height}`
 * X,y,z coordinates for the cylinder center.
 * A vector with the the x,y,z axis in the range [-1,1].
 * R,G,B colors in range [0-255].
