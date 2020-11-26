@@ -1,5 +1,5 @@
 # miniRT
-A student project at [42.fr](https://42.fr).
+A student project at [1337](https://1337.ma).
 A minimal raytracing engine writtent in C and MiniLibX.
 
 ## Index
