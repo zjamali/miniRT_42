@@ -139,12 +139,14 @@ To exit the application press `esc`. You can also click the red `x` in the top l
 To switch camera's you can use the `←`(previous) and `→`(next) keys.
 
 ### Images
-<a href="https://ibb.co/YRxNfpJ"><img src="https://i.ibb.co/GxqdCcG/Screen-Shot-2020-11-25-at-19-21-31.png" alt="Screen-Shot-2020-11-25-at-19-21-31" border="0"></a> <br><br>
-<a href="https://ibb.co/B6NS9NQ"><img src="https://i.ibb.co/JpQM9QG/Screen-Shot-2020-11-25-at-22-45-52.png" alt="Screen-Shot-2020-11-25-at-22-45-52" border="0"></a> <br><br>
-<a href="https://ibb.co/xsttWbd"><img src="https://i.ibb.co/fSzzfWL/Screen-Shot-2020-11-25-at-22-49-34.png" alt="Screen-Shot-2020-11-25-at-22-49-34" border="0"></a><br>
+<a><img src="https://raw.githubusercontent.com/zjamali/miniRT/master/scenes/imgs/scene.png" alt="scene image" border="0"></a> <br><br>
+
+<a><img src="https://raw.githubusercontent.com/zjamali/miniRT/master/scenes/imgs/scene1.png" alt="scene1.rt image" border="0"></a> <br><br>
+
+<a><img src="https://raw.githubusercontent.com/zjamali/miniRT/master/scenes/imgs/scene8.png" alt="scene8.rt image" border="0"></a><br>
 <br>
 different color of lights (blue light + red light + white light).<br>
-<a href="https://ibb.co/SNRR55H"><img src="https://i.ibb.co/ZdWWGGv/Screen-Shot-2020-11-25-at-22-52-53.png" alt="Screen-Shot-2020-11-25-at-22-52-53" border="0"></a>
+<a><img src="https://raw.githubusercontent.com/zjamali/miniRT/master/scenes/imgs/scene2.png" alt="scene2 image" border="0"></a>
 
 <br><br>
 <strong>Resourses</strong><br>
