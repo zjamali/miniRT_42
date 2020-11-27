@@ -1,7 +1,7 @@
 # miniRT
 A student project at [1337](https://1337.ma).
-A minimal raytracing engine writtent in C and MiniLibX.
-
+A minimal raytracing engine writtent in C and MiniLibX.<br><br>
+<img src="https://raw.githubusercontent.com/zjamali/miniRT/master/scenes/imgs/scene8.png">
 ## Index
 
 * [Installation](#installation)
